@@ -23,12 +23,14 @@ using challenge_bypass_ristretto::Token;
 using challenge_bypass_ristretto::UnblindedToken;
 
 ConfirmationInfo BuildConfirmation(const std::string& id,
+                                   const std::string& transaction_id,
                                    const std::string& creative_instance_id,
                                    const ConfirmationType& type,
                                    const AdType& ad_type) {
   ConfirmationInfo confirmation;
 
   confirmation.id = id;
+  confirmation.transaction_id = transaction_id;
   confirmation.creative_instance_id = creative_instance_id;
   confirmation.type = type;
   confirmation.ad_type = ad_type;
@@ -60,11 +62,13 @@ ConfirmationInfo BuildConfirmation(const std::string& id,
   return confirmation;
 }
 
-ConfirmationInfo BuildConfirmation(const std::string& creative_instance_id,
+ConfirmationInfo BuildConfirmation(const std::string& transaction_id,
+                                   const std::string& creative_instance_id,
                                    const ConfirmationType& type,
                                    const AdType& ad_type) {
   const std::string id = base::GenerateGUID();
-  return BuildConfirmation(id, creative_instance_id, type, ad_type);
+  return BuildConfirmation(id, transaction_id, creative_instance_id, type,
+                           ad_type);
 }
 
 }  // namespace ads

@@ -20,7 +20,6 @@ class DictionaryValue;
 
 namespace ads {
 
-class AdRewards;
 class AdType;
 class ConfirmationsState;
 class ConfirmationType;
@@ -28,22 +27,23 @@ class RedeemUnblindedToken;
 
 namespace privacy {
 class TokenGeneratorInterface;
+struct UnblindedPaymentTokenInfo;
 }  // namespace privacy
 
 class Confirmations final : public RedeemUnblindedTokenDelegate {
  public:
-  Confirmations(privacy::TokenGeneratorInterface* token_generator,
-                AdRewards* ad_rewards);
+  explicit Confirmations(privacy::TokenGeneratorInterface* token_generator);
   ~Confirmations() override;
 
   void AddObserver(ConfirmationsObserver* observer);
   void RemoveObserver(ConfirmationsObserver* observer);
 
-  void Confirm(const std::string& creative_instance_id,
+  void Confirm(const std::string& transaction_id,
+               const std::string& creative_instance_id,
                const AdType& ad_type,
                const ConfirmationType& confirmation_type);
 
-  void RetryAfterDelay();
+  void ProcessRetryQueue();
 
  private:
   base::ObserverList<ConfirmationsObserver> observers_;
@@ -54,6 +54,7 @@ class Confirmations final : public RedeemUnblindedTokenDelegate {
   std::unique_ptr<RedeemUnblindedToken> redeem_unblinded_token_;
 
   ConfirmationInfo CreateConfirmation(
+      const std::string& transaction_id,
       const std::string& creative_instance_id,
       const ConfirmationType& confirmation_type,
       const AdType& ad_type,
@@ -64,20 +65,16 @@ class Confirmations final : public RedeemUnblindedTokenDelegate {
       const ConfirmationInfo& confirmation);
   void AppendToRetryQueue(const ConfirmationInfo& confirmation);
   void RemoveFromRetryQueue(const ConfirmationInfo& confirmation);
-  void Retry();
+  void OnProcessRetryQueue();
 
-  void NotifyDidConfirm(const double estimated_redemption_value,
-                        const ConfirmationInfo& confirmation) const;
-
+  void NotifyDidConfirm(const ConfirmationInfo& confirmation) const;
   void NotifyFailedToConfirm(const ConfirmationInfo& confirmation) const;
 
   // RedeemUnblindedTokenDelegate:
   void OnDidSendConfirmation(const ConfirmationInfo& confirmation) override;
-
-  void OnDidRedeemUnblindedToken(
-      const ConfirmationInfo& confirmation,
-      const privacy::UnblindedTokenInfo& unblinded_payment_token) override;
-
+  void OnDidRedeemUnblindedToken(const ConfirmationInfo& confirmation,
+                                 const privacy::UnblindedPaymentTokenInfo&
+                                     unblinded_payment_token) override;
   void OnFailedToRedeemUnblindedToken(const ConfirmationInfo& confirmation,
                                       const bool should_retry) override;
 };

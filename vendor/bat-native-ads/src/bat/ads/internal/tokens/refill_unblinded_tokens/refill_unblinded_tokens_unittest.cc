@@ -335,7 +335,7 @@ TEST_F(BatAdsRefillUnblindedTokensTest, InvalidWallet) {
               OnDidRetryRefillingUnblindedTokens())
       .Times(0);
 
-  const WalletInfo& invalid_wallet;
+  const WalletInfo invalid_wallet;
   refill_unblinded_tokens_->MaybeRefill(invalid_wallet);
 
   // Assert

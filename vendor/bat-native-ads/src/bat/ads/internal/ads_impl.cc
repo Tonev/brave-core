@@ -17,7 +17,7 @@
 #include "bat/ads/confirmation_type.h"
 #include "bat/ads/inline_content_ad_info.h"
 #include "bat/ads/internal/account/account.h"
-#include "bat/ads/internal/account/ad_rewards/ad_rewards_util.h"
+#include "bat/ads/internal/account/account_util.h"
 #include "bat/ads/internal/account/confirmations/confirmations_state.h"
 #include "bat/ads/internal/account/wallet/wallet_info.h"
 #include "bat/ads/internal/ad_diagnostics/ad_diagnostics.h"
@@ -48,7 +48,8 @@
 #include "bat/ads/internal/database/database_initialize.h"
 #include "bat/ads/internal/features/features.h"
 #include "bat/ads/internal/idle_time.h"
-#include "bat/ads/internal/legacy_migration/legacy_conversion_migration.h"
+#include "bat/ads/internal/legacy_migration/conversions/legacy_conversion_migration.h"
+#include "bat/ads/internal/legacy_migration/rewards/legacy_rewards_migration.h"
 #include "bat/ads/internal/logging.h"
 #include "bat/ads/internal/platform/platform_helper.h"
 #include "bat/ads/internal/privacy/tokens/token_generator.h"
@@ -379,14 +380,6 @@ void AdsImpl::RemoveAllHistory(RemoveAllHistoryCallback callback) {
   callback(/* success */ true);
 }
 
-void AdsImpl::ReconcileAdRewards() {
-  if (!IsInitialized()) {
-    return;
-  }
-
-  account_->Reconcile();
-}
-
 AdsHistoryInfo AdsImpl::GetAdsHistory(const AdsHistoryFilterType filter_type,
                                       const AdsHistorySortType sort_type,
                                       const double from_timestamp,
@@ -402,19 +395,15 @@ AdsHistoryInfo AdsImpl::GetAdsHistory(const AdsHistoryFilterType filter_type,
 }
 
 void AdsImpl::GetAccountStatement(GetAccountStatementCallback callback) {
-  StatementInfo statement;
-
   if (!IsInitialized() || !ShouldRewardUser()) {
-    callback(/* success */ false, statement);
+    callback(/* success */ false, {});
     return;
   }
 
-  const base::Time distant_past;
-  const base::Time now = base::Time::Now();
-
-  statement = account_->GetStatement(distant_past, now);
-
-  callback(/* success */ true, statement);
+  account_->GetStatement(
+      [callback](const bool success, const StatementInfo& statement) {
+        callback(success, statement);
+      });
 }
 
 void AdsImpl::GetAdDiagnostics(GetAdDiagnosticsCallback callback) {
@@ -588,6 +577,17 @@ void AdsImpl::MigrateConversions(InitializeCallback callback) {
       return;
     }
 
+    MigrateRewards(callback);
+  });
+}
+
+void AdsImpl::MigrateRewards(InitializeCallback callback) {
+  rewards::Migrate([=](const bool success) {
+    if (!success) {
+      callback(/* success */ false);
+      return;
+    }
+
     LoadClientState(callback);
   });
 }
@@ -649,7 +649,6 @@ void AdsImpl::Start() {
 
   CleanupAdEvents();
 
-  account_->Reconcile();
   account_->MaybeGetIssuers();
   account_->ProcessTransactions();
 
@@ -722,8 +721,6 @@ void AdsImpl::OnWalletDidUpdate(const WalletInfo& wallet) {
 
 void AdsImpl::OnWalletDidChange(const WalletInfo& wallet) {
   BLOG(0, "Wallet changed");
-
-  ReconcileAdRewards();
 }
 
 void AdsImpl::OnInvalidWallet() {

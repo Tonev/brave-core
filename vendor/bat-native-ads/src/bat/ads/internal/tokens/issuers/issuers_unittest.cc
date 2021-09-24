@@ -102,7 +102,7 @@ TEST_F(BatAdsIssuersTest, GetIssuersInvalidJsonResponse) {
   issuers_->MaybeFetch();
 
   // Assert
-  const IssuersInfo& expected_issuers;
+  const IssuersInfo expected_issuers;
 
   const IssuersInfo& issuers = GetIssuers();
 
@@ -125,7 +125,7 @@ TEST_F(BatAdsIssuersTest, GetIssuersNonHttpOkResponse) {
   issuers_->MaybeFetch();
 
   // Assert
-  const IssuersInfo& expected_issuers;
+  const IssuersInfo expected_issuers;
 
   const IssuersInfo& issuers = GetIssuers();
 

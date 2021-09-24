@@ -8,8 +8,7 @@
 #include "base/check_op.h"
 #include "base/time/time.h"
 #include "bat/ads/ads_client.h"
-#include "bat/ads/internal/account/ad_rewards/ad_rewards.h"
-#include "bat/ads/internal/account/ad_rewards/ad_rewards_util.h"
+#include "bat/ads/internal/account/account_util.h"
 #include "bat/ads/internal/account/confirmations/confirmation_info.h"
 #include "bat/ads/internal/account/confirmations/confirmations.h"
 #include "bat/ads/internal/account/confirmations/confirmations_state.h"
@@ -18,6 +17,9 @@
 #include "bat/ads/internal/account/wallet/wallet.h"
 #include "bat/ads/internal/account/wallet/wallet_info.h"
 #include "bat/ads/internal/ads_client_helper.h"
+#include "bat/ads/internal/database/tables/creative_ads_database_table.h"
+#include "bat/ads/internal/database/tables/transactions_database_table.h"
+#include "bat/ads/internal/database/tables/transactions_database_table_aliases.h"
 #include "bat/ads/internal/logging.h"
 #include "bat/ads/internal/privacy/tokens/token_generator_interface.h"
 #include "bat/ads/internal/privacy/unblinded_tokens/unblinded_tokens.h"
@@ -32,19 +34,16 @@
 namespace ads {
 
 Account::Account(privacy::TokenGeneratorInterface* token_generator)
-    : ad_rewards_(std::make_unique<AdRewards>()),
-      issuers_(std::make_unique<Issuers>()),
-      confirmations_(
-          std::make_unique<Confirmations>(token_generator, ad_rewards_.get())),
+    : issuers_(std::make_unique<Issuers>()),
+      confirmations_(std::make_unique<Confirmations>(token_generator)),
       redeem_unblinded_payment_tokens_(
           std::make_unique<RedeemUnblindedPaymentTokens>()),
       refill_unblinded_tokens_(
           std::make_unique<RefillUnblindedTokens>(token_generator)),
-      statement_(std::make_unique<Statement>(ad_rewards_.get())),
+      statement_(std::make_unique<Statement>()),
       wallet_(std::make_unique<Wallet>()) {
   confirmations_->AddObserver(this);
 
-  ad_rewards_->set_delegate(this);
   issuers_->set_delegate(this);
   redeem_unblinded_payment_tokens_->set_delegate(this);
   refill_unblinded_tokens_->set_delegate(this);
@@ -65,19 +64,19 @@ void Account::RemoveObserver(AccountObserver* observer) {
 }
 
 bool Account::SetWallet(const std::string& id, const std::string& seed) {
-  const WalletInfo last_wallet = wallet_->Get();
+  const WalletInfo& last_wallet = wallet_->Get();
 
   if (!wallet_->Set(id, seed)) {
     NotifyInvalidWallet();
     return false;
   }
 
-  const WalletInfo wallet = wallet_->Get();
+  const WalletInfo& wallet = wallet_->Get();
 
   if (last_wallet.IsValid() && last_wallet != wallet) {
-    ad_rewards_->Reset();
-
     NotifyWalletDidChange(wallet);
+
+    Reset();
   }
 
   NotifyWalletDidUpdate(wallet);
@@ -104,22 +103,28 @@ void Account::Deposit(const std::string& creative_instance_id,
   DCHECK_NE(AdType::kUndefined, ad_type.value());
   DCHECK_NE(ConfirmationType::kUndefined, confirmation_type.value());
 
-  confirmations_->Confirm(creative_instance_id, ad_type, confirmation_type);
+  database::table::CreativeAds database_table;
+  database_table.GetForCreativeInstanceId(
+      creative_instance_id,
+      [=](const bool success, const std::string& creative_instance_id,
+          const CreativeAdInfo& creative_ad) {
+        if (!success) {
+          BLOG(1, "Estimated redemption value missing for creative instance id"
+                      << creative_instance_id);
+
+          return;
+        }
+
+        Credit(creative_instance_id, creative_ad.value, ad_type,
+               confirmation_type);
+      });
 }
 
-StatementInfo Account::GetStatement(const base::Time& from,
-                                    const base::Time& to) const {
-  DCHECK(to >= from);
-  return statement_->Get(from, to);
-}
-
-void Account::Reconcile() {
-  if (!ShouldRewardUser()) {
-    return;
-  }
-
-  const WalletInfo wallet = GetWallet();
-  ad_rewards_->MaybeReconcile(wallet);
+void Account::GetStatement(StatementCallback callback) const {
+  return statement_->Get(
+      [callback](const bool success, const StatementInfo& statement) {
+        callback(success, statement);
+      });
 }
 
 void Account::ProcessTransactions() {
@@ -127,25 +132,62 @@ void Account::ProcessTransactions() {
     return;
   }
 
-  confirmations_->RetryAfterDelay();
+  confirmations_->ProcessRetryQueue();
 
   ProcessUnclearedTransactions();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
+void Account::Credit(const std::string& creative_instance_id,
+                     const double value,
+                     const AdType& ad_type,
+                     const ConfirmationType& confirmation_type) const {
+  transactions::Add(
+      value, confirmation_type, [=](const bool success, const std::string& id) {
+        if (!success) {
+          BLOG(0, "Failed to add transaction with creative instance id "
+                      << creative_instance_id << " valued at " << value
+                      << " for " << std::string(confirmation_type));
+          return;
+        }
+
+        BLOG(3, "Successfully added transaction with creative instance id "
+                    << creative_instance_id << " valued at " << value << " for "
+                    << std::string(confirmation_type));
+
+        NotifyStatementOfAccountsDidChange();
+
+        confirmations_->Confirm(id, creative_instance_id, ad_type,
+                                confirmation_type);
+      });
+}
+
 void Account::TopUpUnblindedTokens() {
   if (!ShouldRewardUser()) {
     return;
   }
 
-  const WalletInfo wallet = GetWallet();
+  const WalletInfo& wallet = GetWallet();
   refill_unblinded_tokens_->MaybeRefill(wallet);
 }
 
 void Account::ProcessUnclearedTransactions() {
-  const WalletInfo wallet = GetWallet();
+  const WalletInfo& wallet = GetWallet();
   redeem_unblinded_payment_tokens_->MaybeRedeemAfterDelay(wallet);
+}
+
+void Account::Reset() {
+  ResetRewards([=](const bool success) {
+    if (!success) {
+      BLOG(0, "Failed to reset rewards");
+      return;
+    }
+
+    BLOG(3, "Successfully reset rewards");
+
+    NotifyStatementOfAccountsDidChange();
+  });
 }
 
 void Account::NotifyWalletDidUpdate(const WalletInfo& wallet) const {
@@ -186,11 +228,7 @@ void Account::OnFailedToGetIssuers() {
   BLOG(0, "Failed to get issuers");
 }
 
-void Account::OnDidConfirm(const double estimated_redemption_value,
-                           const ConfirmationInfo& confirmation) {
-  transactions::Add(estimated_redemption_value, confirmation);
-  NotifyStatementOfAccountsDidChange();
-
+void Account::OnDidConfirm(const ConfirmationInfo& confirmation) {
   TopUpUnblindedTokens();
 }
 
@@ -199,21 +237,22 @@ void Account::OnFailedToConfirm(const ConfirmationInfo& confirmation) {
 
   TopUpUnblindedTokens();
 
-  confirmations_->RetryAfterDelay();
-}
-
-void Account::OnDidReconcileAdRewards() {
-  NotifyStatementOfAccountsDidChange();
+  confirmations_->ProcessRetryQueue();
 }
 
 void Account::OnDidRedeemUnblindedPaymentTokens(
-    const privacy::UnblindedTokenList unblinded_tokens) {
+    const privacy::UnblindedPaymentTokenList& unblinded_payment_tokens) {
   BLOG(1, "Successfully redeemed unblinded payment tokens");
 
-  const TransactionList transactions = transactions::GetUncleared();
-  ad_rewards_->AppendUnreconciledTransactions(transactions);
+  database::table::Transactions transactions;
+  transactions.Update(unblinded_payment_tokens, [](const bool success) {
+    if (!success) {
+      BLOG(0, "Failed to update transactions");
+      return;
+    }
 
-  Reconcile();
+    BLOG(3, "Successfully updated transactions");
+  });
 }
 
 void Account::OnFailedToRedeemUnblindedPaymentTokens() {
@@ -234,7 +273,7 @@ void Account::OnCaptchaRequiredToRefillUnblindedTokens(
     const std::string& captcha_id) {
   BLOG(1, "Captcha required to refill unblinded tokens");
 
-  const WalletInfo wallet = GetWallet();
+  const WalletInfo& wallet = GetWallet();
   AdsClientHelper::Get()->ShowScheduledCaptchaNotification(wallet.id,
                                                            captcha_id);
 }
