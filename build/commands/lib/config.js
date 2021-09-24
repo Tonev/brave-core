@@ -90,6 +90,7 @@ const Config = function () {
   this.gClientVerbose = getNPMConfig(['gclient_verbose']) || false
   this.targetArch = getNPMConfig(['target_arch']) || 'x64'
   this.targetOS = getNPMConfig(['target_os'])
+  this.targetEnvironment = getNPMConfig(['target_environment']) || ''
   this.gypTargetArch = 'x64'
   this.targetAndroidBase = 'classic'
   this.braveGoogleApiKey = getNPMConfig(['brave_google_api_key']) || 'AIzaSyAREPLACEWITHYOUROWNGOOGLEAPIKEY2Q'
@@ -417,6 +418,7 @@ Config.prototype.buildArgs = function () {
 
   if (this.targetOS === 'ios') {
     args.target_os = 'ios'
+    args.target_environment = this.targetEnvironment
     args.enable_dsyms = true
     args.enable_stripping = !this.isDebug()
     args.use_xcode_clang = false
@@ -598,6 +600,10 @@ Config.prototype.update = function (options) {
 
   if (options.target_os) {
     this.targetOS = options.target_os
+  }
+
+  if (options.target_environment) {
+    this.targetEnvironment = options.target_environment
   }
 
   if (options.is_asan) {
@@ -914,6 +920,9 @@ Object.defineProperty(Config.prototype, 'outputDir', {
     }
     if (this.targetOS) {
       buildConfigDir = this.targetOS + "_" + buildConfigDir
+    }
+    if (this.targetEnvironment) {
+     buildConfigDir = buildConfigDir  + "_" + this.targetEnvironment
     }
 
     return path.join(baseDir, buildConfigDir)
