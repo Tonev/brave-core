@@ -37,7 +37,7 @@ class AdBlockRegionalService;
 // managing regional AdBlock clients.
 class AdBlockRegionalServiceManager {
  public:
-  explicit AdBlockRegionalServiceManager(BraveComponent::Delegate* delegate);
+  explicit AdBlockRegionalServiceManager(PrefService* local_state, std::string locale, scoped_refptr<base::SequencedTaskRunner> task_runner);
   ~AdBlockRegionalServiceManager();
 
   std::unique_ptr<base::ListValue> GetRegionalLists();
@@ -74,7 +74,9 @@ class AdBlockRegionalServiceManager {
   void StartRegionalServices();
   void UpdateFilterListPrefs(const std::string& uuid, bool enabled);
 
-  brave_component_updater::BraveComponent::Delegate* delegate_;  // NOT OWNED
+  PrefService* local_state_;
+  std::string locale_;
+  //brave_component_updater::BraveComponent::Delegate* delegate_;  // NOT OWNED
   bool initialized_;
   base::Lock regional_services_lock_;
   std::map<std::string, std::unique_ptr<AdBlockRegionalService>>
@@ -82,12 +84,14 @@ class AdBlockRegionalServiceManager {
 
   std::vector<adblock::FilterList> regional_catalog_;
 
+  scoped_refptr<base::SequencedTaskRunner> task_runner_;
+
   DISALLOW_COPY_AND_ASSIGN(AdBlockRegionalServiceManager);
 };
 
 // Creates the AdBlockRegionalServiceManager
 std::unique_ptr<AdBlockRegionalServiceManager>
-AdBlockRegionalServiceManagerFactory(BraveComponent::Delegate* delegate);
+AdBlockRegionalServiceManagerFactory(PrefService* local_state, std::string locale, scoped_refptr<base::SequencedTaskRunner> task_runner);
 
 }  // namespace brave_shields
 

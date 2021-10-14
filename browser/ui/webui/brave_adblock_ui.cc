@@ -14,7 +14,7 @@
 #include "brave/browser/ui/webui/brave_webui_source.h"
 #include "brave/common/webui_url_constants.h"
 #include "brave/components/brave_adblock/resources/grit/brave_adblock_generated_map.h"
-#include "brave/components/brave_shields/browser/ad_block_custom_filters_service.h"
+#include "brave/components/brave_shields/browser/ad_block_custom_filters_source_provider.h"
 #include "brave/components/brave_shields/browser/ad_block_regional_service_manager.h"
 #include "brave/components/brave_shields/browser/ad_block_service.h"
 #include "brave/components/brave_shields/browser/ad_block_service_helper.h"
@@ -152,7 +152,7 @@ void AdblockDOMHandler::HandleGetCustomFilters(
   DCHECK_EQ(args.size(), 0U);
   AllowJavascript();
   const std::string custom_filters =
-      g_brave_browser_process->ad_block_custom_filters_service()
+      g_brave_browser_process->ad_block_custom_filters_source_provider()
           ->GetCustomFilters();
   CallJavascriptFunction("brave_adblock.onGetCustomFilters",
                          base::Value(custom_filters));
@@ -182,7 +182,7 @@ void AdblockDOMHandler::HandleUpdateCustomFilters(
     return;
 
   std::string custom_filters = args[0].GetString();
-  g_brave_browser_process->ad_block_custom_filters_service()
+  g_brave_browser_process->ad_block_custom_filters_source_provider()
       ->UpdateCustomFilters(custom_filters);
 }
 

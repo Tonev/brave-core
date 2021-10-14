@@ -29,38 +29,38 @@ class AdBlockRegionalService : public AdBlockBaseService {
       base::RepeatingCallback<void(const std::string&)>;
 
   explicit AdBlockRegionalService(
-      const adblock::FilterList& catalog_entry,
-      brave_component_updater::BraveComponent::Delegate* delegate,
-      ResourcesFileReadyCallback resoures_file_ready_callback);
+      //const adblock::FilterList& catalog_entry,
+      scoped_refptr<base::SequencedTaskRunner> task_runner/*,
+      ResourcesFileReadyCallback resources_file_ready_callback*/);
   ~AdBlockRegionalService() override;
 
-  void SetCatalogEntry(const adblock::FilterList& entry);
+  //void SetCatalogEntry(const adblock::FilterList& entry);
 
-  std::string GetUUID() const { return uuid_; }
-  std::string GetTitle() const { return title_; }
+  //std::string GetUUID() const { return uuid_; }
+  //std::string GetTitle() const { return title_; }
 
  protected:
   bool Init() override;
-  void OnComponentReady(const std::string& component_id,
+  /*void OnComponentReady(const std::string& component_id,
                         const base::FilePath& install_dir,
                         const std::string& manifest) override;
-  void OnResourcesFileDataReady(const std::string& resources);
+  void OnResourcesFileDataReady(const std::string& resources);*/
 
  private:
   friend class ::AdBlockServiceTest;
-  static std::string g_ad_block_regional_component_id_;
-  static std::string g_ad_block_regional_component_base64_public_key_;
-  static std::string g_ad_block_regional_dat_file_version_;
-  static void SetComponentIdAndBase64PublicKeyForTest(
+  /*static std::string g_ad_block_regional_component_id_;
+  static std::string g_ad_block_regional_component_base64_public_key_;*/
+  //static std::string g_ad_block_regional_dat_file_version_;
+  /*static void SetComponentIdAndBase64PublicKeyForTest(
       const std::string& component_id,
-      const std::string& component_base64_public_key);
+      const std::string& component_base64_public_key);*/
 
-  ResourcesFileReadyCallback resoures_file_ready_callback_;
+  //ResourcesFileReadyCallback resources_file_ready_callback_;
 
-  std::string uuid_;
+  /*std::string uuid_;
   std::string title_;
   std::string component_id_;
-  std::string base64_public_key_;
+  std::string base64_public_key_;*/
 
   base::WeakPtrFactory<AdBlockRegionalService> weak_factory_{this};
   DISALLOW_COPY_AND_ASSIGN(AdBlockRegionalService);
@@ -68,10 +68,10 @@ class AdBlockRegionalService : public AdBlockBaseService {
 
 // Creates the AdBlockRegionalService
 std::unique_ptr<AdBlockRegionalService> AdBlockRegionalServiceFactory(
-    const adblock::FilterList& catalog_entry,
-    brave_component_updater::BraveComponent::Delegate* delegate,
+    //const adblock::FilterList& catalog_entry,
+    scoped_refptr<base::SequencedTaskRunner> task_runner/*,
     AdBlockRegionalService::ResourcesFileReadyCallback
-        resoures_file_ready_callback);
+        resources_file_ready_callback*/);
 
 }  // namespace brave_shields
 

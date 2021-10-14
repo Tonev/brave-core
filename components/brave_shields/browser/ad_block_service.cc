@@ -19,7 +19,9 @@
 #include "base/strings/utf_string_conversions.h"
 #include "base/threading/thread_restrictions.h"
 #include "brave/components/adblock_rust_ffi/src/wrapper.h"
-#include "brave/components/brave_shields/browser/ad_block_custom_filters_service.h"
+#include "brave/components/brave_shields/browser/ad_block_engine_service.h"
+#include "brave/components/brave_shields/browser/ad_block_custom_filters_source_provider.h"
+#include "brave/components/brave_shields/browser/ad_block_default_source_provider.h"
 #include "brave/components/brave_shields/browser/ad_block_regional_service_manager.h"
 #include "brave/components/brave_shields/browser/ad_block_service_helper.h"
 #include "brave/components/brave_shields/browser/ad_block_subscription_service_manager.h"
@@ -60,9 +62,9 @@ void AdBlockServiceDomainResolver(const char* host,
 
 }  // namespace
 
-std::string AdBlockService::g_ad_block_component_id_(kAdBlockComponentId);
+/*std::string AdBlockService::g_ad_block_component_id_(kAdBlockComponentId);
 std::string AdBlockService::g_ad_block_component_base64_public_key_(
-    kAdBlockComponentBase64PublicKey);
+    kAdBlockComponentBase64PublicKey);*/
 
 void AdBlockService::ShouldStartRequest(
     const GURL& url,
@@ -73,8 +75,6 @@ void AdBlockService::ShouldStartRequest(
     bool* did_match_exception,
     bool* did_match_important,
     std::string* mock_data_url) {
-  if (!IsInitialized())
-    return;
 
   if (aggressive_blocking ||
       base::FeatureList::IsEnabled(
@@ -82,7 +82,7 @@ void AdBlockService::ShouldStartRequest(
       !SameDomainOrHost(
           url, url::Origin::CreateFromNormalizedTuple("https", tab_host, 80),
           net::registry_controlled_domains::INCLUDE_PRIVATE_REGISTRIES)) {
-    AdBlockBaseService::ShouldStartRequest(
+    default_service()->ShouldStartRequest(
         url, resource_type, tab_host, aggressive_blocking, did_match_rule,
         did_match_exception, did_match_important, mock_data_url);
     if (did_match_important && *did_match_important) {
@@ -114,7 +114,7 @@ absl::optional<std::string> AdBlockService::GetCspDirectives(
     blink::mojom::ResourceType resource_type,
     const std::string& tab_host) {
   auto csp_directives =
-      AdBlockBaseService::GetCspDirectives(url, resource_type, tab_host);
+      default_service()->GetCspDirectives(url, resource_type, tab_host);
 
   const auto regional_csp = regional_service_manager()->GetCspDirectives(
       url, resource_type, tab_host);
@@ -130,7 +130,7 @@ absl::optional<std::string> AdBlockService::GetCspDirectives(
 absl::optional<base::Value> AdBlockService::UrlCosmeticResources(
     const std::string& url) {
   absl::optional<base::Value> resources =
-      AdBlockBaseService::UrlCosmeticResources(url);
+      default_service()->UrlCosmeticResources(url);
 
   if (!resources || !resources->is_dict()) {
     return resources;
@@ -168,7 +168,7 @@ absl::optional<base::Value> AdBlockService::HiddenClassIdSelectors(
     const std::vector<std::string>& ids,
     const std::vector<std::string>& exceptions) {
   absl::optional<base::Value> hide_selectors =
-      AdBlockBaseService::HiddenClassIdSelectors(classes, ids, exceptions);
+      default_service()->HiddenClassIdSelectors(classes, ids, exceptions);
 
   absl::optional<base::Value> regional_selectors =
       regional_service_manager()->HiddenClassIdSelectors(classes, ids,
@@ -220,17 +220,49 @@ absl::optional<base::Value> AdBlockService::HiddenClassIdSelectors(
 AdBlockRegionalServiceManager* AdBlockService::regional_service_manager() {
   if (!regional_service_manager_)
     regional_service_manager_ =
-        brave_shields::AdBlockRegionalServiceManagerFactory(
-            component_delegate_);
+        brave_shields::AdBlockRegionalServiceManagerFactory(local_state_, locale_, GetTaskRunner());
   return regional_service_manager_.get();
 }
 
-brave_shields::AdBlockCustomFiltersService*
+void AdBlockService::InitCustomFilters() {
+  custom_filters_service_ =
+      brave_shields::AdBlockEngineServiceFactory(GetTaskRunner());
+  custom_filters_source_provider_ =
+      std::make_unique<brave_shields::AdBlockCustomFiltersSourceProvider>(local_state_);
+  custom_filters_service_->Init(custom_filters_source_provider_.get(), resource_provider());
+}
+
+brave_shields::AdBlockEngineService*
+AdBlockService::default_service() {
+  if (!default_service_) {
+    default_service_ = AdBlockEngineServiceFactory(GetTaskRunner());
+    default_source_provider_ =
+        std::make_unique<brave_shields::AdBlockDefaultSourceProvider>(component_update_service_);
+    default_service_->Init(default_source_provider_.get(), default_source_provider_.get());
+  }
+  return default_service_.get();
+}
+
+brave_shields::ResourceProvider* AdBlockService::resource_provider() {
+  // Ensure the default service and source provider are initialized
+  default_service();
+  return default_source_provider_.get();
+}
+
+brave_shields::AdBlockEngineService*
 AdBlockService::custom_filters_service() {
-  if (!custom_filters_service_)
-    custom_filters_service_ =
-        brave_shields::AdBlockCustomFiltersServiceFactory(component_delegate_);
+  if (!custom_filters_service_) {
+    InitCustomFilters();
+  }
   return custom_filters_service_.get();
+}
+
+brave_shields::AdBlockCustomFiltersSourceProvider*
+AdBlockService::custom_filters_source_provider() {
+  if (!custom_filters_source_provider_) {
+    InitCustomFilters();
+  }
+  return custom_filters_source_provider_.get();
 }
 
 brave_shields::AdBlockSubscriptionServiceManager*
@@ -239,27 +271,39 @@ AdBlockService::subscription_service_manager() {
 }
 
 AdBlockService::AdBlockService(
-    brave_component_updater::BraveComponent::Delegate* delegate,
+    PrefService* local_state,
+    std::string locale,
+    component_updater::ComponentUpdateService* cus,
+    scoped_refptr<base::SequencedTaskRunner> task_runner,
     std::unique_ptr<AdBlockSubscriptionServiceManager>
         subscription_service_manager)
-    : AdBlockBaseService(delegate),
-      component_delegate_(delegate),
+    : local_state_(local_state),
+      locale_(locale),
+      component_update_service_(cus),
+      task_runner_(task_runner),
       subscription_service_manager_(std::move(subscription_service_manager)) {}
 
 AdBlockService::~AdBlockService() {}
 
-bool AdBlockService::Init() {
+bool AdBlockService::Start() {
   // Initializes adblock-rust's domain resolution implementation
   adblock::SetDomainResolver(AdBlockServiceDomainResolver);
 
-  if (!AdBlockBaseService::Init())
-    return false;
+  // Initialize each service:
+  default_service();
+  custom_filters_service();
+  regional_service_manager();
+  subscription_service_manager();
 
-  Register(kAdBlockComponentName, g_ad_block_component_id_,
-           g_ad_block_component_base64_public_key_);
   return true;
 }
 
+void AdBlockService::EnableTag(const std::string& tag, bool enabled) {
+  // Tags only need to be modified for the default engine.
+  default_service()->EnableTag(tag, enabled);
+}
+
+/*
 void AdBlockService::OnComponentReady(const std::string& component_id,
                                       const base::FilePath& install_dir,
                                       const std::string& manifest) {
@@ -307,7 +351,7 @@ void AdBlockService::SetComponentIdAndBase64PublicKeyForTest(
     const std::string& component_base64_public_key) {
   g_ad_block_component_id_ = component_id;
   g_ad_block_component_base64_public_key_ = component_base64_public_key;
-}
+}*/
 
 void RegisterPrefsForAdBlockService(PrefRegistrySimple* registry) {
   registry->RegisterStringPref(prefs::kAdBlockCustomFilters, std::string());

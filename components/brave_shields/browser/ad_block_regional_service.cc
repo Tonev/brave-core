@@ -26,47 +26,47 @@
 
 namespace brave_shields {
 
-std::string                                                     // NOLINT
+/*std::string                                                     // NOLINT
     AdBlockRegionalService::g_ad_block_regional_component_id_;  // NOLINT
 std::string AdBlockRegionalService::                            // NOLINT
-    g_ad_block_regional_component_base64_public_key_;           // NOLINT
+    g_ad_block_regional_component_base64_public_key_;           // NOLINT*/
 
 AdBlockRegionalService::AdBlockRegionalService(
-    const adblock::FilterList& catalog_entry,
-    brave_component_updater::BraveComponent::Delegate* delegate,
+    //const adblock::FilterList& catalog_entry,
+    scoped_refptr<base::SequencedTaskRunner> task_runner/*,
     AdBlockRegionalService::ResourcesFileReadyCallback
-        resoures_file_ready_callback)
-    : AdBlockBaseService(delegate),
-      resoures_file_ready_callback_(resoures_file_ready_callback),
-      uuid_(catalog_entry.uuid),
-      title_(catalog_entry.title),
-      component_id_(catalog_entry.component_id),
-      base64_public_key_(catalog_entry.base64_public_key) {}
+        resources_file_ready_callback*/)
+    : AdBlockBaseService(task_runner)//,
+      //resources_file_ready_callback_(resources_file_ready_callback),
+      //uuid_(catalog_entry.uuid),
+      //title_(catalog_entry.title),
+      //component_id_(catalog_entry.component_id),
+      /*base64_public_key_(catalog_entry.base64_public_key)*/ {}
 
 AdBlockRegionalService::~AdBlockRegionalService() {}
 
-void AdBlockRegionalService::SetCatalogEntry(const adblock::FilterList& entry) {
+/*void AdBlockRegionalService::SetCatalogEntry(const adblock::FilterList& entry) {
   DCHECK(entry.uuid == uuid_);
   title_ = entry.title;
   component_id_ = entry.component_id;
   base64_public_key_ = entry.base64_public_key;
-}
+}*/
 
 bool AdBlockRegionalService::Init() {
   AdBlockBaseService::Init();
 
-  Register(title_,
+  /*Register(title_,
            !g_ad_block_regional_component_id_.empty()
                ? g_ad_block_regional_component_id_
                : component_id_,
            !g_ad_block_regional_component_base64_public_key_.empty()
                ? g_ad_block_regional_component_base64_public_key_
-               : base64_public_key_);
+               : base64_public_key_);*/
 
   return true;
 }
 
-void AdBlockRegionalService::OnComponentReady(const std::string& component_id,
+/*void AdBlockRegionalService::OnComponentReady(const std::string& component_id,
                                               const base::FilePath& install_dir,
                                               const std::string& manifest) {
   base::FilePath dat_file_path =
@@ -86,27 +86,27 @@ void AdBlockRegionalService::OnComponentReady(const std::string& component_id,
 
 void AdBlockRegionalService::OnResourcesFileDataReady(
     const std::string& resources) {
-  resoures_file_ready_callback_.Run(resources);
-}
+  resources_file_ready_callback_.Run(resources);
+}*/
 
 // static
-void AdBlockRegionalService::SetComponentIdAndBase64PublicKeyForTest(
+/*void AdBlockRegionalService::SetComponentIdAndBase64PublicKeyForTest(
     const std::string& component_id,
     const std::string& component_base64_public_key) {
   g_ad_block_regional_component_id_ = component_id;
   g_ad_block_regional_component_base64_public_key_ =
       component_base64_public_key;
-}
+}*/
 
 ///////////////////////////////////////////////////////////////////////////////
 
 std::unique_ptr<AdBlockRegionalService> AdBlockRegionalServiceFactory(
-    const adblock::FilterList& catalog_entry,
-    brave_component_updater::BraveComponent::Delegate* delegate,
+    //const adblock::FilterList& catalog_entry,
+    scoped_refptr<base::SequencedTaskRunner> task_runner/*,
     AdBlockRegionalService::ResourcesFileReadyCallback
-        resoures_file_ready_callback) {
-  return std::make_unique<AdBlockRegionalService>(catalog_entry, delegate,
-                                                  resoures_file_ready_callback);
+        resources_file_ready_callback*/) {
+  return std::make_unique<AdBlockRegionalService>(/*catalog_entry,*/ task_runner/*,
+                                                  resources_file_ready_callback*/);
 }
 
 }  // namespace brave_shields
