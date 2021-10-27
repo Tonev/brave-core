@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.chromium.chrome.R;
 
@@ -70,7 +71,7 @@ public class BraveNewsCategorySources extends PreferenceFragmentCompat implement
                 Log.d("bn", "category key:"+ key+ " " + categoryArg);
 
                 Publisher publisher = entry.getValue();
-                if (publisher.categoryName.toLowerCase().equals(categoryArg.toLowerCase())){
+                if (publisher.categoryName.toLowerCase(Locale.ROOT).equals(categoryArg.toLowerCase(Locale.ROOT))){
                     // categsPublishers.computeIfAbsent(publisher.categoryName, k ->new ArrayList<>()).add(publisher);
                     categoryPublishers.add(publisher);                    
                 }
@@ -113,7 +114,7 @@ public class BraveNewsCategorySources extends PreferenceFragmentCompat implement
         for(Map.Entry<String,List<Publisher>> map : publisherCategories.entrySet()){
             String category = map.getKey();
             Log.d("bn", "getfeed addCategs: " + category);
-            if (category.toLowerCase().equals(categoryArg.toLowerCase())){
+            if (category.toLowerCase(Locale.ROOT).equals(categoryArg.toLowerCase(Locale.ROOT))){
 
                 List<Publisher> publishers = map.getValue();
 
@@ -125,7 +126,7 @@ public class BraveNewsCategorySources extends PreferenceFragmentCompat implement
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
                         for (Publisher publisher : publishers){
                             SwitchPreference publisherSource = preferenceManager.findPreference(publisher.publisherName);
-                            if (publisher.publisherName.toLowerCase().contains((String) newValue)){
+                            if (publisher.publisherName.toLowerCase(Locale.ROOT).contains((String) newValue)){
                                 publisherSource.setVisible(true);
                             } else {
                                 publisherSource.setVisible(false);

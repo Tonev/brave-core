@@ -132,6 +132,8 @@ public class NTPUtil {
                       // textView.setText(itemData.title);  
                 }
             }
+        } else {
+            Log.d("bn", id+" items.getFeedItems() :  null, items: " + items);
         }
     }
 

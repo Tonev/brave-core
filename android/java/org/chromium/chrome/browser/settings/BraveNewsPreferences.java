@@ -314,6 +314,7 @@ public class BraveNewsPreferences
 
             return true;
         }
+        sharedPreferencesEditor.apply();
         return true;
     }
 

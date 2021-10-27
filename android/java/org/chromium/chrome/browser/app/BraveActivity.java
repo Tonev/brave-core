@@ -216,7 +216,7 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
     @Override
     public void onResumeWithNative() {
         super.onResumeWithNative();
-        Log.d("bn", "onResumeWithNative");
+        Log.d("bn", "ondetach onResumeWithNative");
         BraveActivityJni.get().restartStatsUpdater();
         InAppPurchaseWrapper.getInstance().startBillingServiceConnection(BraveActivity.this);
         BraveVpnNativeWorker.getInstance().addObserver(this);
@@ -224,6 +224,7 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
 
     @Override
     public void onPauseWithNative() {
+        Log.d("bn", "ondetach onPauseWithNative");
         BraveVpnNativeWorker.getInstance().removeObserver(this);
         super.onPauseWithNative();
     }
@@ -330,7 +331,7 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
     @Override
     public void initializeState() {
         super.initializeState();
-
+Log.d("bn", "ondetach initializeState  ");
         if (isNoRestoreState()) {
             CommandLine.getInstance().appendSwitch(ChromeSwitches.NO_RESTORE_STATE);
         }
@@ -399,7 +400,7 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
 
     @Override
     public void onResume() {
-        Log.d("bn", " onresume  ");
+        Log.d("bn", "ondetach onresume  ");
         super.onResume();
 
         Tab tab = getActivityTab();
@@ -415,7 +416,6 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
     @Override
     public void onPause() {
         super.onPause();
-
         Tab tab = getActivityTab();
         if (tab == null)
             return;
@@ -447,7 +447,7 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
     @Override
     public void finishNativeInitialization() {
         super.finishNativeInitialization();
-
+        Log.d("bn", "ondetach finishNativeInitialization  ");
         if (SharedPreferencesManager.getInstance().readBoolean(
                     BravePreferenceKeys.BRAVE_DOUBLE_RESTART, false)) {
             SharedPreferencesManager.getInstance().writeBoolean(
@@ -624,8 +624,6 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
         } else {
             Log.d("bn", "tab is null");
         }
-
-
 
         Log.d("BN", "lifecycle BraveActivity finishNativeInitialization");
 
