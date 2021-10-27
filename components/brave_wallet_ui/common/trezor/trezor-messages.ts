@@ -1,11 +1,13 @@
 import { loadTimeData } from '../../../common/loadTimeData'
-import { Unsuccessful } from 'trezor-connect'
+import { Unsuccessful, EthereumSignTransaction, CommonParams, Success } from 'trezor-connect'
+import { EthereumSignedTx } from 'trezor-connect/lib/typescript/trezor/protobuf'
 
 export const kTrezorBridgeUrl = loadTimeData.getString('braveWalletTrezorBridgeUrl')
 
 export enum TrezorCommand {
   Unlock = 'trezor-unlock',
-  GetAccounts = 'trezor-get-accounts'
+  GetAccounts = 'trezor-get-accounts',
+  SignTransaction = 'trezor-sign-treansaction'
 }
 export type CommandMessage = {
   command: TrezorCommand
@@ -26,6 +28,16 @@ export type UnlockResponse = CommandMessage & {
   result: Boolean,
   error?: Unsuccessful
 }
+
+export type SignTransactionCommandPayload = CommonParams & EthereumSignTransaction
+
+export type SignTransactionCommand = CommandMessage & {
+  command: TrezorCommand.SignTransaction
+  payload: SignTransactionCommandPayload
+}
+
+export type SignTransactionResponse = Unsuccessful | Success<EthereumSignedTx>
+
 export type TrezorAccount = {
   publicKey: string
   serializedPath: string,
@@ -42,8 +54,12 @@ export type TrezorGetAccountsResponse = {
 export type GetAccountsResponsePayload = CommandMessage & {
   payload: TrezorGetAccountsResponse
 }
-export type TrezorFrameCommand = GetAccountsCommand | UnlockCommand
-export type TrezorFrameResponse = UnlockResponse | GetAccountsResponsePayload
+
+export type SignTransactionResponsePayload = CommandMessage & {
+  payload: SignTransactionResponse
+}
+export type TrezorFrameCommand = GetAccountsCommand | UnlockCommand | SignTransactionCommand
+export type TrezorFrameResponse = UnlockResponse | GetAccountsResponsePayload | SignTransactionResponsePayload
 
 // Trezor library is loaded inside the chrome-untrusted webui page
 // and communication is going through posting messages between parent window

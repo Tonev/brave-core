@@ -1,5 +1,5 @@
 import TrezorConnect, { Success, Unsuccessful } from 'trezor-connect'
-import { HDNodeResponse } from 'trezor-connect/lib/typescript/trezor/protobuf'
+import { EthereumSignedTx, HDNodeResponse } from 'trezor-connect/lib/typescript/trezor/protobuf'
 import {
   TrezorCommand,
   UnlockCommand,
@@ -7,7 +7,9 @@ import {
   GetAccountsCommand,
   TrezorGetAccountsResponse,
   GetAccountsResponsePayload,
-  addTrezorCommandHandler
+  addTrezorCommandHandler,
+  SignTransactionCommand,
+  SignTransactionResponsePayload
 } from '../common/trezor/trezor-messages'
 
 type TrezorGetPublicKeyResponse = Unsuccessful | Success<HDNodeResponse[]>
@@ -40,6 +42,14 @@ addTrezorCommandHandler(TrezorCommand.GetAccounts, (command: GetAccountsCommand,
   return new Promise(async (resolve) => {
     TrezorConnect.getPublicKey({ bundle: command.paths }).then((result: TrezorGetPublicKeyResponse) => {
       resolve(createGetAccountsResponse(command, result))
+    })
+  })
+})
+
+addTrezorCommandHandler(TrezorCommand.SignTransaction, (command: SignTransactionCommand, source: Window): Promise<SignTransactionResponsePayload> => {
+  return new Promise(async (resolve) => {
+    TrezorConnect.ethereumSignTransaction(command.payload).then((result: Unsuccessful | Success<EthereumSignedTx>) => {
+      resolve({ id: command.id, command: command.command, payload: result, origin: command.origin })
     })
   })
 })

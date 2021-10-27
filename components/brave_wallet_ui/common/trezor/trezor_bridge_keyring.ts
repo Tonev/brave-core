@@ -5,12 +5,14 @@
 /* global window */
 
 const { EventEmitter } = require('events')
-import { publicToAddress, toChecksumAddress } from 'ethereumjs-util'
+import { publicToAddress, toChecksumAddress, bufferToHex } from 'ethereumjs-util'
+import { Transaction } from 'ethereumjs-tx'
 import {
   TrezorDerivationPaths, TrezorBridgeAccountsPayload
 } from '../../components/desktop/popup-modals/add-account-modal/hardware-wallet-connect/types'
 import {
-  kTrezorHardwareVendor
+  kTrezorHardwareVendor,
+  TransactionInfo
 } from '../../constants/types'
 import {
   TrezorCommand,
@@ -21,7 +23,9 @@ import {
   TrezorAccount,
   TrezorError,
   sendTrezorCommand,
-  TrezorFrameCommand
+  TrezorFrameCommand,
+  SignTransactionCommand,
+  SignTransactionCommandPayload
 } from '../../common/trezor/trezor-messages'
 import { getLocale } from '../../../common/locale'
 import { hardwareDeviceIdFromAddress } from '../async/lib'
@@ -58,6 +62,31 @@ export default class TrezorBridgeKeyring extends EventEmitter {
       throw Error(accounts.error)
     }
     return accounts.accounts
+  }
+
+  signTransaction = async (path: string, txInfo: TransactionInfo, chainId: string) => {
+    return new Promise(async (resolve, reject) => {
+      if (!this.isUnlocked() && !(await this.unlock())) {
+        return reject(new Error(getLocale('braveWalletUnlockError')))
+      }
+      const message: SignTransactionCommand = {
+        command: TrezorCommand.SignTransaction,
+        // @ts-ignore
+        id: crypto.randomUUID(),
+        payload: this.prepareTransactionPayload(path, txInfo, chainId),
+        origin: window.origin
+      }
+      const result = await this.sendTrezorCommand(message, async (data: SignTransactionCommandPayload) => {
+        if (data.payload.success) {
+          resolve(data.payload.payload)
+        } else {
+          reject(data.payload.payload)
+        }
+      })
+      if (!result) {
+        reject(false)
+      }
+    })
   }
 
   isUnlocked = () => {
@@ -103,6 +132,34 @@ export default class TrezorBridgeKeyring extends EventEmitter {
       return this.getHashFromAddress(address)
     }
     return ''
+  }
+
+  private normalize (buf: any) {
+    return bufferToHex(buf).toString()
+  }
+
+  private prepareTransactionPayload = (path: string, txInfo: TransactionInfo, chainId: string): SignTransactionCommandPayload => {
+    const txParams = {
+      nonce: txInfo.txData.baseData.nonce,
+      gasPrice: txInfo.txData.baseData.gasPrice,
+      gasLimit: txInfo.txData.baseData.gasLimit,
+      to: txInfo.txData.baseData.to,
+      value: txInfo.txData.baseData.value,
+      data: Buffer.from(txInfo.txData.baseData.data)
+    }
+    const tx = new Transaction(txParams)
+    return {
+      path: path,
+      transaction: {
+        to: this.normalize(tx.to),
+        value: this.normalize(tx.value),
+        data: this.normalize(tx.data).replace('0x', ''),
+        chainId: parseInt(chainId, 16),
+        nonce: this.normalize(tx.nonce),
+        gasLimit: this.normalize(tx.gasLimit),
+        gasPrice: this.normalize(tx.gasPrice)
+      }
+    }
   }
 
   private publicKeyToAddress = (key: string) => {
