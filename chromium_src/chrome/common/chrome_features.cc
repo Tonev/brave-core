@@ -9,6 +9,14 @@
 #include "../../../../chrome/common/chrome_features.cc"
 #undef kDnsOverHttpsShowUiParam
 
+#include "base/feature_override.h"
+
+// Enable webui dark theme: @media (prefers-color-scheme: dark) is gated
+// on this feature.
+ENABLE_FEATURE_BY_DEFAULT(features::kWebUIDarkMode);
+
+DISABLE_FEATURE_BY_DEFAULT(features::kPrivacySandboxSettings2);
+
 namespace features {
 
 // Enable the DoH settings UI in chrome://settings/security on all platforms.

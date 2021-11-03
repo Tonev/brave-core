@@ -5,6 +5,12 @@
 
 #include "../../../../net/base/features.cc"
 
+#include "base/feature_override.h"
+
+ENABLE_FEATURE_BY_DEFAULT(net::features::kLegacyTLSEnforced);
+
+DISABLE_FEATURE_BY_DEFAULT(net::features::kFirstPartySets);
+
 namespace net {
 namespace features {
 

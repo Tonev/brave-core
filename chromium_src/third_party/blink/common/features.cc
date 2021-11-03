@@ -5,6 +5,25 @@
 
 #include "../../../../../third_party/blink/common/features.cc"
 
+#include "base/feature_override.h"
+
+// Upgrade all mixed content
+ENABLE_FEATURE_BY_DEFAULT(blink::features::kMixedContentAutoupgrade);
+
+ENABLE_FEATURE_BY_DEFAULT(blink::features::kPrefetchPrivacyChanges);
+ENABLE_FEATURE_BY_DEFAULT(blink::features::kReducedReferrerGranularity);
+
+DISABLE_FEATURE_BY_DEFAULT(blink::features::kComputePressure);
+DISABLE_FEATURE_BY_DEFAULT(blink::features::kConversionMeasurement);
+DISABLE_FEATURE_BY_DEFAULT(blink::features::kFledgeInterestGroupAPI);
+DISABLE_FEATURE_BY_DEFAULT(blink::features::kFledgeInterestGroups);
+DISABLE_FEATURE_BY_DEFAULT(
+    blink::features::kHandwritingRecognitionWebPlatformApiFinch);
+DISABLE_FEATURE_BY_DEFAULT(blink::features::kInterestCohortAPIOriginTrial);
+DISABLE_FEATURE_BY_DEFAULT(blink::features::kInterestCohortFeaturePolicy);
+DISABLE_FEATURE_BY_DEFAULT(blink::features::kNavigatorPluginsFixed);
+DISABLE_FEATURE_BY_DEFAULT(blink::features::kTextFragmentAnchor);
+
 namespace blink {
 namespace features {
 
