@@ -10,6 +10,7 @@
 #include <vector>
 
 #include "base/base64.h"
+#include "base/json/json_reader.h"
 #include "base/json/json_writer.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/stringprintf.h"
@@ -110,7 +111,9 @@ void PostClaimUphold::OnRequest(const type::UrlResponse& response,
                                 const std::string& address,
                                 PostClaimUpholdCallback callback) const {
   ledger::LogUrlResponse(__func__, response);
-  callback(CheckStatusCode(response.status_code), address);
+  const auto result = CheckStatusCode(response.status_code);
+  if ()
+  callback(result, address);
 }
 
 type::Result PostClaimUphold::CheckStatusCode(const int status_code) const {
@@ -121,7 +124,7 @@ type::Result PostClaimUphold::CheckStatusCode(const int status_code) const {
 
   if (status_code == net::HTTP_FORBIDDEN) {
     BLOG(0, "Forbidden");
-    return type::Result::MISMATCHED_PROVIDER_ACCOUNTS;
+    return type::Result::IN_PROGRESS;
   }
 
   if (status_code == net::HTTP_NOT_FOUND) {
@@ -145,6 +148,34 @@ type::Result PostClaimUphold::CheckStatusCode(const int status_code) const {
   }
 
   return type::Result::LEDGER_OK;
+}
+
+type::Result PostClaimUphold::ParseBody(const std::string& body) const {
+  base::DictionaryValue* root = nullptr;
+  auto value = base::JSONReader::Read(body);
+  if (!value || !value->GetAsDictionary(&root)) {
+    BLOG(0, "Invalid body!");
+    return type::Result::LEDGER_ERROR;
+  }
+  DCHECK(root);
+
+  auto* message = root->FindStringKey("message");
+  if (!message) {
+    BLOG(0, "message is missing!");
+    return type::Result::LEDGER_ERROR;
+  }
+
+  if (message->find("error linking wallet: unable to match wallets: wallets do "
+                    "not match") != std::string::npos) {
+    return type::Result::MISMATCHED_PROVIDER_ACCOUNTS;
+  } else if (message->find("error linking wallet: failed to verify "
+                           "transaction: failed to verify transaction") !=
+             std::string::npos) {
+    return type::Result{}; //?
+  } else {
+    BLOG(0, "Unknown message!");
+    return type::Result::LEDGER_ERROR;
+  }
 }
 
 }  // namespace promotion
