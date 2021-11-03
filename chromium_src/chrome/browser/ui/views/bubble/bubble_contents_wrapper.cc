@@ -11,6 +11,12 @@
 #include "content/public/browser/web_contents_delegate.h"
 #include "content/public/browser/web_contents_observer.h"
 
+// Trezor library opens a popup window to connect with a device.
+// The buble delegate doesnt allow to open popups and we use
+// the Browser window delegate to redirect opening new popup content
+// to the Browser delegate instead of default one.
+// In order to close all popups we also save tab ids of each opened popup window
+// and close all with the bubble together.
 #define RenderViewHostChanged                                                \
   SetWalletDelegate(                                                         \
       base::WeakPtr<content::WebContentsDelegate> browser_delegate) {        \
