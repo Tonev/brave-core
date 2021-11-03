@@ -72,8 +72,8 @@ function Onboarding (props: Props) {
   }
 
   const onBack = () => {
-    if (onboardingStep === WalletOnboardingSteps.OnboardingImportCryptoWallets
-      || onboardingStep === WalletOnboardingSteps.OnboardingImportMetaMask) {
+    if (onboardingStep === WalletOnboardingSteps.OnboardingImportCryptoWallets ||
+      onboardingStep === WalletOnboardingSteps.OnboardingImportMetaMask) {
       setOnboardingStep(WalletOnboardingSteps.OnboardingWelcome)
       setPassword('')
       setConfirmedPassword('')
@@ -124,9 +124,9 @@ function Onboarding (props: Props) {
 
   const showBackButton = React.useMemo(() => {
     if (
-      onboardingStep === WalletOnboardingSteps.OnboardingCreatePassword
-      || onboardingStep === WalletOnboardingSteps.OnboardingImportMetaMask
-      || onboardingStep === WalletOnboardingSteps.OnboardingImportCryptoWallets
+      onboardingStep === WalletOnboardingSteps.OnboardingCreatePassword ||
+      onboardingStep === WalletOnboardingSteps.OnboardingImportMetaMask ||
+      onboardingStep === WalletOnboardingSteps.OnboardingImportCryptoWallets
     ) {
       return true
     } else {
@@ -176,8 +176,8 @@ function Onboarding (props: Props) {
     }
   }, [useSamePassword])
 
-  const isImporting = onboardingStep === WalletOnboardingSteps.OnboardingImportMetaMask
-    || onboardingStep === WalletOnboardingSteps.OnboardingImportCryptoWallets
+  const isImporting = onboardingStep === WalletOnboardingSteps.OnboardingImportMetaMask ||
+    onboardingStep === WalletOnboardingSteps.OnboardingImportCryptoWallets
 
   const isCreateWalletDisabled = checkConfirmedPassword || checkPassword || password === '' || confirmedPassword === ''
   const isImportDisabled = isCreateWalletDisabled || importPassword === ''

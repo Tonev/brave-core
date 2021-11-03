@@ -19,7 +19,7 @@ const updateBadgeTextAllWindows = (windows: chrome.windows.Window[], state?: Rew
     return
   }
 
-  windows.forEach((window => {
+  windows.forEach(window => {
     if (!window.id) {
       return
     }
@@ -32,15 +32,14 @@ const updateBadgeTextAllWindows = (windows: chrome.windows.Window[], state?: Rew
       return
     }
 
-    let tab = window.tabs.find((tab) => tab.active)
+    const tab = window.tabs.find((tab) => tab.active)
 
     if (!tab) {
       return
     }
 
     setBadgeText(state, isPublisherConnectedOrVerified(publisher.status), tab.id)
-  }))
-
+  })
 }
 
 const handledByGreaselion = (url: URL) => {
@@ -103,7 +102,6 @@ export const rewardsPanelReducer: Reducer<RewardsExtension.State | undefined> = 
           tabUrl: tab.url,
           tabId: tab.id
         }
-
       } else if (publisher &&
                  publisher.tabUrl === tab.url &&
                  (publisher.tabId !== tab.id || payload.activeTabIsLoadingTriggered) &&
@@ -123,7 +121,7 @@ export const rewardsPanelReducer: Reducer<RewardsExtension.State | undefined> = 
     }
     case types.ON_PUBLISHER_DATA: {
       const publisher = payload.publisher
-      let publishers: Record<string, RewardsExtension.Publisher> = state.publishers
+      const publishers: Record<string, RewardsExtension.Publisher> = state.publishers
       const tabKey = getTabKey(payload.windowId)
 
       if (publisher && !publisher.publisherKey) {
@@ -196,7 +194,7 @@ export const rewardsPanelReducer: Reducer<RewardsExtension.State | undefined> = 
       }
 
       let id = payload.id
-      let notifications: Record<number, RewardsExtension.Notification> = state.notifications
+      const notifications: Record<number, RewardsExtension.Notification> = state.notifications
       if (!notifications[id]) {
         id = `n_${id}`
       }
@@ -204,7 +202,7 @@ export const rewardsPanelReducer: Reducer<RewardsExtension.State | undefined> = 
       delete notifications[id]
 
       if (state.currentNotification === id) {
-        let current: number | undefined = undefined
+        let current: number | undefined
         Object.keys(state.notifications).forEach((key: string) => {
           if (
             current === undefined ||
@@ -213,7 +211,6 @@ export const rewardsPanelReducer: Reducer<RewardsExtension.State | undefined> = 
           ) {
             current = notifications[key].id
           }
-
         })
 
         state.currentNotification = current
@@ -232,8 +229,8 @@ export const rewardsPanelReducer: Reducer<RewardsExtension.State | undefined> = 
       break
     }
     case types.INCLUDE_IN_AUTO_CONTRIBUTION: {
-      let publisherKey = payload.publisherKey
-      let exclude = payload.exclude
+      const publisherKey = payload.publisherKey
+      const exclude = payload.exclude
       chrome.braveRewards.includeInAutoContribution(publisherKey, exclude)
       break
     }
@@ -268,14 +265,14 @@ export const rewardsPanelReducer: Reducer<RewardsExtension.State | undefined> = 
     }
     case types.ON_PUBLISHER_LIST_NORMALIZED: {
       const list = payload.properties
-      let publishers: Record<string, RewardsExtension.Publisher> = state.publishers
+      const publishers: Record<string, RewardsExtension.Publisher> = state.publishers
 
       if (!list || list.length === 0) {
         break
       }
 
       for (const key in publishers) {
-        let publisher = publishers[key]
+        const publisher = publishers[key]
         const updated = list.find((newPublisher: RewardsExtension.PublisherNormalized) =>
           newPublisher.publisherKey === publisher.publisherKey)
 
@@ -302,10 +299,10 @@ export const rewardsPanelReducer: Reducer<RewardsExtension.State | undefined> = 
       const publisherKey: string = payload.properties.publisherKey
       const excluded: boolean = payload.properties.excluded
 
-      let publishers: Record<string, RewardsExtension.Publisher> = state.publishers
+      const publishers: Record<string, RewardsExtension.Publisher> = state.publishers
 
       for (const key in publishers) {
-        let publisher = publishers[key]
+        const publisher = publishers[key]
 
         if (publisher.publisherKey === publisherKey) {
           publisher.excluded = !!excluded
@@ -331,7 +328,7 @@ export const rewardsPanelReducer: Reducer<RewardsExtension.State | undefined> = 
       break
     }
     case types.REMOVE_RECURRING_TIP: {
-      let publisherKey = payload.publisherKey
+      const publisherKey = payload.publisherKey
       if (publisherKey == null) {
         break
       }
@@ -339,8 +336,8 @@ export const rewardsPanelReducer: Reducer<RewardsExtension.State | undefined> = 
       break
     }
     case types.SAVE_RECURRING_TIP: {
-      let newAmount = payload.newAmount
-      let publisherKey = payload.publisherKey
+      const newAmount = payload.newAmount
+      const publisherKey = payload.publisherKey
 
       if (newAmount < 0 ||
           isNaN(newAmount) ||
@@ -371,9 +368,9 @@ export const rewardsPanelReducer: Reducer<RewardsExtension.State | undefined> = 
     case types.ON_PUBLISHER_STATUS_REFRESHED: {
       const publisherKey = payload.publisherKey
       if (publisherKey) {
-        let publishers: Record<string, RewardsExtension.Publisher> = state.publishers
+        const publishers: Record<string, RewardsExtension.Publisher> = state.publishers
         for (const key in publishers) {
-          let publisher = publishers[key]
+          const publisher = publishers[key]
           if (publisher.publisherKey === publisherKey) {
             publisher.status = payload.status
           }
@@ -398,7 +395,7 @@ export const rewardsPanelReducer: Reducer<RewardsExtension.State | undefined> = 
         break
       }
 
-      let notifications = {}
+      const notifications = {}
       let id = ''
       list.forEach((notification: RewardsExtension.Notification) => {
         id = notification.id
@@ -508,7 +505,7 @@ export const rewardsPanelReducer: Reducer<RewardsExtension.State | undefined> = 
       const { prefs } = action.payload
       chrome.braveRewards.updatePrefs(prefs)
       state = { ...state }
-      for (let [key, value] of Object.entries(prefs)) {
+      for (const [key, value] of Object.entries(prefs)) {
         switch (key) {
           case 'adsPerHour':
             state.adsPerHour = Number(value)

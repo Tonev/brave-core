@@ -50,7 +50,7 @@ const geminiReducer: Reducer<NewTab.State | undefined> = (state: NewTab.State, a
     case types.SET_ACCOUNT_BALANCES:
       const { balances } = payload
       state = { ...state }
-      for (let balance in balances) {
+      for (const balance in balances) {
         if (balances[balance]) {
           state.geminiState.accountBalances[balance] = balances[balance]
         }

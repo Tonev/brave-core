@@ -90,12 +90,12 @@ const handleOnAPIRequest = (data: OnAPIRequest, onSuccess: (response: any) => vo
   }
 
   fetch(data.url, data.init)
-    .then(response => {
+    .then(async response => {
       if (!response.ok) {
         throw new Error(`API request failed: ${response.statusText} (${response.status})`)
       }
 
-      return response.json()
+      return await response.json()
     })
     .then(responseData => onSuccess(responseData))
     .catch(error => onFailure(error))
@@ -244,7 +244,6 @@ const getPublisherPanelInfo = (tabId: number, publisherKey: string) => {
             info
           })
       }
-      return
     })
 }
 
@@ -272,7 +271,6 @@ const savePublisherInfo = (tabId: number, mediaType: string, url: string, publis
     (result: RewardsExtension.Result) => {
       if (result !== 0) {
         console.error(`Failed to save publisher info for ${publisherKey}, result is ${result}`)
-        return
       }
     })
 }
@@ -304,8 +302,7 @@ const handleSavePublisherVisit = (tabId: number, mediaType: string, data: SavePu
           data.url,
           data.publisherKey,
           data.publisherName,
-          data.favIconUrl || '')
-        return
+          data.favIconUrl ?? '')
       }
     })
 }

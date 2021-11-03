@@ -2,7 +2,6 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
-/* global window */
 
 import { createReducer } from 'redux-act'
 import {
@@ -101,8 +100,8 @@ reducer.on(WalletActions.initialized, (state: any, payload: InitializedPayloadTy
       tokens: []
     }
   })
-  const selectedAccount = payload.selectedAccount ?
-    accounts.find((account) => account.address.toLowerCase() === payload.selectedAccount.toLowerCase()) ?? accounts[0]
+  const selectedAccount = payload.selectedAccount
+    ? accounts.find((account) => account.address.toLowerCase() === payload.selectedAccount.toLowerCase()) ?? accounts[0]
     : accounts[0]
   return {
     ...state,
@@ -160,7 +159,7 @@ reducer.on(WalletActions.setAllTokensList, (state: any, payload: GetAllTokensRet
 })
 
 reducer.on(WalletActions.nativeAssetBalancesUpdated, (state: any, payload: GetNativeAssetBalancesPriceReturnInfo) => {
-  let accounts: WalletAccountType[] = [...state.accounts]
+  const accounts: WalletAccountType[] = [...state.accounts]
 
   accounts.forEach((account, index) => {
     if (payload.balances[index].success) {
@@ -191,7 +190,7 @@ reducer.on(WalletActions.tokenBalancesUpdated, (state: any, payload: GetERC20Tok
       return '0'
     }
   }
-  let accounts: WalletAccountType[] = [...state.accounts]
+  const accounts: WalletAccountType[] = [...state.accounts]
   accounts.forEach((account, accountIndex) => {
     payload.balances[accountIndex].forEach((info, tokenIndex) => {
       let assetBalance = '0'
@@ -202,7 +201,7 @@ reducer.on(WalletActions.tokenBalancesUpdated, (state: any, payload: GetERC20Tok
         fiatBalance = account.fiatBalance
       } else if (info.success && userVisibleTokensInfo[tokenIndex].isErc721) {
         assetBalance = info.balance
-        fiatBalance = '0'  // TODO: support estimated market value.
+        fiatBalance = '0' // TODO: support estimated market value.
       } else if (info.success) {
         assetBalance = info.balance
         fiatBalance = formatFiatBalance(info.balance, userVisibleTokensInfo[tokenIndex].decimals, findTokenPrice(userVisibleTokensInfo[tokenIndex].symbol))
@@ -245,17 +244,19 @@ reducer.on(WalletActions.portfolioPriceHistoryUpdated, (state: any, payload: Por
   // array of history, this checks for the shortest array first to
   // then map and reduce to it length
   const shortestHistory = jointHistory.length > 0 ? jointHistory.reduce((a, b) => a.length <= b.length ? a : b) : []
-  const sumOfHistory = jointHistory.length > 0 ? shortestHistory.map((token, tokenIndex) => {
+  const sumOfHistory = jointHistory.length > 0
+? shortestHistory.map((token, tokenIndex) => {
     return {
       date: convertMojoTimeToJS(token.date),
       close: jointHistory.map(price => Number(price[tokenIndex].price) || 0).reduce((sum, x) => sum + x, 0)
     }
-  }) : []
+  })
+: []
 
   return {
     ...state,
     portfolioPriceHistory: sumOfHistory,
-    isFetchingPortfolioPriceHistory: sumOfHistory.length === 0 ? true : false
+    isFetchingPortfolioPriceHistory: sumOfHistory.length === 0
   }
 })
 
@@ -420,7 +421,7 @@ reducer.on(WalletActions.setMetaMaskInstalled, (state: WalletState, payload: boo
 reducer.on(WalletActions.refreshAccountInfo, (state: any, payload: InitializedPayloadType) => {
   const accounts = state.accounts
   const updatedAccounts = payload.accountInfos.map((info: AccountInfo) => {
-    let account = accounts.find((account: WalletAccountType) => account.address === info.address)
+    const account = accounts.find((account: WalletAccountType) => account.address === info.address)
     account.name = info.name
     return account
   })

@@ -54,7 +54,7 @@ const RandomContentOrder = [
 
 export const groupItemCount = PageContentOrder.length + RandomContentOrder.length
 
-type Props = {
+interface Props {
   content: BraveToday.Page
   publishers: BraveToday.Publishers
   displayAds?: BraveToday.DisplayAd[]

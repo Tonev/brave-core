@@ -151,8 +151,8 @@ Background.setListener<Messages.GetImageDataResponse, Messages.GetImageDataPaylo
   MessageTypes.getImageData,
   async function (req, sender, sendResponse) {
     // TODO: handle error
-    const blob = await fetchResource(req.url).then(r => r.blob())
-    // @ts-ignore (Blob.arrayBuffer does exist)
+    const blob = await fetchResource(req.url).then(async r => await r.blob())
+    // @ts-expect-error (Blob.arrayBuffer does exist)
     const buffer = await blob.arrayBuffer()
     const dataUrl = await getUnpaddedAsDataUrl(buffer, 'image/jpg')
     sendResponse({

@@ -11,7 +11,7 @@ import { basename, extname } from 'path'
 import * as JSZip from 'jszip'
 
 let webTorrent: WebTorrent.Instance | undefined
-let servers: { [key: string]: any } = { }
+const servers: { [key: string]: any } = { }
 
 export const getWebTorrent = () => {
   if (!webTorrent) {

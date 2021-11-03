@@ -12,15 +12,15 @@ import * as Cr from 'chrome://resources/js/cr.m'
 // especially string keys.
 //
 
-export type PrivateTabData = {
+export interface PrivateTabData {
   useAlternativePrivateSearchEngine: boolean
   showAlternativePrivateSearchEngineToggle: boolean
 }
 
 type PrivateTabDataUpdatedHandler = (data: PrivateTabData) => void
 
-export function getPrivateTabData (): Promise<PrivateTabData> {
-  return Cr.sendWithPromise('getNewTabPagePrivateProperties')
+export async function getPrivateTabData (): Promise<PrivateTabData> {
+  return await Cr.sendWithPromise('getNewTabPagePrivateProperties')
 }
 
 export function toggleAlternativePrivateSearchEngine (): void {

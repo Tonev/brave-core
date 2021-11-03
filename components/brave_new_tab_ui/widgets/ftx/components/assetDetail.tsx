@@ -15,7 +15,7 @@ import { FTXState } from '../ftx_state'
 import IconAsset from '../../shared/iconAsset'
 import getFormattedPrice from '../../shared/getFormattedPrice'
 
-type Props = {
+interface Props {
   ftx: FTXState
   actions: typeof FTXActions
 }

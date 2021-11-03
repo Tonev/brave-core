@@ -3,32 +3,32 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this file,
 // you can obtain one at http://mozilla.org/MPL/2.0/.
 
-function getCryptoDotComTickerInfo (asset: string) {
-  return new Promise((resolve: Function) => {
+async function getCryptoDotComTickerInfo (asset: string) {
+  return await new Promise((resolve: Function) => {
     chrome.cryptoDotCom.getTickerInfo(`${asset}_USDT`, (resp: any) => {
       resolve({ [asset]: resp })
     })
   })
 }
 
-function getCryptoDotComAssetRankings () {
-  return new Promise((resolve: Function) => {
+async function getCryptoDotComAssetRankings () {
+  return await new Promise((resolve: Function) => {
     chrome.cryptoDotCom.getAssetRankings((resp: any) => {
       resolve(resp)
     })
   })
 }
 
-function getCryptoDotComChartData (asset: string) {
-  return new Promise((resolve: Function) => {
+async function getCryptoDotComChartData (asset: string) {
+  return await new Promise((resolve: Function) => {
     chrome.cryptoDotCom.getChartData(`${asset}_USDT`, (resp: any) => {
       resolve({ [asset]: resp })
     })
   })
 }
 
-function getCryptoDotComSupportedPairs () {
-  return new Promise((resolve: Function) => {
+async function getCryptoDotComSupportedPairs () {
+  return await new Promise((resolve: Function) => {
     chrome.cryptoDotCom.getSupportedPairs((resp: any) => {
       resolve(resp)
     })
@@ -36,21 +36,21 @@ function getCryptoDotComSupportedPairs () {
 }
 
 export async function fetchCryptoDotComTickerPrices (assets: string[]) {
-  const assetReqs = assets.map(asset => getCryptoDotComTickerInfo(asset))
+  const assetReqs = assets.map(async asset => await getCryptoDotComTickerInfo(asset))
   const assetResps = await Promise.all(assetReqs).then((resps: object[]) => resps)
   return assetResps.reduce((all, current) => ({ ...current, ...all }), {})
 }
 
 export async function fetchCryptoDotComLosersGainers () {
-  return getCryptoDotComAssetRankings().then((resp: any) => resp)
+  return await getCryptoDotComAssetRankings().then((resp: any) => resp)
 }
 
 export async function fetchCryptoDotComCharts (assets: string[]) {
-  const chartReqs = assets.map(asset => getCryptoDotComChartData(asset))
+  const chartReqs = assets.map(async asset => await getCryptoDotComChartData(asset))
   const chartResps = await Promise.all(chartReqs).then((resps: object[]) => resps)
   return chartResps.reduce((all, current) => ({ ...current, ...all }), {})
 }
 
 export async function fetchCryptoDotComSupportedPairs () {
-  return getCryptoDotComSupportedPairs().then((resp: any) => resp)
+  return await getCryptoDotComSupportedPairs().then((resp: any) => resp)
 }

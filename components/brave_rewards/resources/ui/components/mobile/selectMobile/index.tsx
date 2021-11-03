@@ -8,13 +8,13 @@ import {
 } from './style'
 import { getLocale } from 'brave-ui/helpers'
 
-export type Amount = {
+export interface Amount {
   value: string
   dataValue: string
   converted: string
 }
 
-export type Option = {
+export interface Option {
   value: string
   text: string
 }
@@ -28,7 +28,6 @@ export interface Props {
 }
 
 export default class SelectMobile extends React.PureComponent<Props, {}> {
-
   onChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     if (this.props.onChange) {
       this.props.onChange(event.target.value)

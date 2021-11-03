@@ -15,7 +15,7 @@ import getFormattedPrice from '../../shared/getFormattedPrice'
 import * as FTXActions from '../ftx_actions'
 import { FTXState } from '../ftx_state'
 
-type Props = {
+interface Props {
   ftx: FTXState
   actions: typeof FTXActions
   hideBalance: boolean
@@ -47,8 +47,7 @@ export default function Summary (props: Props) {
         </S.FlexItem>
       </S.FlexItem>
       {balanceKeys.length !== 0
-      ?
-      <S.List hasBorder={false}>
+      ? <S.List hasBorder={false}>
         {balanceKeys.map(currencyKey => {
           const balance = props.ftx.balances[currencyKey]
           return (

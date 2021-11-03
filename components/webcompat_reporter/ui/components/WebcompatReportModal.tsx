@@ -31,9 +31,11 @@ export default class WebcompatReportModal extends React.PureComponent<Props, {}>
     } = this.props
     return (
       <RectangularCard>
-        {submitted ? (
+        {submitted
+? (
           <ConfirmationView/>
-        ) : (
+        )
+: (
           <ReportView
             siteUrl={siteUrl}
             onSubmitReport={onSubmitReport}

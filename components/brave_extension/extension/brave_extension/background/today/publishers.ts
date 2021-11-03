@@ -35,8 +35,8 @@ async function setPublishersCache (publishers: BraveToday.Publishers) {
   })
 }
 
-function getPublishersFromCache () {
-  return new Promise<void>(resolve => {
+async function getPublishersFromCache () {
+  return await new Promise<void>(resolve => {
     chrome.storage.local.get(storageKey, async (data) => {
       if (await isValidStorageData(data)) {
         memoryData = data[storageKey].publishers
@@ -103,7 +103,7 @@ export async function getOrFetchData () {
   // Don't notify about updated data if we're only getting new data
   // due to not having retrieved any data yet. Avoids double feed fetch since
   // requesting feed data also requests publishers data.
-  return update(false, false)
+  return await update(false, false)
 }
 
 export async function update (force: boolean = false, notify: boolean = true) {

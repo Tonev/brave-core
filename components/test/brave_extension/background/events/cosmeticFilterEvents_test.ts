@@ -9,8 +9,8 @@ let lastPromptText: string
 let selectorToReturn: string
 
 global.prompt = (inputText: string, promptText: string) => {
-  lastInputText = inputText
-  lastPromptText = promptText
+  lastInputText = inputText /* eslint @typescript-eslint/no-unused-vars: 0 */
+  lastPromptText = promptText /* eslint @typescript-eslint/no-unused-vars: 0 */
   return selectorToReturn
 }
 
@@ -38,7 +38,7 @@ describe('cosmeticFilterEvents events', () => {
       contextMenuOnClickedSpy = jest.spyOn(chrome.tabs, 'create')
       chromeTabsQuerySpy = jest.spyOn(chrome.tabs, 'query')
       chromeTabsSendMessageSpy = jest.spyOn(chrome.tabs, 'sendMessage')
-      chromeBraveShieldsAddSiteCosmeticFilterSpy = jest.spyOn(chrome.braveShields, 'addSiteCosmeticFilter')
+      chromeBraveShieldsAddSiteCosmeticFilterSpy = jest.spyOn(chrome.braveShields, 'addSiteCosmeticFilter') /* eslint @typescript-eslint/no-unused-vars: 0 */
     })
     afterEach(() => {
       contextMenuOnClickedSpy.mockRestore()
@@ -77,7 +77,7 @@ describe('cosmeticFilterEvents events', () => {
         it('calls `chrome.tabs.insertCSS` with cosmetic filter rule', function () {
           selectorToReturn = '#test_selector'
           cosmeticFilterEvents.applyCosmeticFilter('brave.com', selectorToReturn)
-          let returnObj = {
+          const returnObj = {
             'code': '#test_selector {display: none !important;}',
             'cssOrigin': 'user'
           }

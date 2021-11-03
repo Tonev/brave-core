@@ -42,7 +42,7 @@ export default class TableActivity extends React.PureComponent<Props, {}> {
     }
 
     return rows.map((row: DetailRow): Row => {
-      let content = []
+      const content = []
 
       content.push({
         content: (
@@ -61,10 +61,12 @@ export default class TableActivity extends React.PureComponent<Props, {}> {
         content.push({
           content: (
             <>
-              {row.date ? new Intl.DateTimeFormat('default', {
+              {row.date
+? new Intl.DateTimeFormat('default', {
                 month: 'short',
                 day: 'numeric'
-              }).format(row.date * 1000) : null}
+              }).format(row.date * 1000)
+: null}
             </>
           )
         })
@@ -91,7 +93,7 @@ export default class TableActivity extends React.PureComponent<Props, {}> {
   }
 
   get headers (): Cell[] {
-    let cells = []
+    const cells = []
     cells.push({
       content: getLocale('site')
     })

@@ -7,7 +7,7 @@ import hashStrings from '../../../../../common/hashStrings'
 
 const MS_IN_DAY = 24 * 60 * 60 * 1000
 
-function shuffleArray (array: Array<any>) {
+function shuffleArray (array: any[]) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]]
@@ -39,9 +39,9 @@ export default async function getBraveTodayData (
   enabledPublishers: BraveToday.Publishers
 ): Promise<BraveToday.Feed | undefined> {
   // No sponsor content yet, wait until we have content spec
-  const promotedArticles: (BraveToday.PromotedArticle)[] = []
-  const deals: (BraveToday.Deal)[] = []
-  let articles: (BraveToday.Article)[] = []
+  const promotedArticles: BraveToday.PromotedArticle[] = []
+  const deals: BraveToday.Deal[] = []
+  const articles: BraveToday.Article[] = []
 
   // Filter to only with image and enabled
   // publishers (or publishers we yet know about).
@@ -152,7 +152,6 @@ function generateNextPage (
   promotedArticles: BraveToday.PromotedArticle[],
   featuredCategory?: string,
   dealsCategory?: string): BraveToday.Page | null {
-
   // Collect headlines
   // TODO(petemill): Use the CardType type and PageContentOrder array
   // from cardsGroup.tsx here instead of having to synchronise the amount

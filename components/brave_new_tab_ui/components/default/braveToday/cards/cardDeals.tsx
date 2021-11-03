@@ -18,7 +18,7 @@ interface Props {
   onReadFeedItem: OnReadFeedItem
 }
 
-type ListItemProps = {
+interface ListItemProps {
   item: BraveToday.Deal
   onReadFeedItem: OnReadFeedItem
   shouldScrollIntoView: boolean

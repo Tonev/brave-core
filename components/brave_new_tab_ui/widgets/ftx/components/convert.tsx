@@ -11,12 +11,12 @@ import * as S from '../../shared/styles'
 import * as FTXActions from '../ftx_actions'
 import { FTXState } from '../ftx_state'
 
-type Props = {
+interface Props {
   ftx: FTXState
   actions: typeof FTXActions
 }
 
-type Choices = {
+interface Choices {
   from: string
   to: string
   quantity: number
@@ -52,7 +52,7 @@ function ConversionInProgress (props: Props) {
   // Countdown label
   const countdownLabel = React.useMemo(() => {
     return getLocale('ftxConversionConfirmLabel').replace('$1', `${timeLeft}`)
-  }, [ timeLeft ])
+  }, [timeLeft])
 
   return (
     <S.BasicBox $mt={15} $mb={10} isFlex={true} column={true} alignItems={'stretch'}>

@@ -38,9 +38,11 @@ export default class ShieldsAdvancedView extends React.PureComponent<Props, Stat
     super(props)
     this.state = { isBlockedListOpen: false }
   }
+
   setBlockedListOpen = () => {
     this.setState({ isBlockedListOpen: !this.state.isBlockedListOpen })
   }
+
   render () {
     const {
       enabled,
@@ -71,7 +73,8 @@ export default class ShieldsAdvancedView extends React.PureComponent<Props, Stat
           fakeOnChangeShieldsEnabled={fakeOnChangeShieldsEnabled}
         />
         {
-          enabled ? (
+          enabled
+? (
             <>
               <InterfaceControls
                 favicon={favicon}
@@ -90,7 +93,8 @@ export default class ShieldsAdvancedView extends React.PureComponent<Props, Stat
                 fingerprintingBlocked={fingerprintingBlocked}
               />
             </>
-          ) : null
+          )
+: null
         }
         <Footer
           advancedView={true}

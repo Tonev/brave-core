@@ -29,14 +29,14 @@ import {
 // amount of mapping/adapter code found in |extension_host|. As the extension
 // APIs are improved, the need for this adapter will diminish.
 
-export function getRewardsBalance () {
-  return new Promise<number>((resolve) => {
+export async function getRewardsBalance () {
+  return await new Promise<number>((resolve) => {
     chrome.braveRewards.fetchBalance((balance) => { resolve(balance.total) })
   })
 }
 
-export function getSettings () {
-  return new Promise<Settings>((resolve) => {
+export async function getSettings () {
+  return await new Promise<Settings>((resolve) => {
     chrome.braveRewards.getPrefs((prefs) => {
       resolve({
         adsPerHour: prefs.adsPerHour,
@@ -47,8 +47,8 @@ export function getSettings () {
   })
 }
 
-export function getExternalWalletProviders () {
-  return new Promise<ExternalWalletProvider[]>((resolve) => {
+export async function getExternalWalletProviders () {
+  return await new Promise<ExternalWalletProvider[]>((resolve) => {
     // The extension API currently does not support retrieving a list of
     // external wallet providers.
     chrome.braveRewards.getExternalWallet((_, wallet) => {
@@ -58,8 +58,8 @@ export function getExternalWalletProviders () {
   })
 }
 
-export function getEarningsInfo () {
-  return new Promise<EarningsInfo | null>((resolve) => {
+export async function getEarningsInfo () {
+  return await new Promise<EarningsInfo | null>((resolve) => {
     chrome.braveRewards.getAdsAccountStatement((success, statement) => {
       if (success) {
         resolve({
@@ -74,13 +74,13 @@ export function getEarningsInfo () {
   })
 }
 
-export function getRewardsParameters () {
+export async function getRewardsParameters () {
   interface Result {
     exchangeInfo: ExchangeInfo
     options: Options
   }
 
-  return new Promise<Result>((resolve) => {
+  return await new Promise<Result>((resolve) => {
     chrome.braveRewards.getRewardsParameters((parameters) => {
       resolve({
         options: {
@@ -97,13 +97,13 @@ export function getRewardsParameters () {
 
 const externalWalletLoginURLs = new Map<ExternalWalletProvider, string>()
 
-export function getExternalWalletLoginURL (provider: ExternalWalletProvider) {
-  return new Promise<string>((resolve) => {
+export async function getExternalWalletLoginURL (provider: ExternalWalletProvider) {
+  return await new Promise<string>((resolve) => {
     resolve(externalWalletLoginURLs.get(provider) || '')
   })
 }
 
-export function getExternalWallet () {
+export async function getExternalWallet () {
   function mapStatus (status: number): ExternalWalletStatus | null {
     switch (status) {
       case 1: // CONNECTED
@@ -118,7 +118,7 @@ export function getExternalWallet () {
     return null
   }
 
-  return new Promise<ExternalWallet | null>((resolve) => {
+  return await new Promise<ExternalWallet | null>((resolve) => {
     chrome.braveRewards.getExternalWallet((_, wallet) => {
       const provider = externalWalletProviderFromString(wallet.type)
       const status = mapStatus(wallet.status)
@@ -143,8 +143,8 @@ export function getExternalWallet () {
   })
 }
 
-export function getRewardsSummaryData () {
-  return new Promise<RewardsSummaryData>((resolve) => {
+export async function getRewardsSummaryData () {
+  return await new Promise<RewardsSummaryData>((resolve) => {
     const now = new Date()
     const month = now.getMonth() + 1
     const year = now.getFullYear()
@@ -161,8 +161,8 @@ export function getRewardsSummaryData () {
   })
 }
 
-export function getNotifications () {
-  return new Promise<Notification[]>((resolve) => {
+export async function getNotifications () {
+  return await new Promise<Notification[]>((resolve) => {
     chrome.braveRewards.getAllNotifications((list) => {
       const notifications: Notification[] = []
       const typeSet = new Set<string>()
@@ -197,7 +197,7 @@ type GrantsUpdatedCallback = (grants: GrantInfo[]) => void
 
 let grantResolver: GrantsUpdatedCallback | null = null
 let grantPromise: Promise<GrantInfo[]> | null = null
-let grantsUpdatedCallbacks: GrantsUpdatedCallback[] = []
+const grantsUpdatedCallbacks: GrantsUpdatedCallback[] = []
 
 chrome.braveRewards.onPromotions.addListener((result, promotions) => {
   const grants: GrantInfo[] = []
@@ -227,16 +227,16 @@ export function onGrantsUpdated (callback: (grants: GrantInfo[]) => void) {
   grantsUpdatedCallbacks.push(callback)
 }
 
-export function getGrants () {
+export async function getGrants () {
   if (!grantPromise) {
-    grantPromise = new Promise<GrantInfo[]>((r) => { grantResolver = r })
+    grantPromise = new Promise<GrantInfo[]>((resolve) => { grantResolver = resolve })
     chrome.braveRewards.fetchPromotions()
   }
-  return grantPromise
+  return await grantPromise
 }
 
-export function getRewardsEnabled () {
-  return new Promise<boolean>((resolve) => {
+export async function getRewardsEnabled () {
+  return await new Promise<boolean>((resolve) => {
     // Currently, we must use the |showShowOnboarding| function to infer whether
     // the user has enabled rewards.
     chrome.braveRewards.shouldShowOnboarding((showOnboarding) => {
@@ -250,8 +250,8 @@ export function onRewardsEnabled (callback: () => void) {
   chrome.braveRewards.onAdsEnabled.addListener(() => { callback() })
 }
 
-function getMonthlyTipAmount (publisherKey: string) {
-  return new Promise<number>((resolve) => {
+async function getMonthlyTipAmount (publisherKey: string) {
+  return await new Promise<number>((resolve) => {
     chrome.braveRewards.getRecurringTips((result) => {
       for (const item of result.recurringTips) {
         if (item.publisherKey === publisherKey) {
@@ -289,8 +289,8 @@ async function getPublisherFromBackgroundState (tabId: number) {
   return publishers[`key_${tabId}`] || {}
 }
 
-function getTab (tabId: number) {
-  return new Promise<chrome.tabs.Tab | null>((resolve) => {
+async function getTab (tabId: number) {
+  return await new Promise<chrome.tabs.Tab | null>((resolve) => {
     chrome.tabs.get(tabId, (tab) => { resolve(tab || null) })
   })
 }

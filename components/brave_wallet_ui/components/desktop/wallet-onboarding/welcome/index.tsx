@@ -58,8 +58,8 @@ function OnboardingWelcome (props: Props) {
           <CryptoWalletsAlertTitle>{getLocale('braveWalletCryptoWalletsDetected')}</CryptoWalletsAlertTitle>
           <CryptoWalletsAlertDescription>{getLocale('braveWalletCryptoWalletsDescriptionOne')}</CryptoWalletsAlertDescription>
           <CryptoWalletsAlertDescription>
-            {getLocale('braveWalletCryptoWalletsDescriptionTwoFirst')}{` `}
-            <SettingsButton onClick={onClickSettings}>{getLocale('braveWalletWalletPopupSettings')}</SettingsButton>{` `}
+            {getLocale('braveWalletCryptoWalletsDescriptionTwoFirst')}{' '}
+            <SettingsButton onClick={onClickSettings}>{getLocale('braveWalletWalletPopupSettings')}</SettingsButton>{' '}
             {getLocale('braveWalletCryptoWalletsDescriptionTwoSecond')}
           </CryptoWalletsAlertDescription>
         </CryptoWalletsAlertBox>

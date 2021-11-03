@@ -81,7 +81,7 @@ export interface Props {
 }
 
 const CryptoView = (props: Props) => {
-  let history = useHistory()
+  const history = useHistory()
   const {
     onLockWallet,
     onShowBackup,
@@ -137,7 +137,7 @@ const CryptoView = (props: Props) => {
   const [showDefaultWalletBanner, setShowDefaultWalletBanner] = React.useState<boolean>(needsBackup)
   const [selectedAccount, setSelectedAccount] = React.useState<WalletAccountType>()
 
-  let { category, id } = useParams<ParamsType>()
+  const { category, id } = useParams<ParamsType>()
 
   const tabTo = (path: TopTabNavTypes) => {
     history.push(`/crypto/${path}`)

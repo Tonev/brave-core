@@ -36,13 +36,15 @@ export const Panel = withState(
     }
     return (
       <div style={{ margin: '120px' }}>
-        {store.state.readOnlyView ? (
+        {store.state.readOnlyView
+? (
           <ShieldsReadOnlyView
             favicon={favicon}
             hostname={'buzzfeed.com'}
             onClose={fakeOnChangeReadOnlyView}
           />
-        ) : (
+        )
+: (
           <Shields
             enabled={boolean('Enabled?', store.state.enabled)}
             firstAccess={boolean('First Access?', store.state.firstAccess)}

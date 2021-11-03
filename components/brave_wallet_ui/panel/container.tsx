@@ -65,7 +65,7 @@ import {
 
 import { useAssets, useBalance, useSwap, useSend, useTimeout, usePreset } from '../common/hooks'
 
-type Props = {
+interface Props {
   panel: PanelState
   wallet: WalletState
   walletPanelActions: typeof WalletPanelActions
@@ -562,7 +562,7 @@ function Container (props: Props) {
       assets = WyreAccountAssetOptions
     } else if (selectedPanel === 'send') {
       assets = sendAssetOptions
-    } else {  // swap
+    } else { // swap
       assets = filteredAssetList
     }
     return (

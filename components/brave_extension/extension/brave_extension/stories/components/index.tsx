@@ -70,7 +70,8 @@ export default class Shields extends React.PureComponent<Props, State> {
           fakeOnChangeAdvancedView={fakeOnChangeAdvancedView}
           fakeToggleFirstAccess={fakeToggleFirstAccess}
         />
-      ) : (
+      )
+: (
         <SimpleView
           enabled={enabled}
           hostname={hostname}

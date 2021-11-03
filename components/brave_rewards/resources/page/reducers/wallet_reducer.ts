@@ -28,7 +28,7 @@ const walletReducer: Reducer<Rewards.State | undefined> = (state: Rewards.State,
       key = key.trim()
 
       if (!key || key.length === 0) {
-        let ui = state.ui
+        const ui = state.ui
         ui.walletRecoveryStatus = 0
 
         state = {
@@ -54,7 +54,7 @@ const walletReducer: Reducer<Rewards.State | undefined> = (state: Rewards.State,
     case types.ON_RECOVER_WALLET_DATA: {
       state = { ...state }
       const result = action.payload.result
-      let ui = state.ui
+      const ui = state.ui
 
       // TODO NZ check why enum can't be used inside Rewards namespace
       ui.walletRecoveryStatus = result
@@ -129,7 +129,7 @@ const walletReducer: Reducer<Rewards.State | undefined> = (state: Rewards.State,
     }
     case types.ON_BALANCE: {
       const status = action.payload.status
-      let ui = state.ui
+      const ui = state.ui
 
       if (status === 0) { // on ledger::type::Result::LEDGER_OK
         state.balance = action.payload.balance
@@ -237,7 +237,7 @@ const walletReducer: Reducer<Rewards.State | undefined> = (state: Rewards.State,
       state.monthlyReportIds = action.payload
       break
     }
-    case types.GET_WALLET_PASSPHRASE:	{
+    case types.GET_WALLET_PASSPHRASE: {
       chrome.send('brave_rewards.getWalletPassphrase')
       break
     }
@@ -245,7 +245,7 @@ const walletReducer: Reducer<Rewards.State | undefined> = (state: Rewards.State,
       const value = action.payload.passphrase
       if (value && value.length > 0) {
         state = { ...state }
-        let ui = state.ui
+        const ui = state.ui
         state.recoveryKey = value
 
         state = {

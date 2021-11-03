@@ -23,10 +23,13 @@ export default class NewPrivateTab extends React.PureComponent<Props, {}> {
     const { isTor, isQwant } = this.props
     return isQwant && isTor
       ? <QwantTor />
-      : isQwant ? <QwantWindow />
-      : isTor ? <TorWindow />
+      : isQwant
+? <QwantWindow />
+      : isTor
+? <TorWindow />
       : <PrivateWindow />
   }
+
   render () {
     const { isTor, isQwant } = this.props
     return (

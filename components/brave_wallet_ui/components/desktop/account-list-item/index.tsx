@@ -50,7 +50,7 @@ function AccountListItem (props: Props) {
   }, [account.address])
 
   const removeAccount = () => {
-    let confirmAction = confirm(`Are you sure to remove ${account.name}?`)
+    const confirmAction = confirm(`Are you sure to remove ${account.name}?`)
     if (confirmAction) {
       onRemoveAccount(account.address, isHardwareWallet)
     }

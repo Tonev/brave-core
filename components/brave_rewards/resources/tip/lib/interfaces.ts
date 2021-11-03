@@ -2,11 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-type EmptyMediaData = {
+interface EmptyMediaData {
   mediaType: 'none'
 }
 
-type TwitterMediaData = {
+interface TwitterMediaData {
   mediaType: 'twitter'
   publisherName: string
   postId: string
@@ -14,14 +14,14 @@ type TwitterMediaData = {
   postText: string
 }
 
-type RedditMediaData = {
+interface RedditMediaData {
   mediaType: 'reddit'
   publisherName: string
   postTimestamp: string
   postText: string
 }
 
-type GithubMediaData = {
+interface GithubMediaData {
   mediaType: 'github'
   publisherName: string
   publisherScreenName: string

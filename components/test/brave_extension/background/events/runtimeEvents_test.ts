@@ -10,10 +10,10 @@ import * as tabTypes from '../../../../brave_extension/extension/brave_extension
 import { ChromeEvent } from '../../../testData'
 
 interface InputWindows {
-  id: number,
-  tabs: {
+  id: number
+  tabs: Array<{
     id: number
-  }[]
+  }>
 }
 
 interface RuntimeEvent extends chrome.events.Event<() => void>, ChromeEvent {}
@@ -73,9 +73,9 @@ describe('runtimeEvents events', () => {
       tabCreatedSpy = jest.spyOn(tabActions, 'tabCreated')
         // ensure return value is also mocked so a warning about lack of tabId is not thrown
         .mockReturnValue({ type: tabTypes.TAB_CREATED, tab })
-      windowGetAllSpy = jest.spyOn(chrome.windows, 'getAllAsync').mockImplementation(() => {
+      windowGetAllSpy = jest.spyOn(chrome.windows, 'getAllAsync').mockImplementation(async () => {
         deferred(inputWindows)
-        return p
+        return await p
       })
 
       const event: RuntimeEvent = chrome.runtime.onStartup as RuntimeEvent

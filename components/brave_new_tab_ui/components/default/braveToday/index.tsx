@@ -8,7 +8,7 @@ import * as BraveTodayElement from './default'
 import CardOptIn from './cards/cardOptIn'
 import CardLoading from './cards/cardLoading'
 import { PromotedItemViewedPayload, ReadFeedItemPayload, DisplayAdViewedPayload, VisitDisplayAdPayload } from '../../../actions/today_actions'
-const Content = React.lazy(() => import('./content'))
+const Content = React.lazy(async () => await import('./content'))
 
 export type OnReadFeedItem = (args: ReadFeedItemPayload) => any
 export type OnSetPublisherPref = (publisherId: string, enabled: boolean) => any
@@ -17,7 +17,7 @@ export type OnVisitDisplayAd = (args: VisitDisplayAdPayload) => any
 export type OnViewedDisplayAd = (args: DisplayAdViewedPayload) => any
 export type GetDisplayAdContent = () => Promise<BraveToday.DisplayAd | null>
 
-export type Props = {
+export interface Props {
   isFetching: boolean
   hasInteracted: boolean
   isUpdateAvailable: boolean
@@ -62,7 +62,7 @@ export default function BraveTodayContent (props: Props) {
     // Setup intersection observer params
     console.log('setting today viewport observer, should only happen once')
     viewportObserver.current = new IntersectionObserver(handleHitsViewportObserver, intersectionOptions)
-  }, [ handleHitsViewportObserver ])
+  }, [handleHitsViewportObserver])
 
   const scrollTrigger = React.useRef<HTMLDivElement>(null)
 
@@ -79,7 +79,7 @@ export default function BraveTodayContent (props: Props) {
       // Cleanup current observer if we get a new observer, or a new element to observe
       observer.disconnect()
     }
-  }, [ scrollTrigger.current, viewportObserver.current, props.isOptedIn, props.hasInteracted ])
+  }, [scrollTrigger.current, viewportObserver.current, props.isOptedIn, props.hasInteracted])
 
   // Only load all the content DOM elements if we're
   // scrolled far down enough, otherwise it's too easy to scroll down

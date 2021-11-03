@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import { ArrowLeftIcon } from 'brave-ui/components/icons'
 import { getLocale } from '../../../../common/locale'
 
-type Props = {
+interface Props {
   onBack: () => {}
 }
 

@@ -42,7 +42,7 @@ const getTopSiteCustomizationImage = (dark: boolean, selected: boolean, favorite
 export const SettingsMenu = styled('div')<Props>`
   width: 720px;
   min-width: 720px;
-  ${p => p.textDirection && (p.textDirection === 'rtl') ? `left: 12px` : `right: 12px`};
+  ${p => p.textDirection && (p.textDirection === 'rtl') ? 'left: 12px' : 'right: 12px'};
   background-color: ${p => p.theme.color.contextMenuBackground};
   color:  ${p => p.theme.color.contextMenuForeground};
   border-radius: 8px;
@@ -89,7 +89,7 @@ export const SettingsSidebarActiveButtonSlider =
   transition-property: transform;
 `
 interface SettingsSidebarSVGContentProps {
-  src: string,
+  src: string
   isActive: boolean
 }
 
@@ -513,7 +513,8 @@ export const StyledTopSitesCustomizationImageBorder = styled('div')<Customizatio
   border-radius: 11px;
 
   ${p => p.selected && css`
-    background: ${p => isDarkTheme(p) ? 'linear-gradient(314.42deg, #FA7250 6.04%, #FF1893 44.31%, #A78AFF 100%)'
+    background: ${p => isDarkTheme(p)
+? 'linear-gradient(314.42deg, #FA7250 6.04%, #FF1893 44.31%, #A78AFF 100%)'
                                       : 'linear-gradient(122.53deg, #4C54D2 0%, #BF14A2 56.25%, #F73A1C 100%)'};
     padding: 3px;
   `}

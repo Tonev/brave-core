@@ -64,10 +64,10 @@ class PageWallet extends React.Component<Props, State> {
   getWalletSummary = () => {
     const { balanceReport, parameters } = this.props.rewardsData
 
-    let props = {}
+    const props = {}
 
     if (balanceReport) {
-      for (let key in balanceReport) {
+      for (const key in balanceReport) {
         const item = balanceReport[key]
 
         if (item !== 0) {

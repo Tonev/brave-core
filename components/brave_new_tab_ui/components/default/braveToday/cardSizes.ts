@@ -36,7 +36,7 @@ export const Content = styled('div')<{}>`
   }
 `
 
-type ImageFrameProps = {
+interface ImageFrameProps {
   isImageLoaded: boolean
 }
 
@@ -57,7 +57,7 @@ export const ListImageFrame = styled(ImageFrame)`
   padding-top: 0;
 `
 
-type ImageProps = {
+interface ImageProps {
   isPromoted?: boolean
 }
 export const Image = styled('img')<ImageProps>`

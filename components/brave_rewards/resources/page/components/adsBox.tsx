@@ -71,7 +71,7 @@ class AdsBox extends React.Component<Props, State> {
       automaticallyDetectedAdsSubdivisionTargeting
     } = this.props.rewardsData.adsData
 
-    let subdivisions: [string, string][] = [
+    const subdivisions: Array<[string, string]> = [
       ['US-AL', 'Alabama'],
       ['US-AK', 'Alaska'],
       ['US-AZ', 'Arizona'],
@@ -133,7 +133,7 @@ class AdsBox extends React.Component<Props, State> {
     const subdivisionMap = new Map<string, string>(subdivisions)
     const subdivision = subdivisionMap.get(automaticallyDetectedAdsSubdivisionTargeting)
     if (subdivision && adsSubdivisionTargeting === 'AUTO') {
-      subdivisions.unshift(['AUTO', getLocale('adsSubdivisionTargetingAutoDetectedAs', { adsSubdivisionTarget : subdivision })])
+      subdivisions.unshift(['AUTO', getLocale('adsSubdivisionTargetingAutoDetectedAs', { adsSubdivisionTarget: subdivision })])
     } else {
       subdivisions.unshift(['AUTO', getLocale('adsSubdivisionTargetingAutoDetect')])
     }
@@ -192,8 +192,8 @@ class AdsBox extends React.Component<Props, State> {
             </Select>
           </ControlWrapper>
         </Column>
-        { shouldAllowAdsSubdivisionTargeting ?
-          <>
+        { shouldAllowAdsSubdivisionTargeting
+          ? <>
             <Column size={1} customStyle={{ justifyContent: 'center', flexWrap: 'wrap' }}>
               <ControlWrapper text={getLocale('adsSubdivisionTargetingTitle')}>
                 <Select
@@ -215,7 +215,8 @@ class AdsBox extends React.Component<Props, State> {
             <div>
               {getLocale('adsSubdivisionTargetingDescription')} <a href={'https://support.brave.com/hc/en-us/articles/360026361072-Brave-Ads-FAQ'} target={'_blank'}>{getLocale('adsSubdivisionTargetingLearn')}</a>
             </div>
-          </> : null }
+          </>
+: null }
       </Grid>
     )
   }
@@ -280,14 +281,14 @@ class AdsBox extends React.Component<Props, State> {
   }
 
   getGroupedAdsHistory = (adsHistory: Rewards.AdsHistory[], savedOnly: boolean) => {
-    let groupedAdsHistory: Rewards.AdsHistory[] = []
+    const groupedAdsHistory: Rewards.AdsHistory[] = []
 
     for (let i = 0; i < adsHistory.length; i++) {
       const adHistory = adsHistory[i]
 
       const uuid = adHistory.uuid
 
-      let flooredDate = new Date(adHistory.timestampInMilliseconds)
+      const flooredDate = new Date(adHistory.timestampInMilliseconds)
       flooredDate.setHours(0, 0, 0, 0)
       const flooredDateString = flooredDate.toLocaleDateString()
 

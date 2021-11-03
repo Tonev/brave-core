@@ -1,7 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
-/* global chrome */
 
 import reducers from '../../../../../../brave_rewards/resources/extension/brave_rewards/background/reducers'
 import { types } from '../../../../../../brave_rewards/resources/extension/brave_rewards/constants/rewards_panel_types'
@@ -223,7 +222,7 @@ describe('rewards panel reducer', () => {
           }
         }
 
-        let state = reducers({ rewardsPanelData: initState }, {
+        const state = reducers({ rewardsPanelData: initState }, {
           type: types.ON_TAB_RETRIEVED,
           payload: {
             tab: {
@@ -265,7 +264,7 @@ describe('rewards panel reducer', () => {
           }
         }
 
-        let state = reducers({ rewardsPanelData: initState }, {
+        const state = reducers({ rewardsPanelData: initState }, {
           type: types.ON_TAB_RETRIEVED,
           payload: {
             tab: {
@@ -285,7 +284,7 @@ describe('rewards panel reducer', () => {
 
   describe('ON_PUBLISHER_LIST_NORMALIZED', () => {
     it('list is empty', () => {
-      let state = reducers({ rewardsPanelData: defaultState }, {
+      const state = reducers({ rewardsPanelData: defaultState }, {
         type: types.ON_PUBLISHER_LIST_NORMALIZED,
         payload: {
           properties: []
@@ -296,7 +295,7 @@ describe('rewards panel reducer', () => {
     })
 
     it('list is undefined', () => {
-      let state = reducers({ rewardsPanelData: defaultState }, {
+      const state = reducers({ rewardsPanelData: defaultState }, {
         type: types.ON_PUBLISHER_LIST_NORMALIZED,
         payload: {
           properties: undefined
@@ -380,7 +379,7 @@ describe('rewards panel reducer', () => {
 
   describe('ON_EXCLUDED_SITES_CHANGED', () => {
     it('properties is undefined', () => {
-      let state = reducers({ rewardsPanelData: defaultState }, {
+      const state = reducers({ rewardsPanelData: defaultState }, {
         type: types.ON_EXCLUDED_SITES_CHANGED,
         payload: {
           properties: undefined
@@ -391,7 +390,7 @@ describe('rewards panel reducer', () => {
     })
 
     it('publisher key is undefined', () => {
-      let state = reducers({ rewardsPanelData: defaultState }, {
+      const state = reducers({ rewardsPanelData: defaultState }, {
         type: types.ON_EXCLUDED_SITES_CHANGED,
         payload: {
           properties: {
@@ -457,7 +456,7 @@ describe('rewards panel reducer', () => {
 
   describe('ON_ALL_NOTIFICATIONS', () => {
     it('list is undefined', () => {
-      let state = reducers({ rewardsPanelData: defaultState }, {
+      const state = reducers({ rewardsPanelData: defaultState }, {
         type: types.ON_ALL_NOTIFICATIONS,
         payload: {
           list: undefined
@@ -468,7 +467,7 @@ describe('rewards panel reducer', () => {
     })
 
     it('list is empty and it was not defined before', () => {
-      let state = reducers({ rewardsPanelData: defaultState }, {
+      const state = reducers({ rewardsPanelData: defaultState }, {
         type: types.ON_ALL_NOTIFICATIONS,
         payload: {
           list: []
@@ -484,7 +483,7 @@ describe('rewards panel reducer', () => {
     })
 
     it('list is ok', () => {
-      let state = reducers({ rewardsPanelData: defaultState }, {
+      const state = reducers({ rewardsPanelData: defaultState }, {
         type: types.ON_ALL_NOTIFICATIONS,
         payload: {
           list: [

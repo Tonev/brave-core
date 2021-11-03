@@ -21,10 +21,10 @@ const doNothing = () => {
   console.log('nothing')
 }
 
-type Check = { yt: boolean, tw: boolean, inst: boolean }
+interface Check { yt: boolean, tw: boolean, inst: boolean }
 
 interface State {
-  check: Check,
+  check: Check
   settings: boolean
 }
 

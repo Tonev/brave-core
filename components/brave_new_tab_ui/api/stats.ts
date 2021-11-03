@@ -12,18 +12,18 @@ import * as Cr from 'chrome://resources/js/cr.m'
 // especially string keys.
 //
 
-export type Stats = {
-  adsBlockedStat: number,
-  javascriptBlockedStat: number,
-  fingerprintingBlockedStat: number,
-  httpsUpgradesStat: number,
+export interface Stats {
+  adsBlockedStat: number
+  javascriptBlockedStat: number
+  fingerprintingBlockedStat: number
+  httpsUpgradesStat: number
   bandwidthSavedStat: number
 }
 
 type StatsUpdatedHandler = (statsData: Stats) => void
 
-export function getStats (): Promise<Stats> {
-  return Cr.sendWithPromise('getNewTabPageStats')
+export async function getStats (): Promise<Stats> {
+  return await Cr.sendWithPromise('getNewTabPageStats')
 }
 
 export function addChangeListener (listener: StatsUpdatedHandler): void {

@@ -36,7 +36,8 @@ export const StyleToggle = styled('div')<Props>`
     ? css`
       pointer-events: none;
       animation: none;
-    ` : ''
+    `
+: ''
   };
 `
 
@@ -52,7 +53,7 @@ export const StyledSlider = styled('label')<Props>`
 
 const transform = (p: Props) => {
   let x = p.size === 'small' ? '12px' : '20px'
-  let y = p.size === 'small' ? '3px' : '4px'
+  const y = p.size === 'small' ? '3px' : '4px'
 
   if (!p.checked) {
     x = '-1px'

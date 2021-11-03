@@ -393,7 +393,7 @@ export const _DesktopWalletConcept = (args: { onboarding: boolean, locked: boole
     const response = mockRPCResponse
     const amounts = response.map((account) => {
       const balance = account.assets.find((item) => item.id === asset.contractAddress)?.balance
-      return balance ? balance : 0
+      return balance || 0
     })
     const grandTotal = amounts.reduce(function (a, b) {
       return a + b
@@ -418,7 +418,6 @@ export const _DesktopWalletConcept = (args: { onboarding: boolean, locked: boole
         assetBalance: scrapedFullAssetBalance(asset).toString(),
         fiatBalance: scrapedFullAssetFiatBalance(asset).toString()
       }
-
     })
   }, [mockUserWalletPreferences.viewableAssets])
 
@@ -597,10 +596,10 @@ export const _DesktopWalletConcept = (args: { onboarding: boolean, locked: boole
     alert('Will Remove Account')
   }
 
-  const onConnectHardwareWallet = (opts: HardwareWalletConnectOpts): Promise<HardwareWalletAccount[]> => {
+  const onConnectHardwareWallet = async (opts: HardwareWalletConnectOpts): Promise<HardwareWalletAccount[]> => {
     const makeDerivationPath = (index: number): string => `m/44'/60'/${index}'/0/0`
 
-    return new Promise((resolve) => {
+    return await new Promise((resolve) => {
       resolve(Array.from({ length: opts.stopIndex - opts.startIndex }, (_, i) => ({
         address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
         derivationPath: makeDerivationPath(i + opts.startIndex),
@@ -611,8 +610,8 @@ export const _DesktopWalletConcept = (args: { onboarding: boolean, locked: boole
     })
   }
 
-  const getBalance = (address: string): Promise<string> => {
-    return new Promise(async (resolve) => {
+  const getBalance = async (address: string): Promise<string> => {
+    return await new Promise(async (resolve) => {
       resolve('0')
     })
   }
@@ -667,16 +666,18 @@ export const _DesktopWalletConcept = (args: { onboarding: boolean, locked: boole
         onSubmit={navigateTo}
       /> */}
       <WalletSubViewLayout>
-        {isRestoring ? (
+        {isRestoring
+? (
           <OnboardingRestore
             hasRestoreError={hasRestoreError}
             onRestore={onRestore}
             toggleShowRestore={onToggleRestore}
           />
-        ) : (
+        )
+: (
           <>
-            {needsOnboarding ?
-              (
+            {needsOnboarding
+              ? (
                 <Onboarding
                   importError={importWalletError}
                   recoveryPhrase={recoveryPhrase}
@@ -689,11 +690,14 @@ export const _DesktopWalletConcept = (args: { onboarding: boolean, locked: boole
                   onImportCryptoWallets={onImportWallet}
                   onSetImportError={onSetImportWalletError}
                 />
-              ) : (
+              )
+: (
                 <>
-                  {view === 'crypto' ? (
+                  {view === 'crypto'
+? (
                     <>
-                      {walletLocked ? (
+                      {walletLocked
+? (
                         <LockScreen
                           hasPasswordError={hasPasswordError}
                           onSubmit={unlockWallet}
@@ -701,16 +705,19 @@ export const _DesktopWalletConcept = (args: { onboarding: boolean, locked: boole
                           onPasswordChanged={handlePasswordChanged}
                           onShowRestore={onToggleRestore}
                         />
-                      ) : (
+                      )
+: (
                         <>
-                          {showBackup ? (
+                          {showBackup
+? (
                             <BackupWallet
                               isOnboarding={false}
                               onCancel={onHideBackup}
                               onSubmit={onWalletBackedUp}
                               recoveryPhrase={recoveryPhrase}
                             />
-                          ) : (
+                          )
+: (
                             <CryptoStoryView
                               onLockWallet={lockWallet}
                               needsBackup={needsBackup}
@@ -760,7 +767,8 @@ export const _DesktopWalletConcept = (args: { onboarding: boolean, locked: boole
                         </>
                       )}
                     </>
-                  ) : (
+                  )
+: (
                     <div style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                       <h2>{view} view</h2>
                     </div>

@@ -9,7 +9,7 @@ import * as privateTabDataAPI from './privateTabData'
 import * as torTabDataAPI from './torTabData'
 import * as wallpaper from './wallpaper'
 
-export type InitialData = {
+export interface InitialData {
   preferences: NewTab.Preferences
   stats: statsAPI.Stats
   privateTabData: privateTabDataAPI.PrivateTabData
@@ -22,13 +22,13 @@ export type InitialData = {
   ftxSupported: boolean
 }
 
-export type PreInitialRewardsData = {
+export interface PreInitialRewardsData {
   rewardsEnabled: boolean
   enabledAds: boolean
   adsSupported: boolean
 }
 
-export type InitialRewardsData = {
+export interface InitialRewardsData {
   report: NewTab.RewardsBalanceReport
   balance: NewTab.RewardsBalance
   adsAccountStatement: NewTab.AdsAccountStatement
@@ -136,7 +136,7 @@ export async function getRewardsInitialData (): Promise<InitialRewardsData> {
       new Promise(resolve => chrome.braveRewards.getAdsAccountStatement((success: boolean, adsAccountStatement: NewTab.AdsAccountStatement) => {
         resolve(success ? adsAccountStatement : undefined)
       })),
-      new Promise(resolve => chrome.braveRewards.getBalanceReport(new Date().getMonth() + 1, new Date().getFullYear(),(report: NewTab.RewardsBalanceReport) => {
+      new Promise(resolve => chrome.braveRewards.getBalanceReport(new Date().getMonth() + 1, new Date().getFullYear(), (report: NewTab.RewardsBalanceReport) => {
         resolve(report)
       })),
       new Promise(resolve => chrome.braveRewards.fetchBalance((balance: NewTab.RewardsBalance) => {

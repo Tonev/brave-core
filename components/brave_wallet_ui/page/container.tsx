@@ -63,7 +63,7 @@ import { formatBalance } from '../utils/format-balances'
 import { useSwap, useAssets, useTimeout, useBalance, useSend, usePreset } from '../common/hooks'
 import { stripERC20TokenImageURL } from '../utils/string-utils'
 
-type Props = {
+interface Props {
   wallet: WalletState
   page: PageState
   walletPageActions: typeof WalletPageActions
@@ -71,7 +71,7 @@ type Props = {
 }
 
 function Container (props: Props) {
-  let history = useHistory()
+  const history = useHistory()
   const { pathname: walletLocation } = useLocation()
   // Wallet Props
   const {

@@ -25,7 +25,7 @@ export const enum types {
   UPDATE_CLOCK_WIDGET = '@@newtab/UPDATE_CLOCK_WIDGET'
 }
 
-export type DismissBrandedWallpaperNotificationPayload = {
+export interface DismissBrandedWallpaperNotificationPayload {
   isUserAction: boolean
 }
 
@@ -38,6 +38,6 @@ export type NewTabActions =
   typeof cryptoDotComActions &
   typeof stackWidgetActions &
   {
-    today: typeof todayActions,
+    today: typeof todayActions
     ftx: typeof ftxActions
   }

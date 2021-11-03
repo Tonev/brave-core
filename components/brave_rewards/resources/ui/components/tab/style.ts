@@ -52,13 +52,13 @@ export const StyledSlider = styled('div')<{}>`
 
 export const StyledBullet = styled('div')<StyleProps>`
   top: -17px;
-  width: ${p => 100 / ((p && p.size) || 1)}%;
+  width: ${p => 100 / (p?.size ?? 1)}%;
   height: 37px;
   background: ${p => p.theme.color.primaryBackground};
   border-radius: 21.5px 21.5px 21.5px 21.5px;
   position: relative;
   transition: all .4s ease;
-  transform: translate(calc(${p => 100 * (((p && p.tabIndexSelected) || 0))}%), calc(-50% - 4px));
+  transform: translate(calc(${p => 100 * (p?.tabIndexSelected ?? 0)}%), calc(-50% - 4px));
   box-shadow: 0 3px 3px rgba(0, 0, 0, 0.05);
   margin-left: ${p => getMargin(p.tabIndexSelected, p.size)}px;
 `

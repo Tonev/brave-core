@@ -15,7 +15,7 @@ import {
 import * as FTXActions from '../ftx_actions'
 import { FTXState } from '../ftx_state'
 
-type Props = {
+interface Props {
   ftx: FTXState
   actions: typeof FTXActions
 }

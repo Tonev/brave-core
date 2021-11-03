@@ -11,9 +11,9 @@ import { getFeedUrl } from './urls'
 
 type RemoteData = BraveToday.FeedItem[]
 
-type FeedInStorage = {
-  storageSchemaVersion: number,
-  sourceUrl: string,
+interface FeedInStorage {
+  storageSchemaVersion: number
+  sourceUrl: string
   feed: BraveToday.Feed
 }
 
@@ -25,8 +25,8 @@ const STORAGE_KEY_LAST_REMOTE_CHECK = 'todayLastRemoteUpdateCheck'
 const STORAGE_SCHEMA_VERSION = 1
 let isKnownRemoteUpdateAvailable = false
 
-function getFromStorage<T> (key: string) {
-  return new Promise<T | null>(resolve => {
+async function getFromStorage<T> (key: string) {
+  return await new Promise<T | null>(resolve => {
     chrome.storage.local.get(key, (data) => {
       if (Object.keys(data).includes(key)) {
         resolve(data[key] as T)
@@ -57,8 +57,8 @@ function setStorageEtag (etag: string | null) {
   }
 }
 
-function getStorageEtag () {
-  return getFromStorage<string>(STORAGE_KEY_ETAG)
+async function getStorageEtag () {
+  return await getFromStorage<string>(STORAGE_KEY_ETAG)
 }
 
 function setLastUpdateCheckTime (time: number) {
@@ -68,7 +68,7 @@ function setLastUpdateCheckTime (time: number) {
 }
 
 export async function getLastUpdateCheckTime () {
-  return getFromStorage<number>(STORAGE_KEY_LAST_REMOTE_CHECK)
+  return await getFromStorage<number>(STORAGE_KEY_LAST_REMOTE_CHECK)
 }
 
 async function getStorageData () {
@@ -85,8 +85,8 @@ async function getStorageData () {
   memoryTodayData = data.feed
 }
 
-function clearStorageData () {
-  return new Promise(resolve => {
+async function clearStorageData () {
+  return await new Promise(resolve => {
     chrome.storage.local.remove(STORAGE_KEY, resolve)
   })
 }
@@ -161,7 +161,7 @@ export async function getOrFetchData (waitForInProgressUpdate: boolean = false) 
   if (memoryTodayData && !isKnownRemoteUpdateAvailable) {
     return memoryTodayData
   }
-  return update()
+  return await update()
 }
 
 export async function checkForRemoteUpdate () {

@@ -15,17 +15,17 @@ type Store = MiddlewareAPI<Dispatch<AnyAction>, any>
 let attemptCountForInitRetry = 5
 let expectingNewAuth = document.location.search.includes('ftxAuthSuccess')
 
-function getAccountBalancesAsync (): Promise<{ balances: chrome.ftx.Balances, authInvalid: boolean }> {
-  return new Promise(resolve => chrome.ftx.getAccountBalances((balances, authInvalid) => {
+async function getAccountBalancesAsync (): Promise<{ balances: chrome.ftx.Balances, authInvalid: boolean }> {
+  return await new Promise(resolve => chrome.ftx.getAccountBalances((balances, authInvalid) => {
     const results = { balances, authInvalid }
     resolve(results)
   }))
 }
 
-function get7DayHistoryForCurrency (currencyName: string) {
+async function get7DayHistoryForCurrency (currencyName: string) {
   const conversionSymbol = currencyName.toUpperCase() + '-PERP'
   const startTimeS = Math.floor((new Date().getTime() - (24 * 7 * 3600000)) / 1000)
-  return new Promise<chrome.ftx.ChartData>(resolve => {
+  return await new Promise<chrome.ftx.ChartData>(resolve => {
     chrome.ftx.getChartData(conversionSymbol, startTimeS.toString(), '', resolve)
   })
 }
@@ -101,7 +101,7 @@ handler.on(Actions.initialize.getType(), async (store) => {
     // TODO(petemill): Have ftx service be observable and our page handler fire JS events.
     const authPending = (expectingNewAuth && authInvalid)
     if (authPending && attemptCountForInitRetry > 0) {
-      console.debug(`FTX: expecting connected, but state doesn't represent that yet, so re-requesting in a few seconds`)
+      console.debug('FTX: expecting connected, but state doesn\'t represent that yet, so re-requesting in a few seconds')
       attemptCountForInitRetry--
       setTimeout(function () {
         // Recursive for the current action

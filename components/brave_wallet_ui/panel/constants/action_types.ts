@@ -5,40 +5,40 @@
 
 import { WalletAccountType, EthereumChain } from '../../constants/types'
 
-export type AccountPayloadType = {
+export interface AccountPayloadType {
   selectedAccounts: WalletAccountType[]
   siteToConnectTo: string
 }
 
-export type ShowConnectToSitePayload = {
-  tabId: number,
-  accounts: string[],
+export interface ShowConnectToSitePayload {
+  tabId: number
+  accounts: string[]
   origin: string
 }
 
-export type EthereumChainRequestPayload = {
-  chainId: string,
+export interface EthereumChainRequestPayload {
+  chainId: string
   approved: boolean
 }
 
-export type EthereumChainPayload = {
+export interface EthereumChainPayload {
   chain: EthereumChain
 }
 
-export type SignMessagePayload = {
-  id: number,
-  address: string,
+export interface SignMessagePayload {
+  id: number
+  address: string
   message: string
 }
 
-export type SignMessageProcessedPayload = {
-  approved: boolean,
+export interface SignMessageProcessedPayload {
+  approved: boolean
   id: number
 }
 
-export type SignMessageHardwareProcessedPayload = {
-  success: boolean,
-  id: number,
-  signature: string,
+export interface SignMessageHardwareProcessedPayload {
+  success: boolean
+  id: number
+  signature: string
   error: string
 }

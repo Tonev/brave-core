@@ -7,7 +7,7 @@ import Events from '../../../../../common/events'
 
 const PREF_KEY = 'brave.today.sources'
 
-type Prefs = {
+interface Prefs {
   [publisherId: string]: boolean
 }
 
@@ -26,14 +26,14 @@ chrome.settingsPrivate.onPrefsChanged.addListener((prefs) => {
   }
 })
 
-function setPrefsToStore (prefs: Prefs) {
-  return new Promise(resolve => {
+async function setPrefsToStore (prefs: Prefs) {
+  return await new Promise(resolve => {
     chrome.settingsPrivate.setPref(PREF_KEY, prefs, resolve)
   })
 }
 
-function getPrefsFromStore (): Promise<Prefs> {
-  return new Promise(resolve => {
+async function getPrefsFromStore (): Promise<Prefs> {
+  return await new Promise(resolve => {
     chrome.settingsPrivate.getPref(PREF_KEY, (pref) => {
       if (pref && pref.type === chrome.settingsPrivate.PrefType.DICTIONARY) {
         resolve(pref.value as Prefs)
@@ -46,7 +46,7 @@ async function doWithLock<T> (todo: () => Promise<T>): Promise<T> {
   if (storageLock) {
     await storageLock
   }
-  return new Promise(async (resolve) => {
+  return await new Promise(async (resolve) => {
     if (storageLock) {
       await storageLock
     }
@@ -60,14 +60,14 @@ async function doWithLock<T> (todo: () => Promise<T>): Promise<T> {
 }
 
 export async function getPrefs (): Promise<Prefs> {
-  return doWithLock(async function () {
+  return await doWithLock(async function () {
     const prefs = await getPrefsFromStore()
     return prefs
   })
 }
 
 export async function setPublisherPref (publisherId: string, enabled: boolean | null) {
-  return doWithLock(async function () {
+  return await doWithLock(async function () {
     const prefs = await getPrefsFromStore()
     if (enabled === null) {
       delete prefs[publisherId]
@@ -82,7 +82,7 @@ export async function setPublisherPref (publisherId: string, enabled: boolean | 
 }
 
 export async function clearPrefs () {
-  return doWithLock(async function () {
+  return await doWithLock(async function () {
     await setPrefsToStore({})
   })
 }

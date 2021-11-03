@@ -142,8 +142,6 @@ export default function useSwap (
       default:
         return 'unknownError'
     }
-
-    return
   }, [fromAsset, fromAmount, fromAssetBalance, ethBalance, feesBN, rawError, allowance])
 
   /**
@@ -210,7 +208,7 @@ export default function useSwap (
       slippageTolerance?: SlippagePresetObjectType
     },
     state: {
-      fromAmount: string,
+      fromAmount: string
       toAmount: string
     },
     full: boolean = false
@@ -227,8 +225,8 @@ export default function useSwap (
      *   - Typically, either fromAsset or toAsset is overridden but not both,
      *     except when the asset pair is flipped.
      */
-    let fromAssetNext = overrides.fromAsset ?? fromAsset
-    let toAssetNext = overrides.toAsset ?? toAsset
+    const fromAssetNext = overrides.fromAsset ?? fromAsset
+    const toAssetNext = overrides.toAsset ?? toAsset
 
     let fromAmountWei
     let toAmountWei
@@ -330,7 +328,7 @@ export default function useSwap (
    * amount values.
    */
   const onSwapParamsChangeDebounced = React.useCallback(
-    // @ts-ignore
+    // @ts-expect-error
     debounce(onSwapParamsChange, 1000),
     [onSwapParamsChange]
   )

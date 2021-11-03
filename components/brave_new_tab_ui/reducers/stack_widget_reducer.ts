@@ -15,7 +15,7 @@ const widgets = {
 }
 
 const removeStackWidget = (widget: NewTab.StackWidget, state: NewTab.State): NewTab.State => {
-  let { removedStackWidgets, widgetStackOrder } = state
+  const { removedStackWidgets, widgetStackOrder } = state
 
   if (!widgetStackOrder.length) {
     return state

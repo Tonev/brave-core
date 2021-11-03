@@ -45,7 +45,7 @@ class AdsBox extends React.Component<Props, {}> {
       automaticallyDetectedAdsSubdivisionTargeting
     } = this.props.rewardsData.adsData
 
-    let subdivisions: any = [
+    const subdivisions: any = [
       ['US-AL', 'Alabama'],
       ['US-AK', 'Alaska'],
       ['US-AZ', 'Arizona'],
@@ -107,7 +107,7 @@ class AdsBox extends React.Component<Props, {}> {
     const subdivisionMap = new Map(subdivisions)
     const subdivision = subdivisionMap.get(automaticallyDetectedAdsSubdivisionTargeting) as string
     if (subdivision !== '' && adsSubdivisionTargeting === 'AUTO') {
-      subdivisions.unshift(['AUTO', getLocale('adsSubdivisionTargetingAutoDetectedAs', { adsSubdivisionTarget : subdivision })])
+      subdivisions.unshift(['AUTO', getLocale('adsSubdivisionTargetingAutoDetectedAs', { adsSubdivisionTarget: subdivision })])
     } else {
       subdivisions.unshift(['AUTO', getLocale('adsSubdivisionTargetingAutoDetect')])
     }
@@ -156,8 +156,8 @@ class AdsBox extends React.Component<Props, {}> {
             </Select>
           </ControlWrapper>
         </Column>
-        { shouldAllowAdsSubdivisionTargeting ?
-          <>
+        { shouldAllowAdsSubdivisionTargeting
+          ? <>
             <Column size={1} customStyle={{ justifyContent: 'center', flexWrap: 'wrap' }}>
               <ControlWrapper text={getLocale('adsSubdivisionTargetingTitle')}>
                 <Select
@@ -165,7 +165,7 @@ class AdsBox extends React.Component<Props, {}> {
                   onChange={this.onAdsSettingChange.bind(this, 'adsSubdivisionTargeting')}
                 >
                   {
-                    this.getAdsSubdivisions().map((subdivision: Array<String>) => {
+                    this.getAdsSubdivisions().map((subdivision: String[]) => {
                       return (
                         <div key={`${subdivision[0]}`} data-value={subdivision[0]}>
                           {`${subdivision[1]}`}
@@ -179,7 +179,8 @@ class AdsBox extends React.Component<Props, {}> {
             <div>
               {getLocale('adsSubdivisionTargetingDescription')} <a href={'https://support.brave.com/hc/en-us/articles/360026361072-Brave-Ads-FAQ'} target={'_blank'}>{getLocale('adsSubdivisionTargetingLearn')}</a>
             </div>
-          </> : null }
+          </>
+: null }
       </Grid>
     )
   }
@@ -241,7 +242,7 @@ class AdsBox extends React.Component<Props, {}> {
       <BoxMobile
         title={getLocale('adsTitle')}
         type={'ads'}
-        description={getLocale('adsDesc', { currency : tokenString })}
+        description={getLocale('adsDesc', { currency: tokenString })}
         settingsChild={this.adsSettings(adsEnabled)}
         {...boxPropsExtra}
       >

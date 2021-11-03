@@ -75,7 +75,7 @@ export default class Profile extends React.PureComponent<Props, {}> {
   }
 
   getSrc (src?: string) {
-    return src ? src : ''
+    return src || ''
   }
 
   getVerifiedInfo = () => {
@@ -169,12 +169,11 @@ export default class Profile extends React.PureComponent<Props, {}> {
     } = this.props
 
     return (
-      !refreshingPublisher && !publisherRefreshed ?
-        this.getDefaultVerifiedPanelWrap()
-    : !publisherRefreshed && refreshingPublisher ?
-        this.getVerifiedPanelWrapRefreshing()
-    :
-      this.getVerifiedPanelWrapRefreshFinished()
+      !refreshingPublisher && !publisherRefreshed
+        ? this.getDefaultVerifiedPanelWrap()
+    : !publisherRefreshed && refreshingPublisher
+        ? this.getVerifiedPanelWrapRefreshing()
+    : this.getVerifiedPanelWrapRefreshFinished()
     )
   }
 
@@ -267,12 +266,11 @@ export default class Profile extends React.PureComponent<Props, {}> {
     } = this.props
 
     return (
-      !publisherRefreshed && !refreshingPublisher ?
-        this.getDefaultUnverifiedPanelWrap()
-      : !publisherRefreshed && refreshingPublisher ?
-        this.getUnverifiedPanelWrapRefreshing()
-      :
-        this.getUnverifiedPanelWrapRefreshFinished()
+      !publisherRefreshed && !refreshingPublisher
+        ? this.getDefaultUnverifiedPanelWrap()
+      : !publisherRefreshed && refreshingPublisher
+        ? this.getUnverifiedPanelWrapRefreshing()
+      : this.getUnverifiedPanelWrapRefreshFinished()
     )
   }
 
@@ -291,23 +289,29 @@ export default class Profile extends React.PureComponent<Props, {}> {
       <StyledWrapper id={id}>
         <StyledImageWrapper type={type}>
           <StyledImage src={this.getSrc(src)} />
-          {verified && type === 'small' ? (
+          {verified && type === 'small'
+? (
             <StyledVerified>
               <VerifiedSIcon />
             </StyledVerified>
-          ) : null}
+          )
+: null}
         </StyledImageWrapper>
         <StyledContent>
           <StyledTitleWrap>
             <StyledTitle type={type}>{title}</StyledTitle>
-            {provider ? (
+            {provider
+? (
               <StyledProvider type={type}>
                 {this.getProviderName(provider)}
               </StyledProvider>
-            ) : null}
+            )
+: null}
           </StyledTitleWrap>
-          {verified && type === 'big' ? this.getVerifiedPanelWrapping()
-          : showUnVerifiedHelpIcon ? this.getUnverifiedPanelWrapping()
+          {verified && type === 'big'
+? this.getVerifiedPanelWrapping()
+          : showUnVerifiedHelpIcon
+? this.getUnverifiedPanelWrapping()
           : null}
         </StyledContent>
       </StyledWrapper>

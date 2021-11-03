@@ -31,12 +31,12 @@ import CardsIcon from './settings/icons/cards.svg'
 import TodayIcon from './settings/icons/braveToday.svg'
 
 // Tabs
-const BackgroundImageSettings = React.lazy(() => import('./settings/backgroundImage'))
-const BraveStatsSettings = React.lazy(() => import('./settings/braveStats'))
-const TopSitesSettings = React.lazy(() => import('./settings/topSites'))
-const ClockSettings = React.lazy(() => import('./settings/clock'))
-const CardsSettings = React.lazy(() => import('./settings/cards'))
-const BraveTodaySettings = React.lazy(() => import('./settings/braveToday'))
+const BackgroundImageSettings = React.lazy(async () => await import('./settings/backgroundImage'))
+const BraveStatsSettings = React.lazy(async () => await import('./settings/braveStats'))
+const TopSitesSettings = React.lazy(async () => await import('./settings/topSites'))
+const ClockSettings = React.lazy(async () => await import('./settings/clock'))
+const CardsSettings = React.lazy(async () => await import('./settings/cards'))
+const BraveTodaySettings = React.lazy(async () => await import('./settings/braveToday'))
 
 // Types
 import { NewTabActions } from '../../constants/new_tab_types'
@@ -327,7 +327,8 @@ export default class Settings extends React.PureComponent<Props, State> {
                     brandedWallpaperOptIn={brandedWallpaperOptIn}
                     showBackgroundImage={showBackgroundImage}
                   />
-                ) : null
+                )
+: null
               }
               {
                 activeTab === TabType.BraveStats
@@ -336,7 +337,8 @@ export default class Settings extends React.PureComponent<Props, State> {
                       toggleShowStats={toggleShowStats}
                       showStats={showStats}
                     />
-                  ) : null
+                  )
+: null
               }
               {
                 activeTab === TabType.TopSites
@@ -347,7 +349,8 @@ export default class Settings extends React.PureComponent<Props, State> {
                       customLinksEnabled={customLinksEnabled}
                       setMostVisitedSettings={setMostVisitedSettings}
                     />
-                  ) : null
+                  )
+: null
               }
               {
                 activeTab === TabType.BraveToday
@@ -360,7 +363,8 @@ export default class Settings extends React.PureComponent<Props, State> {
                     showToday={this.props.showToday}
                     toggleShowToday={this.props.toggleShowToday}
                   />
-                ) : null
+                )
+: null
               }
               {
                 activeTab === TabType.Clock
@@ -371,7 +375,8 @@ export default class Settings extends React.PureComponent<Props, State> {
                       showClock={showClock}
                       clockFormat={clockFormat}
                     />
-                  ) : null
+                  )
+: null
               }
               {
                 activeTab === TabType.Cards
@@ -397,7 +402,8 @@ export default class Settings extends React.PureComponent<Props, State> {
                       ftxSupported={ftxSupported}
                       showFTX={showFTX}
                     />
-                  ) : null
+                  )
+: null
               }
               </React.Suspense>
             </SettingsFeatureBody>

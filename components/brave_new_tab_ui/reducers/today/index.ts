@@ -6,7 +6,7 @@
 import { createReducer } from 'redux-act'
 import * as Actions from '../../actions/today_actions'
 
-export type BraveTodayState = {
+export interface BraveTodayState {
   // Are we in the middle of checking for new data
   isFetching: boolean | string
   isUpdateAvailable: boolean

@@ -19,7 +19,7 @@ export namespace MessageTypes {
 }
 export type Payload = any
 type MessageName = string | number
-export type Action = {
+export interface Action {
   messageType: MessageName
   payload: Payload
 }
@@ -38,10 +38,10 @@ function isAllowedMessageSender (sender: chrome.runtime.MessageSender): boolean 
 }
 
 // Client-side scripts call this to send a message to the background
-export function send<U= void, T= void> (messageType: string, payload?: T): Promise<U> {
+export async function send<U= void, T= void> (messageType: string, payload?: T): Promise<U> {
   // TODO: verify comms channel isn't closed prematurely first. If so, wait and try again.
   console.debug(`Sending data to brave extension for ${messageType}`, { messageType, payload })
-  return new Promise(function (resolve) {
+  return await new Promise(function (resolve) {
     chrome.runtime.sendMessage(braveExtensionId, { messageType, payload }, function (responseData: U) {
       console.debug(`got response from brave extension for "${messageType}"`, responseData)
       resolve(responseData)

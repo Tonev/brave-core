@@ -2,7 +2,6 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
-/* global window */
 
 import LedgerBridgeKeyring from './eth_ledger_bridge_keyring'
 
@@ -23,7 +22,7 @@ class MockApp {
   }
 
   async signPersonalMessage (path: string, message: Buffer) {
-    return Promise.resolve(this.signature)
+    return await Promise.resolve(this.signature)
   }
 }
 
@@ -37,8 +36,8 @@ const createLedgerKeyring = () => {
   return ledgerHardwareKeyring
 }
 
-test('Extracting accounts from device', () => {
-  return expect(createLedgerKeyring().getAccounts(-2, 1, LedgerDerivationPaths.LedgerLive))
+test('Extracting accounts from device', async () => {
+  return await expect(createLedgerKeyring().getAccounts(-2, 1, LedgerDerivationPaths.LedgerLive))
     .resolves.toStrictEqual([
       {
         'address': 'address for m/44\'/60\'/0\'/0/0',
@@ -57,8 +56,8 @@ test('Extracting accounts from device', () => {
     )
 })
 
-test('Extracting accounts from legacy device', () => {
-  return expect(createLedgerKeyring().getAccounts(-2, 1, LedgerDerivationPaths.Legacy))
+test('Extracting accounts from legacy device', async () => {
+  return await expect(createLedgerKeyring().getAccounts(-2, 1, LedgerDerivationPaths.Legacy))
     .resolves.toStrictEqual([
       {
         'address': 'address for m/44\'/60\'/0\'/0',
@@ -89,41 +88,41 @@ test('Check locks for device', () => {
   expect(ledgerHardwareKeyring.isUnlocked()).toStrictEqual(true)
 })
 
-test('Extract accounts from locked device', () => {
+test('Extract accounts from locked device', async () => {
   const ledgerHardwareKeyring = new LedgerBridgeKeyring()
   ledgerHardwareKeyring.unlock = async function () {
     return false
   }
-  return expect(ledgerHardwareKeyring.getAccounts(-2, 1, LedgerDerivationPaths.LedgerLive))
+  return await expect(ledgerHardwareKeyring.getAccounts(-2, 1, LedgerDerivationPaths.LedgerLive))
   .rejects.toThrow()
 })
 
-test('Extract accounts from unknown device', () => {
+test('Extract accounts from unknown device', async () => {
   const ledgerHardwareKeyring = new LedgerBridgeKeyring()
   ledgerHardwareKeyring.app = new MockApp()
-  return expect(ledgerHardwareKeyring.getAccounts(-2, 1, 'unknown'))
+  return await expect(ledgerHardwareKeyring.getAccounts(-2, 1, 'unknown'))
   .rejects.toThrow()
 })
 
-test('Sign personal message successfully', () => {
+test('Sign personal message successfully', async () => {
   const ledgerHardwareKeyring = new LedgerBridgeKeyring()
   ledgerHardwareKeyring.app = new MockApp()
   ledgerHardwareKeyring.app.signature = { v: 1, r: 'b68983', s: 'r68983' }
   ledgerHardwareKeyring._recoverAddressFromSignature = (message: string, signature: string) => {
     return '0x111'
   }
-  return expect(ledgerHardwareKeyring.signPersonalMessage(
+  return await expect(ledgerHardwareKeyring.signPersonalMessage(
     'm/44\'/60\'/0\'/0/0', '0x111', 'message'))
     .resolves.toStrictEqual('0xb68983r68983-26')
 })
 
-test('Sign personal message failed', () => {
+test('Sign personal message failed', async () => {
   const ledgerHardwareKeyring = new LedgerBridgeKeyring()
   ledgerHardwareKeyring.app = new MockApp()
   ledgerHardwareKeyring._recoverAddressFromSignature = (message: string, signature: string) => {
     return '0x111'
   }
-  return expect(ledgerHardwareKeyring.signPersonalMessage(
+  return await expect(ledgerHardwareKeyring.signPersonalMessage(
     'm/44\'/60\'/0\'/0/0', '0x111', 'message'))
     .rejects.toThrow()
 })

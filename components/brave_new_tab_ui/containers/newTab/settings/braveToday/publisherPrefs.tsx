@@ -18,12 +18,12 @@ export const DynamicListContext = React.createContext<
   Partial<{ setSize: (index: number, size: number) => void }>
 >({})
 
-type PublisherPrefsProps = {
+interface PublisherPrefsProps {
   setPublisherPref: (publisherId: string, enabled: boolean) => any
   publishers: BraveToday.Publisher[]
 }
 
-type ListItemProps = {
+interface ListItemProps {
   index: number
   width: number
   data: BraveToday.Publisher[]

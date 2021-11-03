@@ -22,12 +22,12 @@ import { GetNetworkInfo } from '../../utils/network-utils'
 import getAPIProxy from './bridge'
 import { Dispatch, State } from './types'
 
-export const getERC20Allowance = (
+export const getERC20Allowance = async (
   contractAddress: string,
   ownerAddress: string,
   spenderAddress: string
 ): Promise<string> => {
-  return new Promise(async (resolve, reject) => {
+  return await new Promise(async (resolve, reject) => {
     const controller = (await getAPIProxy()).ethJsonRpcController
     const result = await controller.getERC20TokenAllowance(
       contractAddress,
@@ -43,8 +43,8 @@ export const getERC20Allowance = (
   })
 }
 
-export const onConnectHardwareWallet = (opts: HardwareWalletConnectOpts): Promise<HardwareWalletAccount[]> => {
-  return new Promise(async (resolve, reject) => {
+export const onConnectHardwareWallet = async (opts: HardwareWalletConnectOpts): Promise<HardwareWalletAccount[]> => {
+  return await new Promise(async (resolve, reject) => {
     const apiProxy = await getAPIProxy()
     const keyring = await apiProxy.getKeyringsByType(opts.hardware)
     keyring.getAccounts(opts.startIndex, opts.stopIndex, opts.scheme)
@@ -55,8 +55,8 @@ export const onConnectHardwareWallet = (opts: HardwareWalletConnectOpts): Promis
   })
 }
 
-export const getBalance = (address: string): Promise<string> => {
-  return new Promise(async (resolve, reject) => {
+export const getBalance = async (address: string): Promise<string> => {
+  return await new Promise(async (resolve, reject) => {
     const controller = (await getAPIProxy()).ethJsonRpcController
     const result = await controller.getBalance(address)
     if (result.success) {
@@ -69,12 +69,12 @@ export const getBalance = (address: string): Promise<string> => {
 
 export async function findENSAddress (address: string) {
   const apiProxy = await getAPIProxy()
-  return apiProxy.ethJsonRpcController.ensGetEthAddr(address)
+  return await apiProxy.ethJsonRpcController.ensGetEthAddr(address)
 }
 
 export async function findUnstoppableDomainAddress (address: string) {
   const apiProxy = await getAPIProxy()
-  return apiProxy.ethJsonRpcController.unstoppableDomainsGetEthAddr(address)
+  return await apiProxy.ethJsonRpcController.unstoppableDomainsGetEthAddr(address)
 }
 
 export async function findHardwareAccountInfo (address: string) {
@@ -146,11 +146,11 @@ export function refreshBalancesAndPrices (currentNetwork: EthereumChain) {
     }))
 
     const getERCTokenBalanceReturnInfos = await Promise.all(accounts.map(async (account) => {
-      return Promise.all(visibleTokens.map(async (token) => {
+      return await Promise.all(visibleTokens.map(async (token) => {
         if (token.isErc721) {
-          return ethJsonRpcController.getERC721TokenBalance(token.contractAddress, token.tokenId ?? '', account.address)
+          return await ethJsonRpcController.getERC721TokenBalance(token.contractAddress, token.tokenId ?? '', account.address)
         }
-        return ethJsonRpcController.getERC20TokenBalance(token.contractAddress, account.address)
+        return await ethJsonRpcController.getERC20TokenBalance(token.contractAddress, account.address)
       }))
     }))
 
@@ -171,7 +171,7 @@ export function refreshTokenPriceHistory (selectedPortfolioTimeline: AssetPriceT
     const { wallet: { accounts } } = getState()
 
     const result = await Promise.all(accounts.map(async (account) => {
-      return Promise.all(account.tokens.filter((t) => !t.asset.isErc721).map(async (token) => {
+      return await Promise.all(account.tokens.filter((t) => !t.asset.isErc721).map(async (token) => {
         return {
           token: token,
           history: await assetRatioController.getPriceHistory(
@@ -197,7 +197,7 @@ export function refreshTransactionHistory (address?: string) {
       : accounts
 
     const freshTransactions: AccountTransactions = await accountsToUpdate.reduce(
-      async (acc, account) => acc.then(async (obj) => {
+      async (acc, account) => await acc.then(async (obj) => {
         const { transactionInfos } = await ethTxController.getAllTransactionInfo(account.address)
         obj[account.address] = transactionInfos
         return obj
@@ -278,11 +278,9 @@ export function refreshSitePermissions () {
       const result = await braveWalletService.hasEthereumPermission(activeOrigin, account.address)
       if (result.hasPermission) {
         return account
-      } else {
-        return
       }
     }))
-    const accountsWithPermission: (WalletAccountType | undefined)[] = getAllPermissions.filter((account) => account !== undefined)
+    const accountsWithPermission: Array<WalletAccountType | undefined> = getAllPermissions.filter((account) => account !== undefined)
     dispatch(WalletActions.setSitePermissions({ accounts: accountsWithPermission }))
   }
 }

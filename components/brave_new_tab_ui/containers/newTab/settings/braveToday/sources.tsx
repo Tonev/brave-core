@@ -16,13 +16,13 @@ import { Props } from './'
 import PublisherPrefs from './publisherPrefs'
 import * as Styled from './style'
 
-type CategoryListProps = {
+interface CategoryListProps {
   categories: string[]
   setCategory: (category: string) => any
 }
 
 function CategoryList (props: CategoryListProps) {
-  type ClickFunctions = { [category: string]: () => any}
+  interface ClickFunctions { [category: string]: () => any}
   const clickFunctions: ClickFunctions = React.useMemo(() => {
     const functions = {}
     for (const category of props.categories) {
@@ -47,7 +47,7 @@ function CategoryList (props: CategoryListProps) {
   )
 }
 
-type CategoryProps = {
+interface CategoryProps {
   category: string
   publishers: BraveToday.Publisher[]
   onBack: () => any

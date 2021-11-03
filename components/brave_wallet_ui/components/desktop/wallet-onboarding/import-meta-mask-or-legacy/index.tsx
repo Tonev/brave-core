@@ -76,23 +76,25 @@ function OnboardingImportMetaMaskOrLegacy (props: Props) {
 
   return (
     <StyledWrapper>
-      {isMetaMask ? (
+      {isMetaMask
+? (
         <MetaMaskIcon />
-      ) : (
+      )
+: (
         <BraveIcon />
       )}
       <Title>
-        {getLocale('braveWalletImportTitle')}{` `}
-        {isMetaMask ?
-          getLocale('braveWalletImportMetaMaskTitle')
+        {getLocale('braveWalletImportTitle')}{' '}
+        {isMetaMask
+          ? getLocale('braveWalletImportMetaMaskTitle')
           : getLocale('braveWalletImportBraveLegacyTitle')}
       </Title>
       <Description>
-        {getLocale('braveWalletImportDescriptionOne')}{` `}
-        {isMetaMask ?
-          getLocale('braveWalletImportMetaMaskTitle')
+        {getLocale('braveWalletImportDescriptionOne')}{' '}
+        {isMetaMask
+          ? getLocale('braveWalletImportMetaMaskTitle')
           : getLocale('braveWalletImportBraveLegacyTitle')
-        }{` `}{getLocale('braveWalletImportDescriptionTwo')}
+        }{' '}{getLocale('braveWalletImportDescriptionTwo')}
       </Description>
       <InputColumn useSamePasswordVerified={useSamePasswordVerified}>
         <PasswordInput
@@ -105,8 +107,8 @@ function OnboardingImportMetaMaskOrLegacy (props: Props) {
       </InputColumn>
       {!useSamePasswordVerified &&
         <PasswordTitle needsNewPassword={needsNewPassword}>
-          {needsNewPassword ?
-            getLocale('braveWalletImportFromExternalNewPassword')
+          {needsNewPassword
+            ? getLocale('braveWalletImportFromExternalNewPassword')
             : getLocale('braveWalletImportFromExternalCreatePassword')}
         </PasswordTitle>
       }

@@ -286,7 +286,8 @@ function SwapInputComponent (props: Props) {
           </Row>
           {expandSelector &&
             <PresetRow>
-              {orderType === 'market' ? (
+              {orderType === 'market'
+? (
                 <>
                   {SlippagePresetOptions.map((preset) =>
                     <PresetButton
@@ -307,7 +308,8 @@ function SwapInputComponent (props: Props) {
                     maxLength={4}
                   />
                 </>
-              ) : (
+              )
+: (
                 <>
                   {ExpirationPresetOptions.map((preset) =>
                     <PresetButton

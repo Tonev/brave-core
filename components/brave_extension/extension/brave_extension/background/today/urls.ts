@@ -9,11 +9,11 @@ let hostnameCache: string
 // This won't change unless OS region changes.
 let regionURLPartCache: string
 
-function getHostname (): Promise<string> {
+async function getHostname (): Promise<string> {
   if (hostnameCache) {
-    return Promise.resolve(hostnameCache)
+    return await Promise.resolve(hostnameCache)
   }
-  return new Promise(resolve => {
+  return await new Promise(resolve => {
     chrome.braveToday.getHostname((newHostname) => {
       hostnameCache = newHostname
       resolve(hostnameCache)
@@ -21,11 +21,11 @@ function getHostname (): Promise<string> {
   })
 }
 
-function getRegionUrlPart (): Promise<string> {
+async function getRegionUrlPart (): Promise<string> {
   if (regionURLPartCache) {
-    return Promise.resolve(regionURLPartCache)
+    return await Promise.resolve(regionURLPartCache)
   }
-  return new Promise(resolve => {
+  return await new Promise(resolve => {
     chrome.braveToday.getRegionUrlPart((regionURLPart) => {
       regionURLPartCache = regionURLPart
       if (regionURLPart) {
@@ -37,7 +37,7 @@ function getRegionUrlPart (): Promise<string> {
 }
 
 export async function getFeedUrl () {
-  let [hostname, regionUrlPart] = await Promise.all([
+  const [hostname, regionUrlPart] = await Promise.all([
     getHostname(),
     getRegionUrlPart()
   ])
@@ -45,7 +45,7 @@ export async function getFeedUrl () {
 }
 
 export async function getSourcesUrl () {
-  let [hostname, regionUrlPart] = await Promise.all([
+  const [hostname, regionUrlPart] = await Promise.all([
     getHostname(),
     getRegionUrlPart()
   ])

@@ -173,7 +173,8 @@ export default class WidgetMenu extends React.PureComponent<Props, State> {
                   {customLinksEnabled ? <FrecencyIcon/> : <FavoritesIcon/>}
                 </StyledWidgetIcon>
                 <StyledSpan>
-                  {customLinksEnabled ? getLocale('showFrecencyMenuLabel')
+                  {customLinksEnabled
+? getLocale('showFrecencyMenuLabel')
                                       : getLocale('showFavoritesMenuLabel')}
                 </StyledSpan>
               </StyledWidgetButton>

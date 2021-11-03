@@ -25,7 +25,7 @@ function convertBalanceToUSD (marketData: chrome.ftx.TokenPriceData[], currencyN
   if (currencyName.toLowerCase() === 'usd') {
     return balance
   }
-  let marketCurrencyMatch = marketData.find(m => m.symbol === currencyName)
+  const marketCurrencyMatch = marketData.find(m => m.symbol === currencyName)
   if (marketCurrencyMatch && marketCurrencyMatch.price) {
     const balanceInCurrency: number = balance * marketCurrencyMatch.price
     return balanceInCurrency

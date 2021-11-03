@@ -31,7 +31,9 @@ export function DialogFrame (props: DialogFrameProps) {
       <TopBar>
         <TitleContainer>
         {
-          !props.showTitle ? null : <>
+          !props.showTitle
+? null
+: <>
             <DialogTitleIcon />
             <BatText>{locale.get('bat')}</BatText> {locale.get('checkout')}
           </>

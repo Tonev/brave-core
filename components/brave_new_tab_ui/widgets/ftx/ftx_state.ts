@@ -13,13 +13,13 @@ export enum ViewType {
   OptIn
 }
 
-export type AssetDetail = {
+export interface AssetDetail {
   currencyName: string
   marketData?: chrome.ftx.TokenPriceData
   chartData?: string | ChartDataPoint[] // string for error, undefined for not-fetched yet
 }
 
-export type FTXState = {
+export interface FTXState {
   hasInitialized: boolean
   isConnected: boolean
   balances: chrome.ftx.Balances
@@ -36,7 +36,7 @@ export type ConversionQuote = chrome.ftx.QuoteInfo & {
   quoteId: string
 }
 
-export type ConversionData = {
+export interface ConversionData {
   from: string
   to: string
   quantity: number

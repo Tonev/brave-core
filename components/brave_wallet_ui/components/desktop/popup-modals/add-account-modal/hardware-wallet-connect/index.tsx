@@ -40,7 +40,7 @@ export default function (props: Props) {
   const [selectedHardwareWallet, setSelectedHardwareWallet] = React.useState<string>(kLedgerHardwareVendor)
   const [isConnecting, setIsConnecting] = React.useState<boolean>(false)
   const [isConnected, setIsConnected] = React.useState<boolean>(false)
-  const [accounts, setAccounts] = React.useState<Array<HardwareWalletAccount>>([])
+  const [accounts, setAccounts] = React.useState<HardwareWalletAccount[]>([])
   const [selectedDerivationPaths, setSelectedDerivationPaths] = React.useState<string[]>([])
   const [connectionError, setConnectionError] = React.useState<string>('')
   const [selectedDerivationScheme, setSelectedDerivationScheme] = React.useState<string>(
@@ -97,8 +97,8 @@ export default function (props: Props) {
     props.onAddHardwareAccounts(selectedAccounts)
   }
 
-  const getBalance = (address: string) => {
-    return props.getBalance(address)
+  const getBalance = async (address: string) => {
+    return await props.getBalance(address)
   }
 
   const onSelectLedger = () => {
@@ -155,11 +155,13 @@ export default function (props: Props) {
         <ErrorText>{connectionError}</ErrorText>
       }
 
-      {isConnecting ? (
+      {isConnecting
+? (
         <ConnectingButton>
           <ConnectingButtonText>{getLocale('braveWalletConnectingHardwareWallet')}</ConnectingButtonText>
         </ConnectingButton>
-      ) : (
+      )
+: (
         <NavButton onSubmit={onSubmit} text={getLocale('braveWalletAddAccountConnect')} buttonType='primary' />
       )}
     </>

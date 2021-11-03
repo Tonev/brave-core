@@ -50,7 +50,9 @@ describe('noScriptState', () => {
         willBlock: true,
         userInteracted: true
       })
-      expect(assertion).toEqual({ ...state, tabs: {
+      expect(assertion).toEqual({
+ ...state,
+tabs: {
         2: {
           ...state.tabs[2],
           noScriptInfo: {
@@ -61,7 +63,8 @@ describe('noScriptState', () => {
               willBlock: true
             }
           }
-        }}
+        }
+}
       })
     })
   })

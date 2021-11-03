@@ -83,7 +83,7 @@ handler.on<Actions.ReadFeedItemPayload>(Actions.readFeedItem.getType(), async (s
       todayCardsVisited: state.today.cardsVisited
     })
     // visit article url
-    // @ts-ignore
+    // @ts-expect-error
     window.location = payload.item.url
   } else {
     window.open(payload.item.url, '_blank')
@@ -160,7 +160,7 @@ handler.on<Actions.VisitDisplayAdPayload>(Actions.visitDisplayAd.getType(), asyn
       todayCardsVisited: state.today.cardsVisited
     })
     // visit article url
-    // @ts-ignore
+    // @ts-expect-error
     window.location = destinationUrl
   } else {
     window.open(destinationUrl, '_blank')

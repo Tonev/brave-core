@@ -12,7 +12,7 @@ import PublisherMeta from '../components/default/braveToday/cards/PublisherMeta'
 import DisplayAdCard from '../components/default/braveToday/cards/displayAd'
 import getBraveNewsDisplayAd from './default/data/getBraveNewsDisplayAd'
 
-const onClick = (() => alert('clicked'))
+const onClick = () => alert('clicked')
 
 export default {
   title: 'New Tab/Brave Today',

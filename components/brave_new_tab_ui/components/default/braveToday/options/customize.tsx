@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import { getLocale } from '../../../../../common/locale'
 import { Button } from '../default'
 
-type Props = {
+interface Props {
   show: boolean
   onCustomizeBraveToday: () => any
 }

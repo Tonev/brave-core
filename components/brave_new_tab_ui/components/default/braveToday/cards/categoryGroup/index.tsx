@@ -11,14 +11,14 @@ import useReadArticleClickHandler from '../../useReadArticleClickHandler'
 import { OnReadFeedItem } from '../../'
 
 interface Props {
-  content: (BraveToday.Article)[]
+  content: BraveToday.Article[]
   publishers: BraveToday.Publishers
   categoryName: string
   articleToScrollTo?: BraveToday.FeedItem
   onReadFeedItem: OnReadFeedItem
 }
 
-type ListItemProps = {
+interface ListItemProps {
   item: BraveToday.Article
   publisher?: BraveToday.Publisher
   onReadFeedItem: OnReadFeedItem

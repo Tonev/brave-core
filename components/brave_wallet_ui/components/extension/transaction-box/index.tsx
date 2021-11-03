@@ -22,13 +22,15 @@ const TransactionDetailBox = (props: Props) => {
 
   return (
     <>
-      {data.length === 0 ? (
+      {data.length === 0
+? (
         <CodeSnippet>
           <code>
             <CodeSnippetText>{getLocale('braveWalletConfirmTransactionNoData')}</CodeSnippetText>
           </code>
         </CodeSnippet>
-      ) : (
+      )
+: (
         <>
           <DetailRow>
             <TransactionText>{getLocale('braveWalletTransactionDetailBoxFunction')}:</TransactionText>

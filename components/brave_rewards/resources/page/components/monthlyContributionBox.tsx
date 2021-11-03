@@ -42,7 +42,7 @@ class MonthlyContributionBox extends React.Component<Props, State> {
 
   getRows = () => {
     const { parameters, recurringList } = this.props.rewardsData
-    let recurring: DetailRow[] = []
+    const recurring: DetailRow[] = []
 
     if (!recurringList) {
       return recurring

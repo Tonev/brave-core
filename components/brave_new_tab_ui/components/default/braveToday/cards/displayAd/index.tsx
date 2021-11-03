@@ -14,7 +14,7 @@ import CardImage from '../CardImage'
 import useTriggerOnNearViewport from './useTriggerOnNearViewport'
 import * as Styles from './style'
 
-type Props = {
+interface Props {
   shouldScrollIntoView?: boolean
   getContent: GetDisplayAdContent
   onVisitDisplayAd: OnVisitDisplayAd
@@ -33,7 +33,7 @@ export default function CardDisplayAd (props: Props) {
       return
     }
     // Detect when card is viewed, and send an action.
-    let onItemViewed = props.onViewedDisplayAd
+    const onItemViewed = props.onViewedDisplayAd
     const observer = new VisibilityTimer(() => {
       onItemViewed({ ad: content })
     }, 100, innerRef.current)

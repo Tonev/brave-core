@@ -14,7 +14,7 @@ import CardImage from '../CardImage'
 import PublisherMeta from '../PublisherMeta'
 // TODO(petemill): Large and Medium article should be combined to 1 component.
 
-type Props = {
+interface Props {
   onReadFeedItem: OnReadFeedItem
   onSetPublisherPref: OnSetPublisherPref
   onItemViewed?: OnPromotedItemViewed
@@ -22,7 +22,7 @@ type Props = {
 }
 
 type ArticlesProps = Props & {
-  content: (BraveToday.Article | BraveToday.PromotedArticle | undefined)[]
+  content: Array<BraveToday.Article | BraveToday.PromotedArticle | undefined>
   publishers: BraveToday.Publishers
   articleToScrollTo?: BraveToday.FeedItem
 }
@@ -53,7 +53,7 @@ const LargeArticle = React.forwardRef<HTMLElement, ArticleProps>(function (props
 
   const uuid = React.useMemo<string | undefined>(function () {
     if (props.isPromoted) {
-      // @ts-ignore
+      // @ts-expect-error
       const uuid: string = crypto.randomUUID()
       return uuid
     }
@@ -76,7 +76,7 @@ const LargeArticle = React.forwardRef<HTMLElement, ArticleProps>(function (props
       if (typeof forwardedRef === 'function') {
         forwardedRef(innerRef.current)
       } else {
-        // @ts-ignore
+        // @ts-expect-error
         // Ref.current is meant to be readonly, but we can ignore that.
         ref.current = newRef
       }

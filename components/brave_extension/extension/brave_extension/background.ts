@@ -13,9 +13,9 @@ global.Promise = bluebird as any
 
 function promisifier (method: any) {
   // return a function
-  return function promisified (...args: any[]) {
+  return async function promisified (...args: any[]) {
     // which returns a promise
-    return new Promise((resolve: any) => {
+    return await new Promise((resolve: any) => {
       args.push(resolve)
       method.apply(this, args)
     })

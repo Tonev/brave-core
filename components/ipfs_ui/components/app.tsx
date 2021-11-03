@@ -91,7 +91,9 @@ export class IPFSPage extends React.Component<Props, {}> {
         <div
           style={(!this.props.ipfsData.daemonStatus.installed ||
           this.props.ipfsData.daemonStatus.restarting ||
-          !this.props.ipfsData.daemonStatus.launched) ? GrayStyle : {}}
+          !this.props.ipfsData.daemonStatus.launched)
+? GrayStyle
+: {}}
         >
           <ConnectedPeers addressesConfig={this.props.ipfsData.addressesConfig} connectedPeers={this.props.ipfsData.connectedPeers} onOpenPeersWebUI={this.openPeersWebUI} />
           <AddressesConfig addressesConfig={this.props.ipfsData.addressesConfig} />

@@ -89,14 +89,17 @@ function ConnectWithSite (props: Props) {
     <StyledWrapper>
       <ConnectHeader url={siteURL} />
       <MiddleWrapper>
-        {isReady ? (
+        {isReady
+? (
           <AccountListWrapper>
             <Details>{createAccountList()}</Details>
           </AccountListWrapper>
-        ) : (
+        )
+: (
           <Details>{getLocale('braveWalletConnectWithSiteTitle')}</Details>
         )}
-        {!isReady ? (
+        {!isReady
+? (
           <SelectAddressContainer>
             <NewAccountTitle>{getLocale('braveWalletAccounts')}</NewAccountTitle>
             <DividerLine />
@@ -116,7 +119,8 @@ function ConnectWithSite (props: Props) {
             </SelectAddressScrollContainer>
             <DividerLine />
           </SelectAddressContainer>
-        ) : (
+        )
+: (
           <ConfirmTextRow>
             <ConfirmIcon />
             <ConfirmTextColumn>

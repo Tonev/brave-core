@@ -12,7 +12,7 @@ function createThemeRules (theme: any) {
     return ''
   }
 
-  let list = []
+  const list = []
 
   for (const [key, value] of Object.entries(theme.color)) {
     list.push(`--brave-color-${key}: ${String(value)};`)

@@ -14,7 +14,7 @@ const walletReducer: Reducer<Rewards.State | undefined> = (state: Rewards.State,
       break
     case types.ON_REWARDS_PARAMETERS: {
       state = { ...state }
-      let ui = state.ui
+      const ui = state.ui
 
       // TODO NZ check why enum can't be used inside Rewards namespace
       if (action.payload.properties.status === 1) {
@@ -85,7 +85,7 @@ const walletReducer: Reducer<Rewards.State | undefined> = (state: Rewards.State,
     }
     case types.ON_BALANCE: {
       const status = action.payload.status
-      let ui = state.ui
+      const ui = state.ui
 
       if (status === 0) { // on ledger::type::Result::LEDGER_OK
         state.balance = action.payload.balance

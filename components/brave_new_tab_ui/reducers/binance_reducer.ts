@@ -137,7 +137,7 @@ const binanceReducer: Reducer<NewTab.State | undefined> = (state: NewTab.State, 
       let totalBtcValue = 0.00
       let totalUSDValue = 0.00
 
-      for (let ticker in balances) {
+      for (const ticker in balances) {
         const balance = balances[ticker].balance
         const usdValue = balances[ticker].fiatValue
         const btcValue = balances[ticker].btcValue

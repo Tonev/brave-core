@@ -64,11 +64,13 @@ export default class Alert extends React.PureComponent<Props, {}> {
         <StyledContent type={type} colored={colored}>
           {children}
         </StyledContent>
-        {onClose ? (
+        {onClose
+? (
           <StyledClose>
             <CloseStrokeIcon />
           </StyledClose>
-        ) : null}
+        )
+: null}
       </StyledWrapper>
     )
   }

@@ -13,14 +13,14 @@ import { OnReadFeedItem, OnSetPublisherPref } from '../../'
 // TODO(petemill): Large and Medium article should be combined to 1 component.
 
 interface Props {
-  content: (BraveToday.Article)[]
+  content: BraveToday.Article[]
   publishers: BraveToday.Publishers
   articleToScrollTo?: BraveToday.FeedItem
   onReadFeedItem: OnReadFeedItem
   onSetPublisherPref: OnSetPublisherPref
 }
 
-type ArticleProps = {
+interface ArticleProps {
   item: BraveToday.Article
   publisher?: BraveToday.Publisher
   shouldScrollIntoView?: boolean

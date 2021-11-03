@@ -19,7 +19,7 @@ interface Props {
   onSetPublisherPref: OnSetPublisherPref
 }
 
-type ListItemProps = {
+interface ListItemProps {
   item: BraveToday.Article
   publisher: BraveToday.Publisher
   onReadFeedItem: OnReadFeedItem

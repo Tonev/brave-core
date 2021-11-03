@@ -26,7 +26,6 @@ export default function useSend (
   sendTransaction: SimpleActionCreator<SendTransactionParams>,
   sendERC721TransferFrom: SimpleActionCreator<ERC721TransferFromParams>
 ) {
-
   const [selectedSendAsset, setSelectedSendAsset] = React.useState<AccountAssetOptionType>(sendAssetOptions[0])
   const [toAddressOrUrl, setToAddressOrUrl] = React.useState('')
   const [toAddress, setToAddress] = React.useState('')

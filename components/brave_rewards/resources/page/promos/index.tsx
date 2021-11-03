@@ -22,7 +22,7 @@ export interface Promo {
 }
 
 export const getActivePromos = (rewardsData: Rewards.State) => {
-  let promos = []
+  const promos = []
 
   if (rewardsData && rewardsData.externalWallet) {
     const wallet = rewardsData.externalWallet

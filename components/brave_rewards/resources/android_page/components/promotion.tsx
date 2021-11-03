@@ -30,12 +30,12 @@ interface Props extends Rewards.ComponentProps {
   promotion: Rewards.Promotion
 }
 
-type GrantWrapperContentProps = {
+interface GrantWrapperContentProps {
   title: string
   text: string
 }
 
-type GrantCompleteContentProps = {
+interface GrantCompleteContentProps {
   amountTitleText: string
   dateTitleText: string
 }
@@ -126,7 +126,7 @@ class Promotion extends React.Component<Props, State> {
     }
 
     // Handle that ugp type string can actually be 'android' on android
-    let type: PromotionType = promotion.type === 1 ? 'ads' : 'ugp'
+    const type: PromotionType = promotion.type === 1 ? 'ads' : 'ugp'
     let promoId
     let tokens = '0.000'
     let date = ''

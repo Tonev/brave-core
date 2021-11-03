@@ -21,7 +21,7 @@ import { Type } from '../tokens'
 import { getLocale } from 'brave-ui/helpers'
 import { WalletInfoIcon } from 'brave-ui/components/icons'
 
-type Token = {
+interface Token {
   tokens: string
   converted: string
   isNegative?: boolean
@@ -84,7 +84,7 @@ export default class WalletSummary extends React.PureComponent<Props, {}> {
       }
     ]
 
-    let result: React.ReactNode[] = []
+    const result: React.ReactNode[] = []
     const all = Object.keys(this.props.report).length
     let current = 0
 

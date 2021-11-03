@@ -75,7 +75,8 @@ export default class EditTopSite extends React.PureComponent<Props, State> {
 
   saveNewTopSite = () => {
     this.props.onSave(this.state.title,
-                      this.props.targetTopSiteForEditing ? this.props.targetTopSiteForEditing.url
+                      this.props.targetTopSiteForEditing
+? this.props.targetTopSiteForEditing.url
                                                          : '',
                       this.state.url)
   }
@@ -111,7 +112,8 @@ export default class EditTopSite extends React.PureComponent<Props, State> {
           textDirection={textDirection}
         >
           <DialogTitle>
-            {targetTopSiteForEditing ? getLocale('editTopSiteDialogTitle')
+            {targetTopSiteForEditing
+? getLocale('editTopSiteDialogTitle')
                                      : getLocale('addTopSiteDialogTitle')}
           </DialogTitle>
           <CloseButton onClick={onClose}>

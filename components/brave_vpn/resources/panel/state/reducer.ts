@@ -9,11 +9,11 @@ import { ConnectionState, Region, ProductUrls } from '../api/panel_browser_api'
 import * as Actions from './actions'
 import { ViewType } from './component_types'
 
-type RootState = {
+interface RootState {
   hasError: boolean
   isSelectingRegion: boolean
   connectionStatus: ConnectionState
-  regions?: Array<Region>
+  regions?: Region[]
   currentRegion?: Region
   productUrls?: ProductUrls
   currentView: ViewType

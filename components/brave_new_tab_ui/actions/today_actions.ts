@@ -11,7 +11,7 @@ export const interactionBegin = createAction('interactionStart')
 
 export const ensureSettingsData = createAction('ensureSettingsData')
 
-type DataReceivedPayload = {
+interface DataReceivedPayload {
   feed?: BraveToday.Feed
   publishers?: BraveToday.Publishers
 }
@@ -24,7 +24,7 @@ export const optIn = createAction('optedIn')
  */
 export const anotherPageNeeded = createAction('anotherPageNeeded')
 
-type BackgroundErrorPayload = {
+interface BackgroundErrorPayload {
   error: Error
 }
 export const errorGettingDataFromBackground = createAction<BackgroundErrorPayload>('errorGettingDataFromBackground')
@@ -32,34 +32,34 @@ export const errorGettingDataFromBackground = createAction<BackgroundErrorPayloa
 /**
  * User has requested to read an article
  */
-export type ReadFeedItemPayload = {
-  item: BraveToday.FeedItem,
-  isPromoted?: boolean,
-  promotedUUID?: string,
+export interface ReadFeedItemPayload {
+  item: BraveToday.FeedItem
+  isPromoted?: boolean
+  promotedUUID?: string
   openInNewTab?: boolean
 }
 export const readFeedItem = createAction<ReadFeedItemPayload>('readFeedItem')
 
 export const feedItemViewedCountChanged = createAction<number>('feedItemViewedCountChanged')
 
-export type PromotedItemViewedPayload = {
+export interface PromotedItemViewedPayload {
   item: BraveToday.PromotedArticle
   uuid: string
 }
 export const promotedItemViewed = createAction<PromotedItemViewedPayload>('promotedItemViewed')
 
-export type VisitDisplayAdPayload = {
+export interface VisitDisplayAdPayload {
   ad: BraveToday.DisplayAd
   openInNewTab?: boolean
 }
 export const visitDisplayAd = createAction<VisitDisplayAdPayload>('visitDisplayAd')
 
-export type DisplayAdViewedPayload = {
+export interface DisplayAdViewedPayload {
   ad: BraveToday.DisplayAd
 }
 export const displayAdViewed = createAction<DisplayAdViewedPayload>('displayAdViewed')
 
-export type SetPublisherPrefPayload = {
+export interface SetPublisherPrefPayload {
   publisherId: string
   enabled: boolean | null
 }
@@ -67,7 +67,7 @@ export const setPublisherPref = createAction<SetPublisherPrefPayload>('setPublis
 
 export const checkForUpdate = createAction('checkForUpdate')
 
-export type IsUpdateAvailablePayload = {
+export interface IsUpdateAvailablePayload {
   isUpdateAvailable: boolean
 }
 export const isUpdateAvailable = createAction<IsUpdateAvailablePayload>('isUpdateAvailable')

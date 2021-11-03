@@ -256,7 +256,8 @@ function ConfirmTransactionPanel (props: Props) {
           </QueueStepRow>
         }
       </TopRow>
-      {transactionInfo.txType === TransactionType.ERC20Approve ? (
+      {transactionInfo.txType === TransactionType.ERC20Approve
+? (
         <>
           <FavIcon src={`chrome://favicon/size/64@1x/${siteURL}`} />
           <URLText>{siteURL}</URLText>
@@ -264,7 +265,8 @@ function ConfirmTransactionPanel (props: Props) {
           <Description>{getLocale('braveWalletAllowSpendDescription').replace('$1', transactionDetails.symbol)}</Description>
           <EditButton onClick={onToggleEditAllowance}>{getLocale('braveWalletEditPermissionsButton')}</EditButton>
         </>
-      ) : (
+      )
+: (
         <>
           <AccountCircleWrapper>
             <FromCircle orb={fromOrb} />
@@ -293,7 +295,8 @@ function ConfirmTransactionPanel (props: Props) {
         />
       </TabRow>
       <MessageBox isDetails={selectedTab === 'details'} isApprove={transactionInfo.txType === TransactionType.ERC20Approve}>
-        {selectedTab === 'transaction' ? (
+        {selectedTab === 'transaction'
+? (
           <>
             {transactionInfo.txType === TransactionType.ERC20Approve &&
               <>
@@ -355,7 +358,8 @@ function ConfirmTransactionPanel (props: Props) {
               </>
             }
           </>
-        ) : <TransactionDetailBox transactionInfo={transactionInfo} />}
+        )
+: <TransactionDetailBox transactionInfo={transactionInfo} />}
       </MessageBox>
       {transactionsQueueLength > 1 &&
         <QueueStepButton

@@ -93,7 +93,7 @@ export default class Shields extends React.PureComponent<Props, State> {
     // If current window is not focused, close Shields immediately.
     // See https://github.com/brave/brave-browser/issues/6601.
     const { url }: Tab = this.props.shieldsPanelTabData
-    if (shieldsHasFocus(url) === false) {
+    if (!shieldsHasFocus(url)) {
       window.close()
     }
   }
@@ -112,13 +112,15 @@ export default class Shields extends React.PureComponent<Props, State> {
           toggleAdvancedView={this.toggleAdvancedView}
           actions={actions}
         />
-      ) : showReadOnlyView
+      )
+: showReadOnlyView
       ? (
         <ReadOnlyView
           shieldsPanelTabData={shieldsPanelTabData}
           toggleReadOnlyView={this.toggleReadOnlyView}
         />
-      ) : (
+      )
+: (
         <SimpleView
           shieldsPanelTabData={shieldsPanelTabData}
           persistentData={persistentData}

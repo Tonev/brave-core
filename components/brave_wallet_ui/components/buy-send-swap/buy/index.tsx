@@ -48,7 +48,8 @@ function Buy (props: Props) {
 
   return (
     <StyledWrapper>
-      {selectedNetwork.chainId === kMainnetChainId ? (
+      {selectedNetwork.chainId === kMainnetChainId
+? (
         <SwapInputComponent
           componentType='buyAmount'
           onInputChange={onInputChange}
@@ -57,7 +58,8 @@ function Buy (props: Props) {
           selectedAsset={selectedAsset}
           onShowSelection={onShowAssets}
         />
-      ) : (
+      )
+: (
         <FaucetWrapper>
           <FaucetTitle>{getLocale('braveWalletBuyTitle')}</FaucetTitle>
           <FaucetDescription>{getLocale('braveWalletBuyDescription')} {networkName}</FaucetDescription>

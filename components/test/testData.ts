@@ -108,7 +108,7 @@ interface OnMessageEvent extends chrome.events.Event<(message: object, options: 
   emit: (message: object) => void
 }
 
-type MockSettingsStore = {
+interface MockSettingsStore {
   [key: string]: chrome.settingsPrivate.PrefObject
 }
 
@@ -116,12 +116,12 @@ type MockSettingsStore = {
 // TODO: do this in individual tests that rely on individual settings,
 //   using the `addMockSetting` function
 let mockSettings: MockSettingsStore = {
-  ['brave.shields.advanced_view_enabled']: {
+  'brave.shields.advanced_view_enabled': {
     key: 'brave.shields.advanced_view_enabled',
     type: 'BOOLEAN',
     value: false
   },
-  ['brave.shields.stats_badge_visible']: {
+  'brave.shields.stats_badge_visible': {
     key: 'brave.shields.stats_badge_visible',
     type: 'BOOLEAN',
     value: true
@@ -137,15 +137,15 @@ export function clearMockSettings () {
 }
 
 export const getMockChrome = () => {
-  let mock = {
-    send: (methodName: string, ...args: Array<any>) => undefined,
+  const mock = {
+    send: (methodName: string, ...args: any[]) => undefined,
     getVariableValue: () => undefined,
     braveRewards: {
       getPublisherData: (id: number, url: string, favicon: string) => undefined
     },
     braveTheme: {
       setBraveThemeType: function (theme: string) {
-        return
+
       }
     },
     runtime: {
@@ -163,27 +163,27 @@ export const getMockChrome = () => {
     },
     browserAction: {
       setBadgeBackgroundColor: function (properties: object) {
-        return
+
       },
       setBadgeText: function (textProperties: object) {
-        return
+
       },
       setIcon: function (iconProperties: object) {
-        return
+
       },
       enable: function (tabId?: number) {
-        return
+
       },
       disable: function (tabId?: number) {
-        return
+
       }
     },
     tabs: {
-      queryAsync: function () {
-        return Promise.resolve([activeTabData])
+      queryAsync: async function () {
+        return await Promise.resolve([activeTabData])
       },
-      getAsync: function (tabId: number) {
-        return Promise.resolve(tabs[tabId])
+      getAsync: async function (tabId: number) {
+        return await Promise.resolve(tabs[tabId])
       },
       create: function (createProperties: object, cb: () => void) {
         setImmediate(cb)
@@ -192,7 +192,7 @@ export const getMockChrome = () => {
         setImmediate(cb)
       },
       insertCSS: function (details: jest.SpyInstance) {
-        return
+
       },
       query: function (queryInfo: chrome.tabs.QueryInfo, callback: (result: chrome.tabs.Tab[]) => void) {
         return callback
@@ -208,70 +208,70 @@ export const getMockChrome = () => {
       onFocusChanged: new ChromeEvent(),
       onCreated: new ChromeEvent(),
       onRemoved: new ChromeEvent(),
-      getAllAsync: function () {
-        return new Promise(() => [])
+      getAllAsync: async function () {
+        return await new Promise(() => [])
       }
     },
     braveShields: {
       onBlocked: new ChromeEvent(),
-      allowScriptsOnce: function (origins: Array<string>, tabId: number, cb: () => void) {
+      allowScriptsOnce: function (origins: string[], tabId: number, cb: () => void) {
         setImmediate(cb)
       },
-      getBraveShieldsEnabledAsync: function (url: string) {
-        return Promise.resolve(false)
+      getBraveShieldsEnabledAsync: async function (url: string) {
+        return await Promise.resolve(false)
       },
-      getAdControlTypeAsync: function (url: string) {
-        return Promise.resolve('block')
+      getAdControlTypeAsync: async function (url: string) {
+        return await Promise.resolve('block')
       },
-      isFirstPartyCosmeticFilteringEnabledAsync: function (url: string) {
-        return Promise.resolve(false)
+      isFirstPartyCosmeticFilteringEnabledAsync: async function (url: string) {
+        return await Promise.resolve(false)
       },
-      getCookieControlTypeAsync: function (url: string) {
-        return Promise.resolve('block')
+      getCookieControlTypeAsync: async function (url: string) {
+        return await Promise.resolve('block')
       },
-      getFingerprintingControlTypeAsync: function (url: string) {
-        return Promise.resolve('block')
+      getFingerprintingControlTypeAsync: async function (url: string) {
+        return await Promise.resolve('block')
       },
-      getHTTPSEverywhereEnabledAsync: function (url: string) {
-        return Promise.resolve(true)
+      getHTTPSEverywhereEnabledAsync: async function (url: string) {
+        return await Promise.resolve(true)
       },
-      getNoScriptControlTypeAsync: function (url: string) {
-        return Promise.resolve('block')
+      getNoScriptControlTypeAsync: async function (url: string) {
+        return await Promise.resolve('block')
       },
-      setBraveShieldsEnabledAsync: function (url: string, enabled: boolean) {
-        return new Promise(() => [])
+      setBraveShieldsEnabledAsync: async function (url: string, enabled: boolean) {
+        return await new Promise(() => [])
       },
-      setAdControlTypeAsync: function (url: string, controlType: string) {
-        return new Promise(() => [])
+      setAdControlTypeAsync: async function (url: string, controlType: string) {
+        return await new Promise(() => [])
       },
-      setCosmeticFilteringControlTypeAsync: function (url: string, controlType: string) {
-        return new Promise(() => [])
+      setCosmeticFilteringControlTypeAsync: async function (url: string, controlType: string) {
+        return await new Promise(() => [])
       },
-      setCookieControlTypeAsync: function (url: string, controlType: string) {
-        return new Promise(() => [])
+      setCookieControlTypeAsync: async function (url: string, controlType: string) {
+        return await new Promise(() => [])
       },
-      setFingerprintingControlTypeAsync: function (url: string, controlType: string) {
-        return new Promise(() => [])
+      setFingerprintingControlTypeAsync: async function (url: string, controlType: string) {
+        return await new Promise(() => [])
       },
-      setHTTPSEverywhereEnabledAsync: function (url: string, enabled: boolean) {
-        return new Promise(() => [])
+      setHTTPSEverywhereEnabledAsync: async function (url: string, enabled: boolean) {
+        return await new Promise(() => [])
       },
-      setNoScriptControlTypeAsync: function (url: string, controlType: string) {
-        return new Promise(() => [])
+      setNoScriptControlTypeAsync: async function (url: string, controlType: string) {
+        return await new Promise(() => [])
       }
     },
     i18n: {
       getMessage: function (message: string) {
-        return
+
       }
     },
     storage: {
       local: {
         get: function (callback: (items: { [key: string]: any }) => void): void {
-          return
+
         },
         set: function (items: Object, callback?: () => void): void {
-          return
+
         }
       }
     },
@@ -285,21 +285,21 @@ export const getMockChrome = () => {
     },
     bookmarks: {
       create: function (bookmark: chrome.bookmarks.BookmarkCreateArg, callback?: (result: chrome.bookmarks.BookmarkTreeNode[]) => void) {
-        return
+
       },
       remove: function (id: string, callback?: Function) {
-        return
+
       },
       search: function (query: string, callback: (results: chrome.bookmarks.BookmarkTreeNode[]) => void) {
-        return
+
       }
     },
     contextMenus: {
-      create: function (data: any) {
-        return Promise.resolve()
+      create: async function (data: any) {
+        return await Promise.resolve()
       },
       onBlocked: new ChromeEvent(),
-      allowScriptsOnce: function (origins: Array<string>, tabId: number, cb: () => void) {
+      allowScriptsOnce: function (origins: string[], tabId: number, cb: () => void) {
         setImmediate(cb)
       },
       onClicked: new ChromeEvent()
@@ -332,7 +332,7 @@ export const getMockChrome = () => {
 }
 
 export const window = () => {
-  let mock = {
+  const mock = {
     prompt: function (text: String) {
       return text
     }
@@ -382,42 +382,42 @@ export const mockSearchProviders = [
 
 export const mockImportSources = [
   {
-    autofillFormData : false,
-    cookies : true,
-    favorites : true,
-    history : true,
-    index : 1,
-    ledger : false,
-    name :  `Chrome Person 1`,
-    passwords : true,
-    search : false,
-    stats : false,
-    windows : false
+    autofillFormData: false,
+    cookies: true,
+    favorites: true,
+    history: true,
+    index: 1,
+    ledger: false,
+    name: 'Chrome Person 1',
+    passwords: true,
+    search: false,
+    stats: false,
+    windows: false
   },
   {
-    autofillFormData : false,
-    cookies : true,
-    favorites : true,
-    history : true,
-    index : 0,
-    ledger : false,
-    name :  `Safari`,
-    passwords : true,
-    search : false,
-    stats : false,
-    windows : false
+    autofillFormData: false,
+    cookies: true,
+    favorites: true,
+    history: true,
+    index: 0,
+    ledger: false,
+    name: 'Safari',
+    passwords: true,
+    search: false,
+    stats: false,
+    windows: false
   },
   {
-    autofillFormData : false,
-    cookies : true,
-    favorites : true,
-    history : true,
-    index : 2,
-    ledger : false,
-    name :  `Bookmarks HTML File`,
-    passwords : true,
-    search : false,
-    stats : false,
-    windows : false
+    autofillFormData: false,
+    cookies: true,
+    favorites: true,
+    history: true,
+    index: 2,
+    ledger: false,
+    name: 'Bookmarks HTML File',
+    passwords: true,
+    search: false,
+    stats: false,
+    windows: false
   }
 ]

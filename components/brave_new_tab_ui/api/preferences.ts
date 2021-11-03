@@ -14,8 +14,8 @@ import { addWebUIListener, sendWithPromise } from 'chrome://resources/js/cr.m'
 
 type PreferencesUpdatedHandler = (prefData: NewTab.Preferences) => void
 
-export function getPreferences (): Promise<NewTab.Preferences> {
-  return sendWithPromise('getNewTabPagePreferences')
+export async function getPreferences (): Promise<NewTab.Preferences> {
+  return await sendWithPromise('getNewTabPagePreferences')
 }
 
 function sendSavePref (key: string, value: any) {

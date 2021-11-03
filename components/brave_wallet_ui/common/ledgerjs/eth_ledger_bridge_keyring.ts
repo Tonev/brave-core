@@ -2,7 +2,6 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
-/* global window */
 
 const { EventEmitter } = require('events')
 
@@ -27,8 +26,8 @@ export default class LedgerBridgeKeyring extends EventEmitter {
     return kLedgerHardwareVendor
   }
 
-  getAccounts = (from: number, to: number, scheme: string) => {
-    return new Promise(async (resolve, reject) => {
+  getAccounts = async (from: number, to: number, scheme: string) => {
+    return await new Promise(async (resolve, reject) => {
       if (from < 0) {
         from = 0
       }
@@ -69,7 +68,7 @@ export default class LedgerBridgeKeyring extends EventEmitter {
   }
 
   signPersonalMessage = async (path: string, address: string, message: string) => {
-    return new Promise(async (resolve, reject) => {
+    return await new Promise(async (resolve, reject) => {
       try {
         if (!this.isUnlocked() && !(await this.unlock())) {
           return new Error(getLocale('braveWalletUnlockError'))
@@ -87,6 +86,7 @@ export default class LedgerBridgeKeyring extends EventEmitter {
       }
     })
   }
+
   _createMessageSignature = (result: SignatureVRS, message: string, address: string) => {
     let v = (result.v - 27).toString()
     if (v.length < 2) {

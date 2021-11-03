@@ -253,8 +253,8 @@ const EditGas = (props: Props) => {
             <SliderLabel>{getLocale('braveWalletEditGasMaxFee')}:</SliderLabel>
             <SliderValue>
               ~${suggestedEIP1559FiatGasFee}
-              {` `}USD ({suggestedEIP1559GasFee}
-              {` `}{selectedNetwork.symbol})</SliderValue>
+              {' '}USD ({suggestedEIP1559GasFee}
+              {' '}{selectedNetwork.symbol})</SliderValue>
             <GasSlider
               type='range'
               min='0'
@@ -287,14 +287,18 @@ const EditGas = (props: Props) => {
         <ButtonRow>
           <NavButton
             buttonType='secondary'
-            text={!isEIP1559Transaction ? getLocale('braveWalletBackupButtonCancel')
-              : maxPriorityPanel === MaxPriorityPanels.setCustom ? getLocale('braveWalletEditGasSetSuggested')
+            text={!isEIP1559Transaction
+? getLocale('braveWalletBackupButtonCancel')
+              : maxPriorityPanel === MaxPriorityPanels.setCustom
+? getLocale('braveWalletEditGasSetSuggested')
                 : getLocale('braveWalletEditGasSetCustom')
 
             }
             onSubmit={
-              !isEIP1559Transaction ? onCancel
-                : maxPriorityPanel === MaxPriorityPanels.setCustom ? onSetPanelToSuggested
+              !isEIP1559Transaction
+? onCancel
+                : maxPriorityPanel === MaxPriorityPanels.setCustom
+? onSetPanelToSuggested
                   : onSetPanelToCustom}
           />
           <NavButton

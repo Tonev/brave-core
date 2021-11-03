@@ -48,7 +48,7 @@ class TipBox extends React.Component<Props, State> {
 
   getTipsRows = () => {
     const { parameters, tipsList } = this.props.rewardsData
-    let tips: DetailRow[] = []
+    const tips: DetailRow[] = []
 
     if (!tipsList) {
       return tips

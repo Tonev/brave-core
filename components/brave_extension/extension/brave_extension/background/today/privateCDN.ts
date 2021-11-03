@@ -25,7 +25,7 @@ export async function getUnpaddedAsDataUrl (buffer: ArrayBuffer, mimeType = 'ima
   const unpaddedData = buffer.slice(4, contentLength + 4)
   const unpaddedBlob = new Blob([unpaddedData], { type: mimeType })
   const dataUrl = await new Promise<string>(resolve => {
-    let reader = new FileReader()
+    const reader = new FileReader()
     reader.onload = () => resolve(reader.result as string)
     reader.readAsDataURL(unpaddedBlob)
   })

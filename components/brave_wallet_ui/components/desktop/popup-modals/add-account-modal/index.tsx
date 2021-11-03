@@ -95,7 +95,6 @@ const AddAccountModal = (props: Props) => {
     if (tab === 'import') {
       if (importOption === 'key') {
         onImportAccount(accountName, privateKey)
-        return
       } else {
         if (file) {
           const index = file[0]
@@ -107,7 +106,6 @@ const AddAccountModal = (props: Props) => {
           }
           reader.readAsText(index)
         }
-        return
       }
     }
   }
@@ -189,13 +187,15 @@ const AddAccountModal = (props: Props) => {
             {importError &&
               <ErrorText>{getLocale('braveWalletImportAccountError')}</ErrorText>
             }
-            {importOption === 'key' ? (
+            {importOption === 'key'
+? (
               <Input
                 placeholder={getLocale('braveWalletImportAccountPlaceholder')}
                 onChange={handlePrivateKeyChanged}
                 type='password'
               />
-            ) : (
+            )
+: (
               <>
                 <ImportRow>
                   <ImportButton htmlFor='recoverFile'>{getLocale('braveWalletImportAccountUploadButton')}</ImportButton>
@@ -229,8 +229,8 @@ const AddAccountModal = (props: Props) => {
               onSubmit={onSubmit}
               disabled={isDisabled}
               text={
-                tab === 'create' ?
-                  `${getLocale('braveWalletAddAccountCreate')} ${getLocale('braveWalletAccount')}`
+                tab === 'create'
+                  ? `${getLocale('braveWalletAddAccountCreate')} ${getLocale('braveWalletAccount')}`
                   : getLocale('braveWalletAddAccountImport')
               }
               buttonType='primary'

@@ -26,7 +26,7 @@ import { DisclaimerText } from '../style'
 
 interface Props {
   hardwareWallet: string
-  accounts: Array<HardwareWalletAccount>
+  accounts: HardwareWalletAccount[]
   onLoadMore: () => void
   selectedDerivationPaths: string[]
   setSelectedDerivationPaths: (paths: string[]) => void
@@ -107,11 +107,13 @@ export default function (props: Props) {
       </DisclaimerWrapper>
       <SearchBar placeholder={getLocale('braveWalletSearchScannedAccounts')} action={filterAccountList} />
       <HardwareWalletAccountsList>
-        {filteredAccountList?.length === 0 ? (
+        {filteredAccountList?.length === 0
+? (
           <LoadingWrapper>
             <LoadIcon />
           </LoadingWrapper>
-        ) : (
+        )
+: (
           <>
             {filteredAccountList?.map((account) => {
               return (
@@ -130,7 +132,8 @@ export default function (props: Props) {
       <ButtonsContainer>
         <NavButton
           onSubmit={onClickLoadMore}
-          text={isLoadingMore ? getLocale('braveWalletLoadingMoreAccountsHardwareWallet')
+          text={isLoadingMore
+? getLocale('braveWalletLoadingMoreAccountsHardwareWallet')
             : getLocale('braveWalletLoadMoreAccountsHardwareWallet')}
           buttonType='primary'
           disabled={isLoadingMore}

@@ -17,20 +17,26 @@ export const StyledButton = styled.button<StyleProps>`
   padding: 10px 22px;
   outline: none;
   background-color: ${(p) =>
-    p.disabled ? p.theme.color.disabled
+    p.disabled
+? p.theme.color.disabled
       : p.buttonType === 'primary' ||
         p.buttonType === 'confirm' ||
-        p.buttonType === 'sign' ? p.theme.palette.blurple500
-        : p.buttonType === 'danger' ? p.theme.color.errorBorder
+        p.buttonType === 'sign'
+? p.theme.palette.blurple500
+        : p.buttonType === 'danger'
+? p.theme.color.errorBorder
           : 'transparent'};
   border: ${(p) =>
     p.buttonType === 'secondary' ||
-      p.buttonType === 'reject' ? `1px solid ${p.theme.color.interactive08}`
+      p.buttonType === 'reject'
+? `1px solid ${p.theme.color.interactive08}`
       : 'none'};
   margin-right: ${(p) =>
     p.buttonType === 'primary' ||
       p.buttonType === 'confirm' ||
-      p.buttonType === 'sign' ? '0px' : '8px'};
+      p.buttonType === 'sign'
+? '0px'
+: '8px'};
 `
 
 export const ButtonText = styled.span<Partial<StyleProps>>`
@@ -39,7 +45,8 @@ export const ButtonText = styled.span<Partial<StyleProps>>`
   line-height: 20px;
   color: ${(p) =>
     p.buttonType === 'secondary' ||
-      p.buttonType === 'reject' ? p.theme.color.interactive07
+      p.buttonType === 'reject'
+? p.theme.color.interactive07
       : p.theme.palette.white};
 `
 

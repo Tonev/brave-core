@@ -20,7 +20,7 @@ export const statsUpdated = (stats: Stats) =>
 
 export const init = createAction<void>('page init')
 
-export type DismissBraveTalkPromptPayload = {
+export interface DismissBraveTalkPromptPayload {
   isAutomatic: boolean
 }
 export const dismissBraveTalkPrompt = createAction<DismissBraveTalkPromptPayload>('dismiss brave talk prompt')

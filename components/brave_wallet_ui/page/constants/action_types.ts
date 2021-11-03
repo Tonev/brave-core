@@ -10,74 +10,74 @@ import {
   AssetPriceTimeframe
 } from '../../constants/types'
 
-export type CreateWalletPayloadType = {
+export interface CreateWalletPayloadType {
   password: string
 }
 
-export type AddAccountPayloadType = {
+export interface AddAccountPayloadType {
   accountName: string
 }
 
-export type ImportAccountPayloadType = {
-  accountName: string,
+export interface ImportAccountPayloadType {
+  accountName: string
   privateKey: string
 }
 
-export type ImportAccountFromJsonPayloadType = {
-  accountName: string,
-  password: string,
+export interface ImportAccountFromJsonPayloadType {
+  accountName: string
+  password: string
   json: string
 }
 
-export type RemoveImportedAccountPayloadType = {
+export interface RemoveImportedAccountPayloadType {
   address: string
 }
 
-export type RemoveHardwareAccountPayloadType = {
+export interface RemoveHardwareAccountPayloadType {
   address: string
 }
 
-export type RestoreWalletPayloadType = {
-  mnemonic: string,
-  password: string,
+export interface RestoreWalletPayloadType {
+  mnemonic: string
+  password: string
   isLegacy: boolean
 }
 
-export type WalletCreatedPayloadType = {
+export interface WalletCreatedPayloadType {
   mnemonic: string
 }
 
-export type ViewPrivateKeyPayloadType = {
+export interface ViewPrivateKeyPayloadType {
   isDefault: boolean
   address: string
 }
 
-export type RecoveryWordsAvailablePayloadType = {
+export interface RecoveryWordsAvailablePayloadType {
   mnemonic: string
 }
 
-export type PrivateKeyAvailablePayloadType = {
+export interface PrivateKeyAvailablePayloadType {
   privateKey: string
 }
 
-export type UpdateSelectedAssetType = {
-  asset: TokenInfo,
+export interface UpdateSelectedAssetType {
+  asset: TokenInfo
   timeFrame: AssetPriceTimeframe
 }
 
-export type SelectAssetPayloadType = {
-  priceHistory: GetPriceHistoryReturnObjectInfo | undefined,
-  usdPriceInfo: AssetPriceInfo | undefined,
-  btcPriceInfo: AssetPriceInfo | undefined,
+export interface SelectAssetPayloadType {
+  priceHistory: GetPriceHistoryReturnObjectInfo | undefined
+  usdPriceInfo: AssetPriceInfo | undefined
+  btcPriceInfo: AssetPriceInfo | undefined
   timeFrame: AssetPriceTimeframe
 }
 
-export type ImportFromExternalWalletPayloadType = {
-  password: string,
+export interface ImportFromExternalWalletPayloadType {
+  password: string
   newPassword: string
 }
 
-export type ImportWalletErrorPayloadType = {
-  hasError: boolean,
+export interface ImportWalletErrorPayloadType {
+  hasError: boolean
   errorMessage?: string
 }

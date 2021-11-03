@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import { getLocale } from '../../../../../common/locale'
 import { OnSetPublisherPref } from '../'
 
-type Props = {
+interface Props {
   publisher: BraveToday.Publisher
   onSetPublisherPref: OnSetPublisherPref
   title?: boolean
@@ -109,7 +109,6 @@ const MenuItem = styled('li')`
 `
 
 export default function PublisherMetaComponent (props: Props) {
-
   const [isMenuOpen, setIsMenuOpen] = React.useState(false)
 
   const triggerElementRef = React.useRef<HTMLButtonElement>(null)

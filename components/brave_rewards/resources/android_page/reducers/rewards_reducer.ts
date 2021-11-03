@@ -25,13 +25,13 @@ const rewardsReducer: Reducer<Rewards.State | undefined> = (state: Rewards.State
     }
     case types.DISCONNECT_WALLET_ERROR: {
       state = { ...state }
-      let ui = state.ui
+      const ui = state.ui
       ui.disconnectWalletError = true
       break
     }
     case types.ON_AUTO_CONTRIBUTE_PROPERTIES: {
       state = { ...state }
-      let properties = action.payload.properties
+      const properties = action.payload.properties
       let ui = state.ui
 
       if (!properties || Object.keys(properties).length === 0) {
@@ -83,7 +83,7 @@ const rewardsReducer: Reducer<Rewards.State | undefined> = (state: Rewards.State
       break
     case types.ON_MODAL_BACKUP_CLOSE: {
       state = { ...state }
-      let ui = state.ui
+      const ui = state.ui
       ui.walletRecoveryStatus = null
       ui.modalBackup = false
       state = {
@@ -93,7 +93,7 @@ const rewardsReducer: Reducer<Rewards.State | undefined> = (state: Rewards.State
       break
     }
     case types.ON_MODAL_BACKUP_OPEN: {
-      let ui = state.ui
+      const ui = state.ui
       ui.modalBackup = true
       state = {
         ...state,
@@ -102,7 +102,7 @@ const rewardsReducer: Reducer<Rewards.State | undefined> = (state: Rewards.State
       break
     }
     case types.ON_CLEAR_ALERT: {
-      let ui = state.ui
+      const ui = state.ui
       if (!ui[action.payload.property]) {
         break
       }
@@ -205,7 +205,7 @@ const rewardsReducer: Reducer<Rewards.State | undefined> = (state: Rewards.State
         break
       }
 
-      let inlineTip = state.inlineTip
+      const inlineTip = state.inlineTip
 
       inlineTip[key] = value
       chrome.send('brave_rewards.setInlineTippingPlatformEnabled', [key, value.toString()])

@@ -91,7 +91,7 @@ export default class TorrentViewerHeader extends React.PureComponent<
     } else {
       // Listen for malicious files pretending to be .torrents (#11488)
       chrome.downloads.onDeterminingFilename.addListener(this.downloadListener)
-      let a = document.createElement('a')
+      const a = document.createElement('a')
       a.download = ''
       a.href = this.props.torrentId
       a.click()

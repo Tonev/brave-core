@@ -28,13 +28,13 @@ const rewardsReducer: Reducer<Rewards.State | undefined> = (state: Rewards.State
     }
     case types.DISCONNECT_WALLET_ERROR: {
       state = { ...state }
-      let ui = state.ui
+      const ui = state.ui
       ui.disconnectWalletError = true
       break
     }
     case types.ON_AUTO_CONTRIBUTE_PROPERTIES: {
       state = { ...state }
-      let properties = action.payload.properties
+      const properties = action.payload.properties
       let ui = state.ui
 
       if (!properties || Object.keys(properties).length === 0) {
@@ -74,7 +74,7 @@ const rewardsReducer: Reducer<Rewards.State | undefined> = (state: Rewards.State
     }
     case types.ON_MODAL_BACKUP_CLOSE: {
       state = { ...state }
-      let ui = state.ui
+      const ui = state.ui
       ui.walletRecoveryStatus = null
       ui.modalBackup = false
       state = {
@@ -84,7 +84,7 @@ const rewardsReducer: Reducer<Rewards.State | undefined> = (state: Rewards.State
       break
     }
     case types.ON_MODAL_BACKUP_OPEN: {
-      let ui = state.ui
+      const ui = state.ui
       ui.modalBackup = true
       state = {
         ...state,
@@ -93,7 +93,7 @@ const rewardsReducer: Reducer<Rewards.State | undefined> = (state: Rewards.State
       break
     }
     case types.ON_CLEAR_ALERT: {
-      let ui = state.ui
+      const ui = state.ui
       if (ui[action.payload.property] === undefined) {
         break
       }
@@ -301,7 +301,7 @@ const rewardsReducer: Reducer<Rewards.State | undefined> = (state: Rewards.State
         break
       }
 
-      let inlineTip = state.inlineTip
+      const inlineTip = state.inlineTip
 
       inlineTip[key] = value
       chrome.send('brave_rewards.setInlineTippingPlatformEnabled', [key, value.toString()])
@@ -367,7 +367,7 @@ const rewardsReducer: Reducer<Rewards.State | undefined> = (state: Rewards.State
         chrome.send('brave_rewards.fetchBalance')
 
         if (data.action === 'authorization') {
-          const url = data.args['redirect_url']
+          const url = data.args.redirect_url
           if (url && url.length > 0) {
             window.open(url, '_self')
           }
@@ -462,7 +462,7 @@ const rewardsReducer: Reducer<Rewards.State | undefined> = (state: Rewards.State
       break
     }
     case types.ON_ONBOARDING_STATUS: {
-      let { showOnboarding } = action.payload
+      const { showOnboarding } = action.payload
       // Once the user has been onboarded (perhaps through another rewards
       // UI entry point) and has viewed the settings page, do not hide the
       // settings page with onboarding again.

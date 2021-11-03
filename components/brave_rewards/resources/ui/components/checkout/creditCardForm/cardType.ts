@@ -14,7 +14,7 @@ type SecurityCodeError =
 
 function checkLuhn (digits: string) {
   let sum = 0
-  let parity = digits.length % 2
+  const parity = digits.length % 2
   for (let i = 0; i < digits.length; ++i) {
     const n = parseInt(digits[i], 10)
     if (isNaN(n)) {
@@ -36,8 +36,8 @@ export class CardType {
   name: string
   pattern: RegExp
   validation: string = 'luhn'
-  gaps: Array<number> = [4, 8, 12]
-  lengths: Array<number> = [16]
+  gaps: number[] = [4, 8, 12]
+  lengths: number[] = [16]
   securityCodeLength: number = 3
 
   constructor (init: object) {
@@ -103,7 +103,7 @@ export class CardType {
   }
 }
 
-function registerTypes (initList: Array<object>) {
+function registerTypes (initList: object[]) {
   for (const init of initList) {
     const cardType = new CardType(init)
     cardTypes.set(cardType.id, cardType)

@@ -146,7 +146,7 @@ export const promotionPanelReducer: Reducer<RewardsExtension.State | undefined> 
         break
       }
 
-      let promotions = state.promotions.map((item: RewardsExtension.Promotion) => {
+      const promotions = state.promotions.map((item: RewardsExtension.Promotion) => {
         if (currentPromotion.promotionId === item.promotionId) {
           item.captchaStatus = null
           item.status = 4
@@ -163,14 +163,14 @@ export const promotionPanelReducer: Reducer<RewardsExtension.State | undefined> 
     }
     case types.ON_PROMOTION_FINISH: {
       state = { ...state }
-      let newPromotion: any = {}
+      const newPromotion: any = {}
       const result = payload.result
 
       if (!state.promotions) {
         break
       }
 
-      let promotionId = payload.promotion.promotionId
+      const promotionId = payload.promotion.promotionId
       newPromotion.promotionId = promotionId
 
       const currentPromotion = getPromotion(promotionId, state.promotions)

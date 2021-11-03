@@ -1,14 +1,21 @@
 import { EthereumChain } from '../constants/types'
 
 export const GetNetworkInfo = (chainId: string, list: EthereumChain[]) => {
-  for (let it of list) {
+  for (const it of list) {
     if (it.chainId === chainId) {
       return it
     }
   }
   return {
-    chainId: '', chainName: '', rpcUrls: [], blockExplorerUrls: [],
-    iconUrls: [], symbol: '', symbolName: '', decimals: 0, isEip1559: false
+    chainId: '',
+chainName: '',
+rpcUrls: [],
+blockExplorerUrls: [],
+    iconUrls: [],
+symbol: '',
+symbolName: '',
+decimals: 0,
+isEip1559: false
   }
 }
 

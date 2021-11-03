@@ -16,7 +16,7 @@ export default function hashStrings (items: string[]) {
   let sum = 0
   let product = 1
   for (let i = 0; i < items.length; i++) {
-    let cs = charsum(items[i])
+    const cs = charsum(items[i])
     if (product % cs > 0) {
       product = product * cs
       sum = sum + (65027 / cs)

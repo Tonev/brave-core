@@ -18,7 +18,9 @@ export const MainPanel = styled.div<{ showBackground?: boolean }>`
   font-size: 14px;
   color: ${p => p.theme.palette.black};
 
-  ${p => !p.showBackground ? '' : css`
+  ${p => !p.showBackground
+? ''
+: css`
     background-image: url(${backgroundSrc});
     background-repeat: no-repeat;
     background-position: bottom right;

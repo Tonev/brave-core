@@ -1,7 +1,7 @@
 import { getLocale } from '../api/localeAPI'
 import { addSiteCosmeticFilter, openFilterManagementPage } from '../api/cosmeticFilterAPI'
 
-export let rule = {
+export const rule = {
   host: '',
   selector: ''
 }
@@ -79,7 +79,7 @@ export function onContextMenuClicked (info: chrome.contextMenus.OnClickData, tab
       break
     }
     default: {
-      console.warn('[cosmeticFilterEvents] invalid context menu option: ${info.menuItemId}')
+      console.warn(`[cosmeticFilterEvents] invalid context menu option: ${info.menuItemId}`)
     }
   }
 }

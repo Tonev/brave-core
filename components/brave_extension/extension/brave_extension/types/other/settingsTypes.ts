@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-export type Settings = {
+export interface Settings {
   key: string
   type: any
   // TODO: can support multiple types, see PrefType in chromel.d.ts
@@ -13,7 +13,7 @@ export type SettingsData = {
   [key in GeneratedSettingsKey]: boolean
 }
 
-export type SettingsOptions = {
+export interface SettingsOptions {
   [key: string]: GeneratedSettingsKey
 }
 

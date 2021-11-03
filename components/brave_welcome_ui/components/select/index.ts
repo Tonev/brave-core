@@ -50,12 +50,14 @@ export const SelectBox = styled('select')<SelectBoxProps>`
     ? css`
       user-select: none;
       opacity: 0.6;
-    ` : ''
+    `
+: ''
   }
   ${(p: SelectBoxProps) => p.multiple
     ? css`
       padding: 6px;
       background: none;
-    ` : ''
+    `
+: ''
   }
 `

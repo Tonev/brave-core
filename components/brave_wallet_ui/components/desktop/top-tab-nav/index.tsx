@@ -47,11 +47,13 @@ export default class TopTabNav extends React.PureComponent<Props, {}> {
         )}
 
         <MoreRow>
-          {hasMoreButtons ? (
+          {hasMoreButtons
+? (
             <MoreButton onClick={onLockWallet}>
               <LockIcon />
             </MoreButton>
-          ) : (
+          )
+: (
             <EmptyPadding />
           )}
           <Line />

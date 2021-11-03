@@ -95,7 +95,6 @@ async function updateAccountInfo (store: Store) {
   } else {
     await refreshWalletInfo(store)
   }
-
 }
 
 handler.on(WalletActions.refreshBalancesAndPrices.getType(), async (store: Store) => {
@@ -314,7 +313,7 @@ handler.on(WalletActions.sendTransaction.getType(), async (store: Store, payload
   )
   if (!addResult.success) {
     console.log(
-      `Sending unapproved transaction failed: ` +
+      'Sending unapproved transaction failed: ' +
       `from=${payload.from} err=${addResult.errorMessage} txData=`, txData
     )
     return
@@ -391,7 +390,7 @@ handler.on(WalletActions.approveTransaction.getType(), async (store: Store, txIn
   if (hardwareAccount && hardwareAccount.hardware) {
     const { success, message } = await apiProxy.ethTxController.approveHardwareTransaction(txInfo.id)
     if (success) {
-      let deviceKeyring = await apiProxy.getKeyringsByType(hardwareAccount.hardware.vendor)
+      const deviceKeyring = await apiProxy.getKeyringsByType(hardwareAccount.hardware.vendor)
       const { v, r, s } = await deviceKeyring.signTransaction(hardwareAccount.hardware.path, message.replace('0x', ''))
       await apiProxy.ethTxController.processLedgerSignature(txInfo.id, '0x' + v, r, s)
       await refreshWalletInfo(store)
@@ -497,7 +496,7 @@ handler.on(WalletActions.refreshGasEstimates.getType(), async (store) => {
   const assetPriceController = (await getAPIProxy()).assetRatioController
   const basicEstimates = await assetPriceController.getGasOracle()
   if (!basicEstimates.estimation) {
-    console.error(`Failed to fetch gas estimates`)
+    console.error('Failed to fetch gas estimates')
     return
   }
 
@@ -519,7 +518,7 @@ handler.on(WalletActions.updateUnapprovedTransactionGasFields.getType(), async (
 
     if (!result.success) {
       console.error(
-        `Failed to update unapproved transaction: ` +
+        'Failed to update unapproved transaction: ' +
         `id=${payload.txMetaId} ` +
         `maxPriorityFeePerGas=${payload.maxPriorityFeePerGas}` +
         `maxFeePerGas=${payload.maxFeePerGas}` +
@@ -535,7 +534,7 @@ handler.on(WalletActions.updateUnapprovedTransactionGasFields.getType(), async (
 
     if (!result.success) {
       console.error(
-        `Failed to update unapproved transaction: ` +
+        'Failed to update unapproved transaction: ' +
         `id=${payload.txMetaId} ` +
         `gasPrice=${payload.gasPrice}` +
         `gasLimit=${payload.gasLimit}`
@@ -559,7 +558,7 @@ handler.on(WalletActions.updateUnapprovedTransactionSpendAllowance.getType(), as
   const result = await apiProxy.ethTxController.setDataForUnapprovedTransaction(payload.txMetaId, data)
   if (!result.success) {
     console.error(
-      `Failed to update unapproved transaction: ` +
+      'Failed to update unapproved transaction: ' +
       `id=${payload.txMetaId} ` +
       `allowance=${payload.allowance}`
     )

@@ -22,9 +22,11 @@ export default class AddButton extends React.PureComponent<Props, {}> {
     } = this.props
     return (
       <StyledButton disabled={disabled} buttonType={buttonType} onClick={onSubmit}>
-        {!editIcon ? (
+        {!editIcon
+? (
           <PlusIcon />
-        ) : (
+        )
+: (
           <EditIcon />
         )}
         <ButtonText buttonType={buttonType}>{text}</ButtonText>

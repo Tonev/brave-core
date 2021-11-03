@@ -148,9 +148,9 @@ export default function shieldsPanelReducer (
       }
 
       setAllowHTTPUpgradableResources(tabData.origin, toggleShieldsValue(action.setting))
-        .then(() => {
+        .then(async () => {
           requestShieldPanelData(shieldsPanelState.getActiveTabId(state))
-          return reloadTab(tabData.id, true).catch(() => {
+          return await reloadTab(tabData.id, true).catch(() => {
             console.error('Tab reload was not successful')
           })
         })
@@ -166,9 +166,9 @@ export default function shieldsPanelReducer (
         break
       }
       setAllowJavaScript(tabData.origin, toggleShieldsValue(tabData.javascript))
-        .then(() => {
+        .then(async () => {
           requestShieldPanelData(shieldsPanelState.getActiveTabId(state))
-          return reloadTab(tabData.id, true).catch(() => {
+          return await reloadTab(tabData.id, true).catch(() => {
             console.error('Tab reload was not successful')
           })
         })
@@ -239,9 +239,9 @@ export default function shieldsPanelReducer (
         break
       }
       setAllowFingerprinting(tabData.origin, action.setting)
-        .then(() => {
+        .then(async () => {
           requestShieldPanelData(shieldsPanelState.getActiveTabId(state))
-          return reloadTab(tabData.id, true).catch(() => {
+          return await reloadTab(tabData.id, true).catch(() => {
             console.error('Tab reload was not successful')
           })
         })
@@ -257,7 +257,7 @@ export default function shieldsPanelReducer (
         break
       }
       setAllowCookies(tabData.origin, action.setting)
-        .then(() => {
+        .then(async () => {
           if (action.setting === 'block') {
             chrome.cookies.getAll({ domain: tabData.origin },
               function (cookies) {
@@ -298,7 +298,7 @@ export default function shieldsPanelReducer (
             })
           }
           requestShieldPanelData(shieldsPanelState.getActiveTabId(state))
-          return reloadTab(tabData.id, true).catch(() => {
+          return await reloadTab(tabData.id, true).catch(() => {
             console.error('Tab reload was not successful')
           })
         })
@@ -312,9 +312,9 @@ export default function shieldsPanelReducer (
         break
       }
       setAllowScriptOriginsOnce(getAllowedScriptsOrigins(tabData.noScriptInfo), tabData.id)
-        .then(() => {
+        .then(async () => {
           requestShieldPanelData(shieldsPanelState.getActiveTabId(state))
-          return reloadTab(tabData.id, true).catch(() => {
+          return await reloadTab(tabData.id, true).catch(() => {
             console.error('Tab reload was not successful')
           })
         })

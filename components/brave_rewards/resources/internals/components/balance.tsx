@@ -34,7 +34,7 @@ const getWalletName = (walletKey: string) => {
 }
 
 const getWalletBalance = (wallets: Record<string, number>) => {
-  let items = []
+  const items = []
   for (const key in wallets) {
     items.push(<div key={'wallet-' + key}> {getWalletName(key)}: {wallets[key]} {getLocale('bat')} </div>)
   }

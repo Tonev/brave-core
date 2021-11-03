@@ -25,12 +25,12 @@ function openTab (url: string) {
   chrome.tabs.create({ url }, () => { closePanel() })
 }
 
-function getCurrentTabInfo () {
+async function getCurrentTabInfo () {
   interface TabInfo {
     id: number
   }
 
-  return new Promise<TabInfo | null>((resolve) => {
+  return await new Promise<TabInfo | null>((resolve) => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (tabs.length > 0) {
         const [tab] = tabs
@@ -145,7 +145,6 @@ export function createHost (): Host {
     if (grantId && typeof grantId === 'string') {
       location.hash = ''
       loadCaptcha(grantId, 'pending')
-      return
     }
   }
 
@@ -383,7 +382,6 @@ export function createHost (): Host {
         }
 
         closePanel()
-
       }).catch(console.error)
     },
 

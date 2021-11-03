@@ -10,8 +10,8 @@ import { formatBalance } from '../../utils/format-balances'
 
 export default function useBalance (selectedAccount: WalletAccountType) {
   return React.useCallback((asset: AccountAssetOptionType) => {
-    let assetBalance = '0'
-    let fiatBalance = '0'
+    const assetBalance = '0'
+    const fiatBalance = '0'
 
     if (!selectedAccount || !selectedAccount.tokens) {
       return { assetBalance, fiatBalance }

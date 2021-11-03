@@ -131,7 +131,7 @@ export const Button = styled('button')<{}>`
   }
 `
 
-type CardButtonProps = {
+interface CardButtonProps {
   isMainFocus?: boolean
 }
 export const CardButton = styled(Button)<CardButtonProps>`

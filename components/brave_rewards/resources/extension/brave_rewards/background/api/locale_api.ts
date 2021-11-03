@@ -8,7 +8,7 @@
  */
 export const getMessage = (message: string, substitutions?: string[]): string => {
   if (chrome.i18n) {
-    let translated = chrome.i18n.getMessage(message, substitutions)
+    const translated = chrome.i18n.getMessage(message, substitutions)
 
     if (translated) {
       return translated
@@ -154,7 +154,7 @@ export const getUIMessages = (): Record<string, string> => {
     'walletDisconnected'
   ]
 
-  let translations = {}
+  const translations = {}
 
   strings.forEach((key: string) => {
     translations[key] = getMessage(key, ['$1', '$2', '$3', '$4', '$5', '$6'])

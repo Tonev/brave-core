@@ -255,9 +255,11 @@ const Portfolio = (props: Props) => {
     <StyledWrapper onClick={onHideNetworkDropdown}>
       <TopRow>
         <BalanceRow>
-          {!selectedAsset ? (
+          {!selectedAsset
+? (
             <BalanceTitle>{getLocale('braveWalletBalance')}</BalanceTitle>
-          ) : (
+          )
+: (
             <BackButton onSubmit={goBack} />
           )}
           <SelectNetworkDropdown
@@ -274,11 +276,13 @@ const Portfolio = (props: Props) => {
           timelineOptions={ChartTimelineOptions()}
         />
       </TopRow>
-      {!selectedAsset ? (
+      {!selectedAsset
+? (
         <>
-          <BalanceText>${hoverBalance ? hoverBalance : portfolioBalance}</BalanceText>
+          <BalanceText>${hoverBalance || portfolioBalance}</BalanceText>
         </>
-      ) : (
+      )
+: (
         <InfoColumn>
           <AssetRow>
             <AssetIconWithPlaceholder selectedAsset={selectedAsset} />
@@ -286,7 +290,7 @@ const Portfolio = (props: Props) => {
           </AssetRow>
           <DetailText>{selectedAsset.name} {getLocale('braveWalletPrice')} ({selectedAsset.symbol})</DetailText>
           <PriceRow>
-            <PriceText>${hoverPrice ? hoverPrice : selectedUSDAssetPrice ? formatWithCommasAndDecimals(selectedUSDAssetPrice.price) : 0.00}</PriceText>
+            <PriceText>${hoverPrice || (selectedUSDAssetPrice ? formatWithCommasAndDecimals(selectedUSDAssetPrice.price) : 0.00)}</PriceText>
             <PercentBubble isDown={selectedUSDAssetPrice ? Number(selectedUSDAssetPrice.assetTimeframeChange) < 0 : false}>
               <ArrowIcon isDown={selectedUSDAssetPrice ? Number(selectedUSDAssetPrice.assetTimeframeChange) < 0 : false} />
               <PercentText>{selectedUSDAssetPrice ? Number(selectedUSDAssetPrice.assetTimeframeChange).toFixed(2) : 0.00}%</PercentText>
@@ -330,7 +334,8 @@ const Portfolio = (props: Props) => {
           </ButtonRow>
           <DividerText>{getLocale('braveWalletTransactions')}</DividerText>
           <SubDivider />
-          {selectedAssetTransactions.length !== 0 ? (
+          {selectedAssetTransactions.length !== 0
+? (
             <>
               {selectedAssetTransactions.map((transaction: TransactionInfo) =>
                 <PortfolioTransactionItem
@@ -347,7 +352,8 @@ const Portfolio = (props: Props) => {
                 />
               )}
             </>
-          ) : (
+          )
+: (
             <EmptyTransactionContainer>
               <TransactionPlaceholderText>{getLocale('braveWalletTransactionPlaceholder')}</TransactionPlaceholderText>
             </EmptyTransactionContainer>

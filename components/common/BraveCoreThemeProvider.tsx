@@ -2,12 +2,12 @@ import * as React from 'react'
 import { ThemeProvider } from 'styled-components'
 import IBraveTheme from 'brave-ui/theme/theme-interface'
 
-export type Props = {
+export interface Props {
   initialThemeType?: chrome.braveTheme.ThemeType
-  dark: IBraveTheme,
+  dark: IBraveTheme
   light: IBraveTheme
 }
-type State = {
+interface State {
   themeType?: chrome.braveTheme.ThemeType
 }
 

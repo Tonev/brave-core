@@ -10,7 +10,7 @@ import Theme from 'brave-ui/theme/brave-default'
 import DarkTheme from 'brave-ui/theme/brave-dark'
 import BraveCoreThemeProvider from './BraveCoreThemeProvider'
 
-type Props = {
+interface Props {
   darkTheme?: ITheme
   lightTheme?: ITheme
 }
@@ -18,11 +18,11 @@ type Props = {
 const ThemeProvider: React.FunctionComponent<Props> = (props) => {
   const themeName = select(
     'Theme',
-    { ['Light']: 'Light', ['Dark']: 'Dark' },
+    { 'Light': 'Light', 'Dark': 'Dark' },
     'Light'
   )
-  let darkTheme: ITheme = props.darkTheme as ITheme || DarkTheme
-  let lightTheme: ITheme = props.lightTheme as ITheme || Theme
+  const darkTheme: ITheme = props.darkTheme as ITheme || DarkTheme
+  const lightTheme: ITheme = props.lightTheme as ITheme || Theme
   return (
     <BraveCoreThemeProvider
       dark={darkTheme}

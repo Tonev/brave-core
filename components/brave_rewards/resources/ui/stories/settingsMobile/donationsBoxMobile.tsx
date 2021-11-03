@@ -19,7 +19,7 @@ const favicon = require('../img/brave-favicon.png')
 const eich = require('../img/eich.jpg')
 const guardian = require('../img/guardian.jpg')
 
-type Check = { yt: boolean, tw: boolean, inst: boolean }
+interface Check { yt: boolean, tw: boolean, inst: boolean }
 
 interface Props {
   rewardsEnabled: boolean

@@ -5,15 +5,15 @@
 
 import * as Cr from 'chrome://resources/js/cr.m'
 
-export type TorTabData = {
-  torCircuitEstablished: boolean,
+export interface TorTabData {
+  torCircuitEstablished: boolean
   torInitProgress: string
 }
 
 type TorTabDataUpdatedHandler = (data: TorTabData) => void
 
-export function getTorTabData (): Promise<TorTabData> {
-  return Cr.sendWithPromise('getNewTabPageTorProperties')
+export async function getTorTabData (): Promise<TorTabData> {
+  return await Cr.sendWithPromise('getNewTabPageTorProperties')
 }
 
 export function addChangeListener (listener: TorTabDataUpdatedHandler): void {

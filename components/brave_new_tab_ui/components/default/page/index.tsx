@@ -37,7 +37,7 @@ type PageProps = {
 } & HasImageProps
 
 function getItemRowCount (p: PageProps): number {
-  let right = (p.showClock ? 1 : 0) + (p.showRewards ? 2 : 0)
+  const right = (p.showClock ? 1 : 0) + (p.showRewards ? 2 : 0)
   let left = (p.showStats ? 1 : 0) + (p.showTopSites ? 1 : 0)
   // Has space for branded logo to sit next to something on right?
   if (p.showBrandedWallpaper && left >= right) {
@@ -128,8 +128,8 @@ export const Page: React.FunctionComponent<PageProps> = (props) => {
       if (scrollPast >= 1) {
         // Have blur effect amount follow scroll amount. Should
         // be fully blurred at 50% of viewport height
-        const blurUpperLimit = viewportHeight * .65
-        const blurLowerLimit = viewportHeight * .25
+        const blurUpperLimit = viewportHeight * 0.65
+        const blurLowerLimit = viewportHeight * 0.25
         const blurAmount = scrollPast > blurUpperLimit
           ? 1
           : scrollPast < blurLowerLimit

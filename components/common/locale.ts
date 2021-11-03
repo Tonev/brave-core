@@ -21,7 +21,7 @@ export const getLocale = (key: string, replacements?: Record<string, string>) =>
   }
 
   if (replacements) {
-    for (let item in replacements) {
+    for (const item in replacements) {
       returnVal = returnVal.replace(new RegExp('\\[\\[\\s*' + item + '\\s*\\]\\]'), replacements[item].toString())
     }
   }
@@ -57,7 +57,7 @@ export const getLocaleWithTag = (key: string, replacements?: Record<string, stri
  */
 export const getLocaleWithTags = (key: string, tags: number, replacements?: Record<string, string>) => {
   let text = getLocale(key, replacements)
-  let result = []
+  const result = []
   for (let i = 1; i <= tags; i++) {
     const split = splitStringForTag(text, (i * 2 - 1))
     text = split.afterTag || ''

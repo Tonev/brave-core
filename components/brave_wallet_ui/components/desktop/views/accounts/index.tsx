@@ -170,7 +170,8 @@ function Accounts (props: Props) {
       {selectedAccount &&
         <TopRow><BackButton onSubmit={goBack} /></TopRow>
       }
-      {!selectedAccount ? (
+      {!selectedAccount
+? (
         <>
           <PrimaryRow>
             <SectionTitle>{getLocale('braveWalletAccountsPrimary')}</SectionTitle>
@@ -241,7 +242,8 @@ function Accounts (props: Props) {
             text={getLocale('braveWalletAddAccount')}
           />
         </>
-      ) : (
+      )
+: (
         <>
           <WalletInfoRow>
             <WalletInfoLeftSide>
@@ -270,7 +272,8 @@ function Accounts (props: Props) {
           )}
           <SubviewSectionTitle>{getLocale('braveWalletTransactions')}</SubviewSectionTitle>
           <SubDivider />
-          {transactionList.length !== 0 ? (
+          {transactionList.length !== 0
+? (
             <>
               {transactionList.map((transaction) =>
                 <PortfolioTransactionItem
@@ -287,7 +290,8 @@ function Accounts (props: Props) {
                 />
               )}
             </>
-          ) : (
+          )
+: (
             <TransactionPlaceholderContainer>
               <TransactionPlaceholderText>{getLocale('braveWalletTransactionPlaceholder')}</TransactionPlaceholderText>
             </TransactionPlaceholderContainer>

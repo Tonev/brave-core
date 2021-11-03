@@ -94,7 +94,6 @@ const accounts: WalletAccountType[] = [
 ]
 
 export const _ConfirmTransaction = () => {
-
   const transactionInfo: TransactionInfo = {
     fromAddress: '0x7d66c9ddAED3115d93Bd1790332f3Cd06Cf52B14',
     id: '465a4d6646-kjlwf665',
@@ -148,8 +147,8 @@ export const _ConfirmTransaction = () => {
     alert('Updated spending allowance')
   }
 
-  const getERC20Allowance = (recipient: string, sender: string, approvalTarget: string) => {
-    return Promise.resolve('0x15ddf09c97b0000')
+  const getERC20Allowance = async (recipient: string, sender: string, approvalTarget: string) => {
+    return await Promise.resolve('0x15ddf09c97b0000')
   }
 
   const transactionSpotPrices = [
@@ -195,7 +194,6 @@ _ConfirmTransaction.story = {
 }
 
 export const _AllowAddNetwork = () => {
-
   const onApprove = () => {
     alert('Approved Adding Network')
   }
@@ -225,7 +223,6 @@ _AllowAddNetwork.story = {
 }
 
 export const _SignData = () => {
-
   const onSign = () => {
     alert('Signed Data')
   }
@@ -456,7 +453,8 @@ export const _ConnectedPanel = (args: { locked: boolean }) => {
 
   return (
     <StyledExtensionWrapper>
-      {walletLocked ? (
+      {walletLocked
+? (
         <LockPanel
           hasPasswordError={hasPasswordError}
           onSubmit={unlockWallet}
@@ -464,9 +462,11 @@ export const _ConnectedPanel = (args: { locked: boolean }) => {
           onPasswordChanged={handlePasswordChanged}
           onClickRestore={onRestore}
         />
-      ) : (
+      )
+: (
         <>
-          {selectedPanel === 'main' ? (
+          {selectedPanel === 'main'
+? (
             <ConnectedPanel
               selectedNetwork={selectedNetwork}
               selectedAccount={selectedAccount}
@@ -476,7 +476,8 @@ export const _ConnectedPanel = (args: { locked: boolean }) => {
               onOpenSettings={onOpenSettings}
               activeOrigin=''
             />
-          ) : (
+          )
+: (
             <>
               {showSelectAsset &&
                 <SelectContainer>
@@ -576,7 +577,6 @@ _ConnectedPanel.story = {
 }
 
 export const _SetupWallet = () => {
-
   const onRestore = () => {
     alert('Will navigate to full wallet restore page')
   }
@@ -597,7 +597,6 @@ _SetupWallet.story = {
 }
 
 export const _ConnectHardwareWallet = () => {
-
   const onCancel = () => {
     // Doesn't do anything in storybook
   }

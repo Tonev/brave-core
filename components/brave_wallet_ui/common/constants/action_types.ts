@@ -14,7 +14,7 @@ import {
   WalletAccountType
 } from '../../constants/types'
 
-export type InitializedPayloadType = {
+export interface InitializedPayloadType {
   isWalletCreated: boolean
   isWalletLocked: boolean
   favoriteApps: AppObjectType[]
@@ -24,85 +24,85 @@ export type InitializedPayloadType = {
   selectedAccount: string
 }
 
-export type UnlockWalletPayloadType = {
+export interface UnlockWalletPayloadType {
   password: string
 }
 
-export type ChainChangedEventPayloadType = {
+export interface ChainChangedEventPayloadType {
   chainId: string
 }
 
-export type IsEip1559Changed = {
-  chainId: string,
+export interface IsEip1559Changed {
+  chainId: string
   isEip1559: boolean
 }
 
-export type NewUnapprovedTxAdded = {
+export interface NewUnapprovedTxAdded {
   txInfo: TransactionInfo
 }
 
-export type UnapprovedTxUpdated = {
+export interface UnapprovedTxUpdated {
   txInfo: TransactionInfo
 }
 
-export type TransactionStatusChanged = {
+export interface TransactionStatusChanged {
   txInfo: TransactionInfo
 }
 
-export type AddUserAssetPayloadType = {
+export interface AddUserAssetPayloadType {
   token: TokenInfo
   chainId: string
 }
 
-export type RemoveUserAssetPayloadType = {
+export interface RemoveUserAssetPayloadType {
   token: TokenInfo
   chainId: string
 }
 
-export type SetUserAssetVisiblePayloadType = {
+export interface SetUserAssetVisiblePayloadType {
   token: TokenInfo
   chainId: string
   isVisible: boolean
 }
 
-export type SwapParamsPayloadType = {
-  fromAsset: AccountAssetOptionType,
-  toAsset: AccountAssetOptionType,
-  fromAssetAmount?: string,
-  toAssetAmount?: string,
-  slippageTolerance: SlippagePresetObjectType,
-  accountAddress: string,
-  networkChainId: string,
+export interface SwapParamsPayloadType {
+  fromAsset: AccountAssetOptionType
+  toAsset: AccountAssetOptionType
+  fromAssetAmount?: string
+  toAssetAmount?: string
+  slippageTolerance: SlippagePresetObjectType
+  accountAddress: string
+  networkChainId: string
   full: boolean
 }
 
-export type ActiveOriginChanged = {
+export interface ActiveOriginChanged {
   origin: string
 }
 
-export type UpdateUnapprovedTransactionGasFieldsType = {
-  txMetaId: string,
-  gasLimit: string,
-  gasPrice?: string,
-  maxPriorityFeePerGas?: string,
+export interface UpdateUnapprovedTransactionGasFieldsType {
+  txMetaId: string
+  gasLimit: string
+  gasPrice?: string
+  maxPriorityFeePerGas?: string
   maxFeePerGas?: string
 }
 
-export type UpdateUnapprovedTransactionSpendAllowanceType = {
-  txMetaId: string,
-  spenderAddress: string,
+export interface UpdateUnapprovedTransactionSpendAllowanceType {
+  txMetaId: string
+  spenderAddress: string
   allowance: string
 }
 
-export type DefaultWalletChanged = {
+export interface DefaultWalletChanged {
   defaultWallet: DefaultWallet
 }
 
-export type SitePermissionsPayloadType = {
-  accounts: (WalletAccountType | undefined)[]
+export interface SitePermissionsPayloadType {
+  accounts: Array<WalletAccountType | undefined>
 }
 
-export type RemoveSitePermissionPayloadType = {
-  origin: string,
+export interface RemoveSitePermissionPayloadType {
+  origin: string
   account: string
 }

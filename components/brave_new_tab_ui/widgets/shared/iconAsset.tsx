@@ -6,7 +6,7 @@
 import * as React from 'react'
 import icons from './assets/icons'
 
-type Props = {
+interface Props {
   iconKey: string
   size?: number
 }

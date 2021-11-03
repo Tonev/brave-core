@@ -34,8 +34,8 @@ interface Props {
   ftx: FTXState
 }
 
-const getBraveNewsDisplayAd: GetDisplayAdContent = function GetBraveNewsDisplayAd () {
-  return sendWithPromise('todayGetDisplayAd')
+const getBraveNewsDisplayAd: GetDisplayAdContent = async function GetBraveNewsDisplayAd () {
+  return await sendWithPromise('todayGetDisplayAd')
 }
 
 function DefaultPage (props: Props) {

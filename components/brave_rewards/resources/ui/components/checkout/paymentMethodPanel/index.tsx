@@ -40,8 +40,9 @@ export function PaymentMethodPanel (props: PaymentMethodPanelProps) {
         orderTotalConverted={props.orderTotalConverted}
       />
       {
-        continueWithCard ? null :
-          <UseWalletPanel
+        continueWithCard
+? null
+          : <UseWalletPanel
             canAddFunds={props.canUseCreditCard}
             balance={props.walletBalance}
             balanceConverted={props.walletBalanceConverted}
@@ -53,8 +54,9 @@ export function PaymentMethodPanel (props: PaymentMethodPanelProps) {
             onPayWithWallet={props.onPayWithWallet}
           />
       }
-      { !props.canUseCreditCard ? null :
-          <UseCreditCardPanel
+      { !props.canUseCreditCard
+? null
+          : <UseCreditCardPanel
             hasSufficientFunds={props.hasSufficientFunds}
             rewardsEnabled={props.rewardsEnabled}
             walletVerified={props.walletVerified}

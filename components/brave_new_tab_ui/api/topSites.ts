@@ -5,7 +5,7 @@
 
 import { addWebUIListener } from 'chrome://resources/js/cr.m'
 
-export type MostVisitedInfoChanged = {
+export interface MostVisitedInfoChanged {
   tiles: NewTab.Site[]
   custom_links_enabled: boolean
   custom_links_num: number

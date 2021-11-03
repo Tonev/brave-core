@@ -6,7 +6,7 @@
 import { createAction } from 'redux-act'
 import { ViewType, AssetDetail, ConversionQuote } from './ftx_state'
 
-type InitializedPayload = {
+interface InitializedPayload {
   isConnected: boolean
   balances: chrome.ftx.Balances
   ftxHost: chrome.ftx.FTXOauthHost
@@ -19,7 +19,7 @@ export const initialized = createAction<InitializedPayload>('initialized')
 
 export const openView = createAction<ViewType>('openView')
 
-export type StartConnectPayload = {
+export interface StartConnectPayload {
   isUS: boolean
 }
 export const startConnect = createAction<StartConnectPayload>('startConnect')
@@ -28,13 +28,13 @@ export const disconnect = createAction('disconnectToFtx')
 
 export const refresh = createAction('refresh')
 
-export type DataUpdatedPayload = {
+export interface DataUpdatedPayload {
   balances: chrome.ftx.Balances
   marketData: chrome.ftx.TokenPriceData[]
 }
 export const dataUpdated = createAction<DataUpdatedPayload>('dataUpdated')
 
-export type ShowAssetDetailPayload = {
+export interface ShowAssetDetailPayload {
   symbol: string
 }
 export const showAssetDetail = createAction<ShowAssetDetailPayload>('showAssetDetail')
@@ -47,12 +47,12 @@ export const toggleOptInMarkets = createAction<boolean>('toggleOptInMarkets')
 
 export const interacted = createAction('interacted')
 
-type PreOptInViewMarkets = {
+interface PreOptInViewMarkets {
   hide?: boolean
 }
 export const preOptInViewMarkets = createAction<PreOptInViewMarkets>('preOptInViewMarkets')
 
-export type PreviewConversionPayload = {
+export interface PreviewConversionPayload {
   from: string
   to: string
   quantity: number

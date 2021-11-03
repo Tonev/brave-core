@@ -60,7 +60,7 @@ export class Log extends React.Component<Props, State> {
 
   downloadFile = (log: string) => {
     const filename = 'brave_rewards_log.txt'
-    let element = document.createElement('a')
+    const element = document.createElement('a')
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(log))
     element.setAttribute('download', filename)
 

@@ -12,7 +12,7 @@ import getFormattedPrice from '../../shared/getFormattedPrice'
 import * as FTXActions from '../ftx_actions'
 import { FTXState } from '../ftx_state'
 
-type Props = {
+interface Props {
   ftx: FTXState
   actions: typeof FTXActions
 }
@@ -24,7 +24,7 @@ export default function Markets (props: Props) {
 
   const handleAssetDetailClick = React.useCallback((symbol) => {
     props.actions.showAssetDetail({ symbol })
-  }, [ props.actions.showAssetDetail ])
+  }, [props.actions.showAssetDetail])
 
   return (
     <>

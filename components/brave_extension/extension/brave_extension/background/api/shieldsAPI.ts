@@ -12,16 +12,16 @@ import * as SettingsPrivate from '../../../../../common/settingsPrivate'
  * @param {Object} tabData the details of the tab
  * @return a promise with the corresponding shields panel data for the input tabData
  */
-export const getShieldSettingsForTabData = (tabData?: chrome.tabs.Tab) => {
+export const getShieldSettingsForTabData = async (tabData?: chrome.tabs.Tab) => {
   if (tabData === undefined || !tabData.url) {
-    return Promise.reject(new Error('No tab url specified'))
+    return await Promise.reject(new Error('No tab url specified'))
   }
 
   const url = new window.URL(tabData.url)
   const origin = url.origin
   const hostname = url.hostname
 
-  return Promise.all([
+  return await Promise.all([
     chrome.braveShields.getBraveShieldsEnabledAsync(tabData.url),
     chrome.braveShields.getAdControlTypeAsync(tabData.url),
     chrome.braveShields.isFirstPartyCosmeticFilteringEnabledAsync(tabData.url),
@@ -64,12 +64,12 @@ export const getShieldSettingsForTabData = (tabData?: chrome.tabs.Tab) => {
  * Filters ipfs and ipns locations to their equivalent gateway
  * @return a promise with the possibly modified tab data
  */
-const filterTabData = (tabData?: chrome.tabs.Tab) => {
+const filterTabData = async (tabData?: chrome.tabs.Tab) => {
   if (tabData === undefined || !tabData.url) {
-    return Promise.reject(new Error('No tab url specified'))
+    return await Promise.reject(new Error('No tab url specified'))
   }
   const url = new window.URL(tabData.url)
-  return new Promise(resolve => {
+  return await new Promise(resolve => {
     if ((url.protocol === 'ipfs:' || url.protocol === 'ipns:') && tabData.url) {
       chrome.ipfs.resolveIPFSURI(tabData.url, (gatewayUrl: string) => {
         tabData.url = gatewayUrl
@@ -110,7 +110,7 @@ export const requestShieldPanelData = (tabId: number) =>
  * @return a promise which resolves when the setting is set
  */
 export const setAllowBraveShields = (origin: string, setting: string) =>
-  chrome.braveShields.setBraveShieldsEnabledAsync(setting === 'allow' ? true : false, origin)
+  chrome.braveShields.setBraveShieldsEnabledAsync(setting === 'allow', origin)
 
 /**
  * Changes the ads at origin to be allowed or blocked.
@@ -151,7 +151,7 @@ export const setAllowCosmeticFiltering = (origin: string, setting: string) => {
  * @return a promise which resolves when the setting is set
  */
 export const setAllowHTTPUpgradableResources = (origin: string, setting: BlockOptions) =>
-  chrome.braveShields.setHTTPSEverywhereEnabledAsync(setting === 'allow' ? false : true, origin)
+  chrome.braveShields.setHTTPSEverywhereEnabledAsync(setting !== 'allow', origin)
 
 /**
  * Changes the Javascript to be on (allow) or off (block)
@@ -192,8 +192,8 @@ export const toggleShieldsValue = (value: BlockOptions) =>
  * @param {number} tabId ID of the tab which these origins are allowed in
  * @return a promise which resolves when the origins are set.
  */
-export const setAllowScriptOriginsOnce = (origins: Array<string>, tabId: number) =>
-  new Promise<void>((resolve) => {
+export const setAllowScriptOriginsOnce = async (origins: string[], tabId: number) =>
+  await new Promise<void>((resolve) => {
     chrome.braveShields.allowScriptsOnce(origins, tabId, () => {
       resolve()
     })
@@ -206,7 +206,7 @@ export const setAllowScriptOriginsOnce = (origins: Array<string>, tabId: number)
 export const reportBrokenSite = (tabId: number) =>
   chrome.braveShields.reportBrokenSite(tabId)
 
-export type GetViewPreferencesData = {
+export interface GetViewPreferencesData {
   showAdvancedView: boolean
   statsBadgeVisible: boolean
 }
@@ -216,7 +216,7 @@ const settingsKeys = {
   statsBadgeVisible: { key: 'brave.shields.stats_badge_visible', type: chrome.settingsPrivate.PrefType.BOOLEAN }
 }
 export async function getViewPreferences (): Promise<GetViewPreferencesData> {
-  let newSettings = {} as GetViewPreferencesData
+  const newSettings = {} as GetViewPreferencesData
   await Promise.all(
     Object.keys(settingsKeys).map(async (name) => {
       // Get setting by internal key
@@ -232,7 +232,7 @@ export async function getViewPreferences (): Promise<GetViewPreferencesData> {
   return newSettings
 }
 
-export type SetViewPreferencesData = {
+export interface SetViewPreferencesData {
   showAdvancedView?: boolean
   statsBadgeVisible?: boolean
 }
@@ -251,7 +251,7 @@ export async function setViewPreferences (preferences: SetViewPreferencesData): 
   await Promise.all(setOps)
 }
 
-export const onShieldsPanelShown = () =>
-  new Promise<void>((resolve) => {
+export const onShieldsPanelShown = async () =>
+  await new Promise<void>((resolve) => {
     chrome.braveShields.onShieldsPanelShown()
   })

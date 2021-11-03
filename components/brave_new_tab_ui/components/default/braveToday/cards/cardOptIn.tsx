@@ -9,7 +9,7 @@ import * as Card from '../cardIntro'
 import BraveTodayLogoUrl from '../braveTodayLogo.svg'
 import { CardButton, TertiaryButton } from '../default'
 
-type Props = {
+interface Props {
   onOptIn: () => unknown
   onDisable: () => unknown
 }

@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import { ArrowUpIcon, LoaderIcon } from 'brave-ui/components/icons'
 import { getLocale } from '../../../../../common/locale'
 
-type Props = {
+interface Props {
   show: boolean
   isFetching: boolean
   onClick: () => any
